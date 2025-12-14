@@ -2,6 +2,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import { ScrollReveal, StaggerContainer, StaggerItem } from "@/components/ui/scroll-reveal";
+import { motion } from "framer-motion";
 import heroSandwich from "@/assets/hero-sandwich.jpg";
 import breakfastBurrito from "@/assets/breakfast-burrito.jpg";
 import smashBurger from "@/assets/smash-burger.jpg";
@@ -185,26 +187,47 @@ const Menu = () => {
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-secondary">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-primary font-medium tracking-widest uppercase mb-3 animate-fade-up">
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-primary font-medium tracking-widest uppercase mb-3"
+          >
             What We Serve
-          </p>
-          <h1 className="font-display text-5xl md:text-6xl font-bold text-foreground mb-6 animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="font-display text-5xl md:text-6xl font-bold text-foreground mb-6"
+          >
             Our Menu
-          </h1>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8 animate-fade-up" style={{ animationDelay: "0.2s" }}>
-            Fresh ingredients, bold flavors, and recipes made with love. From legendary Philly cheesesteaks to hearty breakfast burritos — theres something for everyone.
-          </p>
-          <Button variant="default" size="lg" asChild className="animate-fade-up" style={{ animationDelay: "0.3s" }}>
-            <a
-              href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2"
-            >
-              Order on DoorDash
-              <ExternalLink className="w-4 h-4" />
-            </a>
-          </Button>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto mb-8"
+          >
+            Fresh ingredients, bold flavors, and recipes made with love. From legendary Philly cheesesteaks to hearty breakfast burritos — there is something for everyone.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
+            <Button variant="default" size="lg" asChild>
+              <a
+                href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2"
+              >
+                Order on DoorDash
+                <ExternalLink className="w-4 h-4" />
+              </a>
+            </Button>
+          </motion.div>
         </div>
       </section>
 
@@ -216,14 +239,18 @@ const Menu = () => {
               <div key={category.title} className="scroll-mt-24" id={category.title.toLowerCase().replace(/\s+/g, "-")}>
                 {/* Category Header */}
                 <div className={`flex flex-col ${categoryIndex % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"} gap-8 mb-10`}>
-                  <div className="lg:w-1/3">
-                    <div className="relative rounded-2xl overflow-hidden warm-shadow aspect-square">
-                      <img
+                  <ScrollReveal
+                    variant={categoryIndex % 2 === 0 ? "slideLeft" : "slideRight"}
+                    className="lg:w-1/3"
+                  >
+                    <div className="relative rounded-2xl overflow-hidden warm-shadow aspect-square group">
+                      <motion.img
                         src={category.image}
                         alt={category.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        whileHover={{ scale: 1.05 }}
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/60 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-foreground/70 via-foreground/20 to-transparent" />
                       <div className="absolute bottom-6 left-6 right-6">
                         <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground">
                           {category.title}
@@ -233,40 +260,42 @@ const Menu = () => {
                         </p>
                       </div>
                     </div>
-                  </div>
+                  </ScrollReveal>
 
                   {/* Menu Items */}
-                  <div className="lg:w-2/3">
+                  <StaggerContainer className="lg:w-2/3" staggerDelay={0.08}>
                     <div className="space-y-4">
                       {category.items.map((item) => (
-                        <div
-                          key={item.name}
-                          className="bg-card rounded-xl p-6 warm-shadow hover:warm-shadow-hover transition-shadow duration-300 group"
-                        >
-                          <div className="flex justify-between items-start gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-2">
-                                <h3 className="font-display text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
-                                  {item.name}
-                                </h3>
-                                {item.popular && (
-                                  <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-full">
-                                    Popular
-                                  </span>
-                                )}
+                        <StaggerItem key={item.name}>
+                          <motion.div
+                            className="bg-card rounded-xl p-6 warm-shadow hover:warm-shadow-hover transition-all duration-300 group"
+                            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                          >
+                            <div className="flex justify-between items-start gap-4">
+                              <div className="flex-1">
+                                <div className="flex items-center gap-3 mb-2">
+                                  <h3 className="font-display text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+                                    {item.name}
+                                  </h3>
+                                  {item.popular && (
+                                    <span className="bg-primary/10 text-primary text-xs font-semibold px-2 py-1 rounded-full">
+                                      Popular
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="text-muted-foreground text-sm leading-relaxed">
+                                  {item.description}
+                                </p>
                               </div>
-                              <p className="text-muted-foreground text-sm leading-relaxed">
-                                {item.description}
-                              </p>
+                              <span className="font-display text-xl font-bold text-primary whitespace-nowrap">
+                                {item.price}
+                              </span>
                             </div>
-                            <span className="font-display text-xl font-bold text-primary whitespace-nowrap">
-                              {item.price}
-                            </span>
-                          </div>
-                        </div>
+                          </motion.div>
+                        </StaggerItem>
                       ))}
                     </div>
-                  </div>
+                  </StaggerContainer>
                 </div>
               </div>
             ))}
@@ -278,73 +307,95 @@ const Menu = () => {
       <section className="py-16 bg-secondary">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto">
-            <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-12">
-              Sides & Drinks
-            </h2>
+            <ScrollReveal variant="fadeUp">
+              <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground text-center mb-12">
+                Sides & Drinks
+              </h2>
+            </ScrollReveal>
 
             <div className="grid md:grid-cols-2 gap-8">
               {/* Sides */}
-              <div className="bg-card rounded-2xl p-8 warm-shadow">
-                <h3 className="font-display text-2xl font-semibold text-foreground mb-6 flex items-center gap-3">
-                  <span className="text-2xl">🍟</span> Sides
-                </h3>
-                <div className="space-y-4">
-                  {sides.map((item) => (
-                    <div key={item.name} className="flex justify-between items-center py-2 border-b border-border last:border-0">
-                      <span className="text-foreground">{item.name}</span>
-                      <span className="font-display font-semibold text-primary">{item.price}</span>
-                    </div>
-                  ))}
+              <ScrollReveal variant="slideLeft" delay={0.1}>
+                <div className="bg-card rounded-2xl p-8 warm-shadow h-full">
+                  <h3 className="font-display text-2xl font-semibold text-foreground mb-6 flex items-center gap-3">
+                    <span className="text-2xl">🍟</span> Sides
+                  </h3>
+                  <div className="space-y-4">
+                    {sides.map((item) => (
+                      <motion.div
+                        key={item.name}
+                        className="flex justify-between items-center py-2 border-b border-border last:border-0"
+                        whileHover={{ x: 4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <span className="text-foreground">{item.name}</span>
+                        <span className="font-display font-semibold text-primary">{item.price}</span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </ScrollReveal>
 
               {/* Drinks */}
-              <div className="bg-card rounded-2xl p-8 warm-shadow">
-                <h3 className="font-display text-2xl font-semibold text-foreground mb-6 flex items-center gap-3">
-                  <span className="text-2xl">🥤</span> Drinks
-                </h3>
-                <div className="space-y-4">
-                  {drinks.map((item) => (
-                    <div key={item.name} className="flex justify-between items-center py-2 border-b border-border last:border-0">
-                      <span className="text-foreground">{item.name}</span>
-                      <span className="font-display font-semibold text-primary">{item.price}</span>
-                    </div>
-                  ))}
+              <ScrollReveal variant="slideRight" delay={0.2}>
+                <div className="bg-card rounded-2xl p-8 warm-shadow h-full">
+                  <h3 className="font-display text-2xl font-semibold text-foreground mb-6 flex items-center gap-3">
+                    <span className="text-2xl">🥤</span> Drinks
+                  </h3>
+                  <div className="space-y-4">
+                    {drinks.map((item) => (
+                      <motion.div
+                        key={item.name}
+                        className="flex justify-between items-center py-2 border-b border-border last:border-0"
+                        whileHover={{ x: 4 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <span className="text-foreground">{item.name}</span>
+                        <span className="font-display font-semibold text-primary">{item.price}</span>
+                      </motion.div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              </ScrollReveal>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-primary">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
-            Ready to Order?
-          </h2>
-          <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-            Get your favorites delivered straight to your door or call ahead for pickup!
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button variant="secondary" size="lg" asChild>
-              <a
-                href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2"
-              >
-                Order on DoorDash
-                <ExternalLink className="w-4 h-4" />
-              </a>
-            </Button>
-            <Button variant="heroOutline" size="lg" asChild>
-              <a href="tel:7722201020">
-                Call (772) 220-1020
-              </a>
-            </Button>
+      <section className="py-20 bg-primary overflow-hidden">
+        <ScrollReveal variant="scaleIn">
+          <div className="container mx-auto px-4 text-center">
+            <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
+              Ready to Order?
+            </h2>
+            <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
+              Get your favorites delivered straight to your door or call ahead for pickup!
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <Button variant="secondary" size="lg" asChild>
+                  <a
+                    href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2"
+                  >
+                    Order on DoorDash
+                    <ExternalLink className="w-4 h-4" />
+                  </a>
+                </Button>
+              </motion.div>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
+                <Button variant="heroOutline" size="lg" asChild>
+                  <a href="tel:7722201020">
+                    Call (772) 220-1020
+                  </a>
+                </Button>
+              </motion.div>
+            </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <Footer />
