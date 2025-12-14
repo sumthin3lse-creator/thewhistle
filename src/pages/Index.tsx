@@ -6,6 +6,7 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { SpecialsSection } from "@/components/SpecialsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { StickyOrderButton } from "@/components/StickyOrderButton";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <SpecialsSection />
       <ContactSection />
       <Footer />
+      <StickyOrderButton />
     </main>
   );
 };
