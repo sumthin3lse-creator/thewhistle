@@ -1,11 +1,18 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const navLinks = [
+type NavLink = {
+  label: string;
+  href: string;
+  isPage?: boolean;
+};
+
+const navLinks: NavLink[] = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Menu", href: "#menu" },
+  { label: "Menu", href: "/menu", isPage: true },
   { label: "Specials", href: "#specials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -13,6 +20,8 @@ const navLinks = [
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,12 +31,30 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
+  const handleNavClick = (link: NavLink) => {
+    if (link.isPage) {
+      navigate(link.href);
+    } else {
+      // If on homepage, scroll to section
+      if (location.pathname === "/") {
+        const element = document.querySelector(link.href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        // Navigate to homepage with hash
+        navigate("/" + link.href);
+      }
     }
     setIsOpen(false);
+  };
+
+  const handleLogoClick = () => {
+    if (location.pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      navigate("/");
+    }
   };
 
   return (
@@ -41,13 +68,9 @@ export function Navbar() {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <a
-            href="#home"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("#home");
-            }}
-            className="flex flex-col"
+          <button
+            onClick={handleLogoClick}
+            className="flex flex-col text-left"
           >
             <span className="font-display text-2xl font-bold text-primary">
               The Whistle Stop
@@ -55,14 +78,14 @@ export function Navbar() {
             <span className="text-xs text-muted-foreground tracking-wider">
               by Ariel Seafoods
             </span>
-          </a>
+          </button>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <button
                 key={link.href}
-                onClick={() => scrollToSection(link.href)}
+                onClick={() => handleNavClick(link)}
                 className="text-foreground/80 hover:text-primary transition-colors font-medium"
               >
                 {link.label}
@@ -107,7 +130,7 @@ export function Navbar() {
               {navLinks.map((link) => (
                 <button
                   key={link.href}
-                  onClick={() => scrollToSection(link.href)}
+                  onClick={() => handleNavClick(link)}
                   className="text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
                 >
                   {link.label}
