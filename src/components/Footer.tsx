@@ -1,4 +1,5 @@
 import { Facebook, Instagram } from "lucide-react";
+import logo from "@/assets/logo.jpg";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -10,12 +11,11 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             {/* Logo & Tagline */}
             <div className="text-center md:text-left">
-              <h3 className="font-display text-2xl font-bold text-primary mb-1">
-                The Whistle Stop
-              </h3>
-              <p className="text-primary-foreground/60 text-sm">
-                by Ariel Seafoods
-              </p>
+              <img 
+                src={logo} 
+                alt="The Whistle Stop by Ariel Seafoods" 
+                className="h-16 w-auto mx-auto md:mx-0 mb-2"
+              />
               <p className="text-primary-foreground/50 text-sm mt-2">
                 Locally-owned. Family-made. Always fresh.
               </p>

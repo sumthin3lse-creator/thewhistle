@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import logo from "@/assets/logo.jpg";
 
 const navLinks = [
   { label: "Home", href: "#home" },
@@ -48,14 +49,12 @@ export function Navbar() {
               e.preventDefault();
               scrollToSection("#home");
             }}
-            className="flex flex-col"
           >
-            <span className="font-display text-2xl font-bold text-primary">
-              The Whistle Stop
-            </span>
-            <span className="text-xs text-muted-foreground tracking-wider">
-              by Ariel Seafoods
-            </span>
+            <img 
+              src={logo} 
+              alt="The Whistle Stop by Ariel Seafoods" 
+              className="h-14 w-auto"
+            />
           </a>
 
           {/* Desktop Navigation */}
