@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Menu", href: "#menu" },
+  { label: "Menu", href: "/menu", isPage: true },
   { label: "Specials", href: "#specials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -60,13 +61,23 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <button
-                key={link.href}
-                onClick={() => scrollToSection(link.href)}
-                className="text-foreground/80 hover:text-primary transition-colors font-medium"
-              >
-                {link.label}
-              </button>
+              link.isPage ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="text-foreground/80 hover:text-primary transition-colors font-medium"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <button
+                  key={link.href}
+                  onClick={() => scrollToSection(link.href)}
+                  className="text-foreground/80 hover:text-primary transition-colors font-medium"
+                >
+                  {link.label}
+                </button>
+              )
             ))}
           </div>
 
@@ -105,13 +116,24 @@ export function Navbar() {
           <div className="md:hidden bg-card rounded-lg mb-4 p-4 warm-shadow animate-fade-in">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                <button
-                  key={link.href}
-                  onClick={() => scrollToSection(link.href)}
-                  className="text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
-                >
-                  {link.label}
-                </button>
+                link.isPage ? (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <button
+                    key={link.href}
+                    onClick={() => scrollToSection(link.href)}
+                    className="text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
+                  >
+                    {link.label}
+                  </button>
+                )
               ))}
               <hr className="border-border" />
               <a

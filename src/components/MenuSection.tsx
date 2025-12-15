@@ -87,10 +87,10 @@ export function MenuSection() {
             Plus breakfast sandwiches, sides, and daily specials!
           </p>
           <a
-            href="tel:7722201020"
-            className="text-primary font-semibold hover:underline"
+            href="/menu"
+            className="inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg font-semibold hover:bg-primary/90 transition-colors"
           >
-            Call (772) 220-1020 for full menu
+            View Full Menu
           </a>
         </div>
       </div>
