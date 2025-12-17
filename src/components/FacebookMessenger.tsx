@@ -1,56 +1,19 @@
-import { useEffect } from 'react';
-
-declare global {
-  interface Window {
-    fbAsyncInit: () => void;
-    FB: any;
-  }
-}
+import { MessageCircle } from 'lucide-react';
 
 const FacebookMessenger = () => {
   const pageId = '503899209482782';
-
-  useEffect(() => {
-    // Initialize Facebook SDK
-    window.fbAsyncInit = function () {
-      window.FB.init({
-        xfbml: true,
-        version: 'v18.0',
-      });
-    };
-
-    // Load Facebook SDK
-    (function (d, s, id) {
-      const fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      const js = d.createElement(s) as HTMLScriptElement;
-      js.id = id;
-      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-      fjs.parentNode?.insertBefore(js, fjs);
-    })(document, 'script', 'facebook-jssdk');
-
-    return () => {
-      // Cleanup SDK on unmount
-      const fbRoot = document.getElementById('fb-root');
-      const fbScript = document.getElementById('facebook-jssdk');
-      if (fbRoot) fbRoot.remove();
-      if (fbScript) fbScript.remove();
-    };
-  }, []);
+  const messengerUrl = `https://m.me/${pageId}`;
 
   return (
-    <>
-      <div id="fb-root"></div>
-      <div
-        className="fb-customerchat"
-        // @ts-ignore - Facebook SDK attributes
-        attribution="setup_tool"
-        page_id={pageId}
-        theme_color="#dc2626"
-        logged_in_greeting="Hi! How can we help you today?"
-        logged_out_greeting="Hi! How can we help you today?"
-      ></div>
-    </>
+    <a
+      href={messengerUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform hover:scale-110 hover:shadow-xl"
+      aria-label="Chat with us on Facebook Messenger"
+    >
+      <MessageCircle className="h-7 w-7" />
+    </a>
   );
 };
 
