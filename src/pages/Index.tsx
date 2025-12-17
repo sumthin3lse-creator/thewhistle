@@ -6,6 +6,7 @@ import { SpecialsSection } from "@/components/SpecialsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import FacebookMessenger from "@/components/FacebookMessenger";
 
 const Index = () => {
   return (
@@ -18,6 +19,7 @@ const Index = () => {
       <TestimonialsSection />
       <ContactSection />
       <Footer />
+      <FacebookMessenger />
     </main>
   );
 };
