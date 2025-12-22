@@ -1,5 +1,6 @@
 import { Star } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
 
 const testimonials = [
   {
@@ -42,30 +43,34 @@ export function TestimonialsSection() {
   return (
     <section className="py-20 bg-secondary/30">
       <div className="container mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            What Our Customers Say
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-            Don't just take our word for it — hear from the folks who keep coming back
-          </p>
-        </div>
+        <ScrollReveal>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Don't just take our word for it — hear from the folks who keep coming back
+            </p>
+          </div>
+        </ScrollReveal>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <ScrollRevealStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {testimonials.map((testimonial, index) => (
-            <Card key={index} className="bg-card border-border/50">
-              <CardContent className="p-6">
-                <StarRating rating={testimonial.rating} />
-                <blockquote className="mt-4 text-foreground/90 italic">
-                  "{testimonial.quote}"
-                </blockquote>
-                <p className="mt-4 font-semibold text-primary">
-                  — {testimonial.name}
-                </p>
-              </CardContent>
-            </Card>
+            <ScrollRevealItem key={index}>
+              <Card className="bg-card border-border/50 h-full">
+                <CardContent className="p-6">
+                  <StarRating rating={testimonial.rating} />
+                  <blockquote className="mt-4 text-foreground/90 italic">
+                    "{testimonial.quote}"
+                  </blockquote>
+                  <p className="mt-4 font-semibold text-primary">
+                    — {testimonial.name}
+                  </p>
+                </CardContent>
+              </Card>
+            </ScrollRevealItem>
           ))}
-        </div>
+        </ScrollRevealStagger>
       </div>
     </section>
   );
