@@ -6,7 +6,7 @@ import { SpecialsSection } from "@/components/SpecialsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
-import FacebookMessenger from "@/components/FacebookMessenger";
+import TawkChat from "@/components/TawkChat";
 
 const Index = () => {
   return (
@@ -19,7 +19,7 @@ const Index = () => {
       <TestimonialsSection />
       <ContactSection />
       <Footer />
-      <FacebookMessenger />
+      <TawkChat />
     </main>
   );
 };
