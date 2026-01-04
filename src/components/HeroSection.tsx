@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock } from "lucide-react";
 import heroImage from "@/assets/hero-sandwich.jpg";
@@ -62,13 +63,9 @@ export function HeroSection() {
             style={{ animationDelay: "0.5s" }}
           >
             <Button variant="hero" size="lg" asChild>
-              <a
-                href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Order on DoorDash
-              </a>
+              <Link to="/order-online">
+                Order Online
+              </Link>
             </Button>
             <Button variant="heroOutline" size="lg" onClick={scrollToMenu}>
               View Our Menu
