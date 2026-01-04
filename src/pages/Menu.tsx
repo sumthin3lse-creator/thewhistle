@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft, Phone } from "lucide-react";
+import { ArrowLeft, Phone, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import heroSandwich from "@/assets/hero-sandwich.jpg";
 import breakfastBurrito from "@/assets/breakfast-burrito.jpg";
@@ -199,13 +199,10 @@ export default function Menu() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" asChild>
-              <a
-                href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Order Online
-              </a>
+              <Link to="/order-online" className="flex items-center gap-2">
+                <ShoppingCart className="w-4 h-4" />
+                Order for Pickup
+              </Link>
             </Button>
             <Button variant="outline" size="lg" asChild>
               <a href="tel:7722201020" className="flex items-center gap-2">
