@@ -111,6 +111,29 @@ export default function Order() {
 
       if (itemsError) throw itemsError;
 
+      // Send order confirmation notifications (email + SMS)
+      try {
+        await supabase.functions.invoke("send-order-notification", {
+          body: {
+            orderId: order.id,
+            customerName: formData.name.trim(),
+            customerPhone: formData.phone.trim(),
+            customerEmail: formData.email.trim() || undefined,
+            pickupTime: pickupDate.toISOString(),
+            totalAmount,
+            items: items.map((item) => ({
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+            })),
+          },
+        });
+        console.log("Order notifications sent successfully");
+      } catch (notificationError) {
+        // Don't fail the order if notifications fail
+        console.error("Failed to send notifications:", notificationError);
+      }
+
       // Clear cart and redirect
       clearCart();
       navigate("/order-confirmation", { 
