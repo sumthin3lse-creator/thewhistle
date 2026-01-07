@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
-import { LogOut, RefreshCw, Package, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { LogOut, RefreshCw, Package, Clock, CheckCircle, XCircle, Printer } from 'lucide-react';
 import { format } from 'date-fns';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -134,6 +134,96 @@ export default function AdminDashboard() {
   const handleSignOut = async () => {
     await signOut();
     navigate('/admin/auth');
+  };
+
+  const printOrder = (order: OrderWithItems) => {
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    const printContent = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Order #${order.id.slice(0, 8)}</title>
+          <style>
+            body { font-family: Arial, sans-serif; padding: 20px; max-width: 400px; margin: 0 auto; }
+            .header { text-align: center; border-bottom: 2px solid #000; padding-bottom: 10px; margin-bottom: 20px; }
+            .header h1 { margin: 0 0 5px 0; font-size: 24px; }
+            .header p { margin: 0; font-size: 12px; color: #666; }
+            .order-id { font-size: 14px; font-weight: bold; margin-bottom: 15px; }
+            .section { margin-bottom: 15px; }
+            .section-title { font-weight: bold; font-size: 14px; border-bottom: 1px solid #ccc; padding-bottom: 5px; margin-bottom: 8px; }
+            .customer-info p { margin: 3px 0; font-size: 13px; }
+            .items { width: 100%; border-collapse: collapse; }
+            .items th, .items td { padding: 5px; text-align: left; font-size: 13px; }
+            .items th { border-bottom: 1px solid #ccc; }
+            .items .qty { width: 40px; text-align: center; }
+            .items .price { text-align: right; }
+            .total { text-align: right; font-size: 16px; font-weight: bold; margin-top: 10px; padding-top: 10px; border-top: 2px solid #000; }
+            .pickup-time { background: #f5f5f5; padding: 10px; text-align: center; font-weight: bold; margin-top: 15px; }
+            .notes { background: #fff3cd; padding: 10px; margin-top: 10px; font-size: 12px; }
+            .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #666; }
+            @media print { body { padding: 0; } }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1>BITES & BREW</h1>
+            <p>Order Receipt</p>
+          </div>
+          <div class="order-id">Order #${order.id.slice(0, 8).toUpperCase()}</div>
+          <div class="section">
+            <div class="section-title">Customer</div>
+            <div class="customer-info">
+              <p><strong>${order.customer_name}</strong></p>
+              <p>${order.customer_phone}</p>
+              ${order.customer_email ? `<p>${order.customer_email}</p>` : ''}
+            </div>
+          </div>
+          <div class="section">
+            <div class="section-title">Items</div>
+            <table class="items">
+              <thead>
+                <tr>
+                  <th class="qty">Qty</th>
+                  <th>Item</th>
+                  <th class="price">Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${order.order_items.map(item => `
+                  <tr>
+                    <td class="qty">${item.quantity}</td>
+                    <td>${item.item_name}</td>
+                    <td class="price">$${(Number(item.item_price) * item.quantity).toFixed(2)}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+            <div class="total">Total: $${Number(order.total_amount).toFixed(2)}</div>
+          </div>
+          ${order.special_instructions ? `
+            <div class="notes">
+              <strong>Special Instructions:</strong><br>
+              ${order.special_instructions}
+            </div>
+          ` : ''}
+          <div class="pickup-time">
+            PICKUP: ${format(new Date(order.pickup_time), 'MMM d, yyyy - h:mm a')}
+          </div>
+          <div class="footer">
+            <p>Order placed: ${format(new Date(order.created_at), 'MMM d, yyyy h:mm a')}</p>
+            <p>Thank you for your order!</p>
+          </div>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    printWindow.onload = () => {
+      printWindow.print();
+    };
   };
 
   if (authLoading || loading) {
@@ -264,23 +354,33 @@ export default function AdminDashboard() {
                           </Badge>
                         </TableCell>
                         <TableCell>
-                          <Select
-                            value={order.status}
-                            onValueChange={(value) => updateOrderStatus(order.id, value as OrderStatus)}
-                            disabled={updating === order.id}
-                          >
-                            <SelectTrigger className="w-[140px]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="pending">Pending</SelectItem>
-                              <SelectItem value="confirmed">Confirmed</SelectItem>
-                              <SelectItem value="preparing">Preparing</SelectItem>
-                              <SelectItem value="ready">Ready</SelectItem>
-                              <SelectItem value="completed">Completed</SelectItem>
-                              <SelectItem value="cancelled">Cancelled</SelectItem>
-                            </SelectContent>
-                          </Select>
+                          <div className="flex items-center gap-2">
+                            <Select
+                              value={order.status}
+                              onValueChange={(value) => updateOrderStatus(order.id, value as OrderStatus)}
+                              disabled={updating === order.id}
+                            >
+                              <SelectTrigger className="w-[140px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="pending">Pending</SelectItem>
+                                <SelectItem value="confirmed">Confirmed</SelectItem>
+                                <SelectItem value="preparing">Preparing</SelectItem>
+                                <SelectItem value="ready">Ready</SelectItem>
+                                <SelectItem value="completed">Completed</SelectItem>
+                                <SelectItem value="cancelled">Cancelled</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Button
+                              variant="outline"
+                              size="icon"
+                              onClick={() => printOrder(order)}
+                              title="Print order"
+                            >
+                              <Printer className="w-4 h-4" />
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
