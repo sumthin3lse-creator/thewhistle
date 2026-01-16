@@ -11,65 +11,128 @@ import italianSub from "@/assets/italian-sub.jpg";
 
 const menuCategories = [
   {
-    name: "Philly Cheesesteaks",
-    description: "Authentic, mouthwatering cheesesteaks with perfectly grilled steak",
-    image: heroSandwich,
-    items: [
-      { name: "Classic Philly Cheesesteak", description: "Thinly sliced ribeye steak, grilled onions, melted provolone on a fresh hoagie roll", price: 12.99 },
-      { name: "Whiz Wit", description: "Traditional Philly style with Cheez Whiz and grilled onions", price: 12.99 },
-      { name: "Pepper Cheesesteak", description: "Ribeye steak with sautéed peppers, onions, and American cheese", price: 13.49 },
-      { name: "Mushroom Cheesesteak", description: "Loaded with sautéed mushrooms, onions, and Swiss cheese", price: 13.49 },
-      { name: "Pizza Cheesesteak", description: "Topped with marinara sauce and melted mozzarella", price: 13.99 },
-      { name: "Bacon Cheesesteak", description: "Crispy bacon, ribeye steak, and melted cheddar", price: 14.49 },
-    ]
-  },
-  {
-    name: "Breakfast Burritos",
-    description: "Hearty morning burritos packed with fresh ingredients",
+    name: "All Day Breakfast",
+    description: "Hearty breakfast favorites served all day long",
     image: breakfastBurrito,
     items: [
-      { name: "Classic Breakfast Burrito", description: "Scrambled eggs, cheese, bacon, and home fries wrapped in a warm tortilla", price: 9.99 },
-      { name: "Meat Lovers Burrito", description: "Eggs, bacon, sausage, ham, cheese, and peppers", price: 11.99 },
-      { name: "Veggie Sunrise Burrito", description: "Eggs, peppers, onions, mushrooms, spinach, and cheese", price: 9.99 },
-      { name: "Chorizo Burrito", description: "Spicy chorizo, scrambled eggs, jalapeños, and pepper jack cheese", price: 11.49 },
-      { name: "Steak & Egg Burrito", description: "Grilled steak, scrambled eggs, cheese, and sautéed onions", price: 12.99 },
-      { name: "Southwest Burrito", description: "Eggs, black beans, corn, salsa, cheese, and sour cream", price: 10.49 },
+      { name: "Breakfast Platter", description: "2 eggs your way with choice of 1 meat, 1 side and toast", price: 9.95 },
+      { name: "Omelette", description: "\"You build it\" 3 eggs scrambled, cheese, meat or vegetables, served with home fries & toast", price: 9.95 },
+      { name: "Train Wreck", description: "2 scrambled eggs with bacon, ham & sausage, peppers, onions, home fries topped with homemade cheese sauce", price: 10.95 },
+      { name: "Burrito", description: "3 eggs, cheese with choice of meat and home fries inside or outside", price: 9.95 },
+      { name: "Biscuits and Gravy (Half)", description: "1 biscuit with homemade gravy", price: 2.95 },
+      { name: "Biscuits and Gravy (Whole)", description: "2 biscuits with homemade gravy", price: 5.95 },
+      { name: "French Toast", description: "2 deep fried slices cut into 4 triangles & a side of maple syrup", price: 4.95 },
+      { name: "Egg & Cheese Sandwich", description: "1 meat on a kaiser roll", price: 4.95 },
+      { name: "Breakfast Hoagie", description: "Served on a toasted hoagie roll, 3 eggs, cheese, home fries", price: 9.95 },
+      { name: "Patty Melt", description: "1 patty grilled on rye with melted swiss & grilled onions", price: 8.95 },
     ]
   },
   {
-    name: "Smash Burgers",
-    description: "Juicy, crispy-edged smash burgers made to order",
+    name: "Burgers & More",
+    description: "5 oz each never frozen Angus beef patty on a grilled kaiser",
     image: smashBurger,
     items: [
-      { name: "Classic Smash Burger", description: "Two smashed patties, American cheese, pickles, onion, special sauce on brioche", price: 11.99 },
-      { name: "Bacon Smash", description: "Double patty, crispy bacon, cheddar cheese, lettuce, tomato, mayo", price: 13.49 },
-      { name: "Mushroom Swiss Smash", description: "Double patty, sautéed mushrooms, melted Swiss, garlic aioli", price: 13.49 },
-      { name: "BBQ Smash", description: "Double patty, bacon, cheddar, onion rings, tangy BBQ sauce", price: 13.99 },
-      { name: "Jalapeño Popper Smash", description: "Double patty, cream cheese, jalapeños, pepper jack, bacon", price: 14.49 },
-      { name: "Single Smash", description: "One smashed patty, American cheese, pickles, onion, special sauce", price: 8.99 },
+      { name: "Smash Burger", description: "\"Build your way\" pick a cheese & pick toppings", price: 8.95 },
+      { name: "Uncle Pumpkin", description: "2 patties, melted cheddar, grilled onions, bacon & 1 crispy onion ring", price: 11.95 },
+      { name: "Patty Melt", description: "1 patty grilled on rye with melted swiss & grilled onions", price: 8.95 },
+      { name: "Veggie Burger", description: "\"Build your way\"", price: 8.99 },
+      { name: "Reuben", description: "Corned beef or turkey, sauerkraut, swiss, thousand island on rye", price: 9.95 },
+      { name: "Hot Dog", description: "Make it your way! Add chili & cheese or kraut +$1", price: 4.95 },
+      { name: "Grilled Chicken Sandwich", description: "Grilled chicken breast on a grilled kaiser, provolone, lettuce, tomato, onion & mayo", price: 10.95 },
+      { name: "Corky Chicken", description: "2 crispy tenders on a grilled kaiser with lettuce, tomato & bacon, drizzled with honey mustard", price: 9.95 },
+      { name: "Grilled Cheese", description: "Classic grilled cheese sandwich", price: 5.50 },
     ]
   },
   {
-    name: "Fresh Subs",
-    description: "Classic deli-style subs with premium meats and fresh vegetables",
+    name: "Philly's & Grilled Hoagies",
+    description: "Our Famous Philly's - Served on a grilled hoagie roll topped with grilled onions & our homemade cheese sauce",
+    image: heroSandwich,
+    items: [
+      { name: "Whole Philly", description: "Beef or chicken - around 10 inches", price: 13.95 },
+      { name: "1/2 Philly", description: "Beef or chicken - about half a whole one", price: 9.95 },
+      { name: "1/2 & 1/2 Beef & Chicken", description: "Why choose 1 when you can have both mixed together!", price: 14.95 },
+      { name: "Grilled Hoagies", description: "Served on toasted hoagie roll", price: 11.99 },
+      { name: "The Deuce", description: "Grilled chicken tossed in buffalo sauce & topped with our creamy coleslaw", price: 11.99 },
+      { name: "Chicken Parmesan", description: "Crispy chicken, marinara, provolone & parmesan", price: 11.99 },
+      { name: "Crispy Chicken Hoagie", description: "Crispy chicken, bacon, mayo, lettuce & tomato", price: 11.99 },
+      { name: "Meatball Parmesan", description: "Meatballs, marinara, provolone & parmesan", price: 11.99 },
+    ]
+  },
+  {
+    name: "Wraps",
+    description: "Fresh wraps made to order",
     image: italianSub,
     items: [
-      { name: "Italian Sub", description: "Ham, capicola, salami, provolone, lettuce, tomato, onion, oil & vinegar", price: 11.99 },
-      { name: "Turkey Club Sub", description: "Roasted turkey, bacon, Swiss, lettuce, tomato, mayo", price: 11.99 },
-      { name: "Roast Beef Sub", description: "Thinly sliced roast beef, provolone, horseradish mayo, onion", price: 12.49 },
-      { name: "Chicken Parm Sub", description: "Breaded chicken cutlet, marinara, melted mozzarella", price: 12.99 },
-      { name: "Meatball Sub", description: "House-made meatballs, marinara sauce, melted provolone", price: 11.99 },
-      { name: "BLT Sub", description: "Crispy bacon, fresh lettuce, ripe tomato, mayo on toasted bread", price: 10.99 },
+      { name: "Buffalo Chicken Wrap", description: "Crispy chicken tossed in buffalo topped with ranch, lettuce, tomato & onion", price: 11.95 },
+      { name: "Chilled Chicken Wrap", description: "Grilled chicken, cheddar cheese, sour cream, rice & beans", price: 11.95 },
+      { name: "Crispy Chicken Wrap", description: "Crispy chicken, bacon, ranch, lettuce, tomato & onion", price: 11.85 },
+      { name: "Caesar Wrap", description: "Grilled chicken, lettuce, parmesan and caesar dressing", price: 11.95 },
+      { name: "Turkey BLT Wrap", description: "Turkey, bacon, lettuce, tomato and mayo", price: 10.95 },
+      { name: "Veggie Wrap", description: "Grilled onions, peppers, mushrooms, provolone, lettuce, tomato & banana peppers", price: 11.95 },
+    ]
+  },
+  {
+    name: "Cold Sandwiches",
+    description: "Fresh lunch options",
+    image: italianSub,
+    items: [
+      { name: "Italian Hot or Cold", description: "Salami, pepperoni, capicola, provolone, served on a hoagie roll", price: 11.95 },
+      { name: "Ham and Cheese", description: "Served on a hoagie roll, add toppings of your choice", price: 10.75 },
+      { name: "Turkey and Cheese", description: "Served on a hoagie roll, add toppings of your choice", price: 10.75 },
+      { name: "Salerno Club", description: "Turkey, ham, bacon, lettuce, tomato and mayo stacked on 3 slices of toast", price: 11.95 },
+      { name: "BLT", description: "No explanation needed! Just choose your toast!", price: 8.95 },
+    ]
+  },
+  {
+    name: "Salads",
+    description: "Fresh and delicious salads",
+    image: italianSub,
+    items: [
+      { name: "Titanic Salad", description: "Choose 1 scoop of either tuna, chicken or egg salad served on a bed of lettuce, tomato, cucumber & onion", price: 8.95 },
+      { name: "Cobb Salad", description: "Grilled or crispy chicken, bacon, lettuce, tomato, onion, cucumber & a hard boiled egg", price: 11.95 },
+      { name: "Chef Salad", description: "Turkey ham, lettuce, tomato, onion, shredded cheddar, cucumber & a hard boiled egg", price: 11.95 },
+      { name: "Caesar Salad", description: "Grilled chicken, lettuce, tomato, cucumber & caesar dressing", price: 11.95 },
+      { name: "Chopped Hoagie Salad", description: "Salami, pepperoni, provolone, lettuce, tomato, onion & banana peppers chopped", price: 11.95 },
+      { name: "Buffalo Chicken Salad", description: "Crispy buffalo style chicken, lettuce, tomato, onion, cucumber & hard boiled egg", price: 11.95 },
+      { name: "Deluxe Salad", description: "Grilled chicken, bacon, tomato, onion, banana peppers, hard boiled egg, shredded cheddar, homemade croutons", price: 12.95 },
+    ]
+  },
+  {
+    name: "Platters & Kids Meals",
+    description: "Hearty platters and kid-friendly options",
+    image: breakfastBurrito,
+    items: [
+      { name: "Grilled Chicken Platter", description: "Grilled chicken breast, rice, black beans", price: 12.95 },
+      { name: "Chicken Tender Platter", description: "4 crispy tenders, fries, slaw & garlic toast", price: 13.50 },
+      { name: "Kids Meal - 2 Chicken Tenders", description: "Pick 1: fries or chips - Substitute w/ mac & cheese +$1.50", price: 7.85 },
+      { name: "Kids Meal - Smash Burger", description: "Pick 1: fries or chips - Substitute w/ mac & cheese +$1.50", price: 7.85 },
+      { name: "Kids Meal - Hot Dog", description: "Pick 1: fries or chips - Substitute w/ mac & cheese +$1.50", price: 7.85 },
+      { name: "Kids Meal - Mac N Cheese", description: "Pick 1: fries or chips", price: 7.85 },
+      { name: "Kids Meal - Grilled Cheese", description: "Pick 1: fries or chips - Substitute w/ mac & cheese +$1.50", price: 7.85 },
+    ]
+  },
+  {
+    name: "The Sweet Spot",
+    description: "Delicious desserts and sweet treats",
+    image: breakfastBurrito,
+    items: [
+      { name: "Cinnamon Roll", description: "Try our buttered and grilled cinnamon roll - served with a side of icing", price: 3.55 },
+      { name: "Blueberry Muffin", description: "Freshly baked blueberry muffin", price: 3.50 },
+      { name: "Chocolate Chip Muffin", description: "Freshly baked chocolate chip muffin", price: 3.50 },
+      { name: "Chocolate Chip Cookies (2)", description: "Two fresh baked cookies", price: 2.50 },
+      { name: "Brownie", description: "Rich chocolate brownie", price: 2.50 },
+      { name: "4 oz Ice Cream", description: "Strawberry, vanilla or chocolate", price: 2.50 },
     ]
   }
 ];
 
 const sides = [
-  { name: "Fresh Cut Fries", price: 4.49 },
-  { name: "Onion Rings", price: 5.49 },
-  { name: "Cheese Fries", price: 5.99 },
-  { name: "Mozzarella Sticks", price: 7.99 },
-  { name: "Side Salad", price: 4.99 },
+  { name: "Home Fries", price: 1.50 },
+  { name: "Grits", price: 1.49 },
+  { name: "Bacon (3 strips)", price: 3.00 },
+  { name: "Sausage (2 links)", price: 2.00 },
+  { name: "Toast", price: 2.00 },
+  { name: "Fruit Cup", price: 2.00 },
 ];
 
 const drinks = [
@@ -103,7 +166,7 @@ export default function OrderOnline() {
           <div className="flex items-center gap-4">
             <div className="flex flex-col text-right">
               <span className="font-display text-xl font-bold text-primary">The Whistle Stop</span>
-              <span className="text-xs text-muted-foreground">by Ariel Seafoods</span>
+              <span className="text-xs text-muted-foreground">We Love Cooking For You!</span>
             </div>
             <CartSheet />
           </div>
@@ -278,7 +341,7 @@ export default function OrderOnline() {
       <footer className="bg-card border-t border-border py-8 mb-20">
         <div className="container mx-auto px-4 text-center">
           <p className="text-muted-foreground text-sm">
-            © {new Date().getFullYear()} The Whistle Stop by Ariel Seafoods. All rights reserved.
+            © {new Date().getFullYear()} The Whistle Stop. We Love Cooking For You!
           </p>
         </div>
       </footer>

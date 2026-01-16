@@ -6,32 +6,36 @@ import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollRev
 
 const menuItems = [
   {
-    name: "Philly Cheesesteaks",
+    name: "Famous Philly's",
     description:
-      "Authentic, mouthwatering cheesesteaks with perfectly grilled steak and melted cheese on a fresh hoagie roll.",
+      "Served on a grilled hoagie roll topped with grilled onions & our homemade cheese sauce. Beef or chicken available.",
     image: heroSandwich,
     featured: true,
+    price: "From $9.95",
   },
   {
-    name: "Breakfast Burritos",
+    name: "All Day Breakfast",
     description:
-      "Hearty morning burritos packed with fluffy scrambled eggs, cheese, bacon, and fresh peppers.",
+      "Train Wreck, omelettes, breakfast platters, burritos and more. Served all day!",
     image: breakfastBurrito,
     featured: true,
+    price: "From $4.95",
   },
   {
     name: "Smash Burgers",
     description:
-      "Juicy, crispy-edged smash burgers with melted American cheese on a soft brioche bun.",
+      "5 oz never frozen Angus beef patty on a grilled kaiser. Build your way with your choice of cheese & toppings.",
     image: smashBurger,
     featured: true,
+    price: "From $8.95",
   },
   {
-    name: "Fresh Subs",
+    name: "Cold Subs & Wraps",
     description:
-      "Classic deli-style subs with premium meats, fresh vegetables, and house-made dressings.",
+      "Italian subs, BLTs, club sandwiches, and fresh wraps made with premium ingredients.",
     image: italianSub,
     featured: true,
+    price: "From $8.95",
   },
 ];
 
@@ -71,9 +75,14 @@ export function MenuSection() {
                   )}
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display text-2xl font-semibold text-foreground mb-2">
-                    {item.name}
-                  </h3>
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="font-display text-2xl font-semibold text-foreground">
+                      {item.name}
+                    </h3>
+                    <span className="text-primary font-bold text-lg ml-2 whitespace-nowrap">
+                      {item.price}
+                    </span>
+                  </div>
                   <p className="text-muted-foreground leading-relaxed">
                     {item.description}
                   </p>
