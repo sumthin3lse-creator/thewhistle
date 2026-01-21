@@ -1,5 +1,5 @@
-import { Star } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Star, Quote } from "lucide-react";
+import { motion } from "framer-motion";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
 
 const testimonials = [
@@ -31,8 +31,8 @@ function StarRating({ rating }: { rating: number }) {
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}
-          size={18}
-          className={i < rating ? "fill-primary text-primary" : "text-muted"}
+          size={16}
+          className={i < rating ? "fill-primary text-primary" : "text-muted-foreground/30"}
         />
       ))}
     </div>
@@ -41,33 +41,57 @@ function StarRating({ rating }: { rating: number }) {
 
 export function TestimonialsSection() {
   return (
-    <section className="py-20 bg-secondary/30">
-      <div className="container mx-auto px-4">
+    <section className="section-padding bg-background relative overflow-hidden">
+      {/* Subtle background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-secondary/50 via-background to-background" />
+
+      <div className="container mx-auto px-4 relative">
         <ScrollReveal>
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <div className="text-center mb-14">
+            <span className="inline-block text-primary font-semibold tracking-[0.2em] uppercase text-sm mb-4">
+              Testimonials
+            </span>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-foreground text-balance">
               What Our Customers Say
             </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
               Don't just take our word for it — hear from the folks who keep coming back
             </p>
           </div>
         </ScrollReveal>
 
-        <ScrollRevealStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <ScrollRevealStagger className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
           {testimonials.map((testimonial, index) => (
             <ScrollRevealItem key={index}>
-              <Card className="bg-card border-border/50 h-full">
-                <CardContent className="p-6">
+              <motion.div 
+                className="bg-card border border-border/50 rounded-2xl p-6 h-full warm-shadow hover-lift relative group"
+                whileHover={{ y: -4 }}
+                transition={{ duration: 0.3 }}
+              >
+                {/* Quote icon */}
+                <div className="absolute -top-3 -left-2 w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <Quote className="w-5 h-5 text-primary" />
+                </div>
+
+                <div className="mb-4">
                   <StarRating rating={testimonial.rating} />
-                  <blockquote className="mt-4 text-foreground/90 italic">
-                    "{testimonial.quote}"
-                  </blockquote>
-                  <p className="mt-4 font-semibold text-primary">
-                    — {testimonial.name}
+                </div>
+                
+                <blockquote className="text-foreground/80 leading-relaxed mb-5 text-[15px]">
+                  "{testimonial.quote}"
+                </blockquote>
+                
+                <div className="flex items-center gap-3 pt-4 border-t border-border/50">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <span className="text-primary font-bold text-sm">
+                      {testimonial.name.charAt(0)}
+                    </span>
+                  </div>
+                  <p className="font-semibold text-foreground">
+                    {testimonial.name}
                   </p>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             </ScrollRevealItem>
           ))}
         </ScrollRevealStagger>
