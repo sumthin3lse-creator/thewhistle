@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import heroSandwich from "@/assets/hero-sandwich.jpg";
-import breakfastBurrito from "@/assets/breakfast-burrito.jpg";
-import smashBurger from "@/assets/smash-burger.jpg";
-import italianSub from "@/assets/italian-sub.jpg";
+import heroSandwich from "@/assets/food-photo-10.png";
+import breakfastBurrito from "@/assets/breakfast-burrito.jpg"; // Keep existing for now if no better option
+import smashBurger from "@/assets/smash-burger.jpg"; // Keep existing
+import italianSub from "@/assets/food-style-1.jpg";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
 
 const menuItems = [

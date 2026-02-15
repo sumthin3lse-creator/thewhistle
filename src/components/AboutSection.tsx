@@ -1,6 +1,7 @@
 import { Heart, Users, Award, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
+import exteriorImage from "@/assets/restaurant-exterior.png";
 
 const features = [
   {
@@ -81,9 +82,16 @@ export function AboutSection() {
           </ScrollRevealStagger>
 
           <ScrollReveal delay={0.3}>
-            <div className="mt-16 md:mt-20">
-              <div className="bg-card rounded-3xl p-8 md:p-12 warm-shadow border border-border/50 max-w-4xl mx-auto">
-                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed text-center">
+            <div className="mt-16 md:mt-20 grid md:grid-cols-2 gap-8 items-center">
+              <div className="rounded-2xl overflow-hidden warm-shadow hover-lift">
+                <img 
+                  src={exteriorImage} 
+                  alt="The Whistle Stop Exterior" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="bg-card rounded-3xl p-8 md:p-12 warm-shadow border border-border/50">
+                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
                   From savory Smash Burgers to classic Breakfast Sandwiches and
                   delectable Subs, we offer a wide variety of options to please all
                   palates. Re-opened in 2023 under new ownership, we take pride in
