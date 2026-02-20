@@ -53,7 +53,7 @@ export function Navbar() {
             <img 
               src={logo} 
               alt="The Whistle Stop by Ariel Seafoods" 
-              className={`w-auto transition-all duration-500 ease-out mix-blend-multiply ${
+              className={`w-auto transition-all duration-500 ease-out ${
                 isScrolled 
                   ? "h-14 md:h-16 scale-95" 
                   : "h-16 md:h-20 scale-100"
