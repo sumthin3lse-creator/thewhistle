@@ -81,41 +81,32 @@ export default function Order() {
         pickupDate.setDate(pickupDate.getDate() + 1);
       }
 
-      // Create order
-      const { data: order, error: orderError } = await supabase
-        .from("orders")
-        .insert({
-          customer_name: formData.name.trim(),
-          customer_phone: formData.phone.trim(),
-          customer_email: formData.email.trim() || null,
-          pickup_time: pickupDate.toISOString(),
-          special_instructions: formData.specialInstructions.trim() || null,
-          total_amount: totalAmount,
-        })
-        .select()
-        .single();
+      // Create order via validated RPC (server-side validation + total calculation)
+      const { data: orderResult, error: orderError } = await supabase.rpc(
+        "create_validated_order",
+        {
+          _customer_name: formData.name.trim(),
+          _customer_phone: formData.phone.trim(),
+          _customer_email: formData.email.trim() || null,
+          _pickup_time: pickupDate.toISOString(),
+          _special_instructions: formData.specialInstructions.trim() || null,
+          _items: items.map((item) => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+          })),
+        }
+      );
 
       if (orderError) throw orderError;
 
-      // Create order items
-      const orderItems = items.map((item) => ({
-        order_id: order.id,
-        item_name: item.name,
-        item_price: item.price,
-        quantity: item.quantity,
-      }));
-
-      const { error: itemsError } = await supabase
-        .from("order_items")
-        .insert(orderItems);
-
-      if (itemsError) throw itemsError;
+      const orderId = (orderResult as any).order_id;
 
       // Send order confirmation notifications (email + SMS)
       try {
         await supabase.functions.invoke("send-order-notification", {
           body: {
-            orderId: order.id,
+            orderId: orderId,
             customerName: formData.name.trim(),
             customerPhone: formData.phone.trim(),
             customerEmail: formData.email.trim() || undefined,
@@ -138,7 +129,7 @@ export default function Order() {
       clearCart();
       navigate("/order-confirmation", { 
         state: { 
-          orderId: order.id,
+          orderId: orderId,
           pickupTime: formData.pickupTime,
           customerName: formData.name,
         } 
