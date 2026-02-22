@@ -1,11 +1,25 @@
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { Link } from "react-router-dom";
 import heroSandwich from "@/assets/food-photo-10.png";
-import breakfastBurrito from "@/assets/breakfast-burrito.jpg"; // Keep existing for now if no better option
-import smashBurger from "@/assets/smash-burger.jpg"; // Keep existing
+import breakfastBurrito from "@/assets/breakfast-burrito.jpg";
+import smashBurger from "@/assets/smash-burger.jpg";
 import italianSub from "@/assets/food-style-1.jpg";
+import foodPhoto3 from "@/assets/food-photo-3.png";
+import foodPhoto4 from "@/assets/food-photo-4.png";
+import foodPhoto5 from "@/assets/food-photo-5.png";
+import foodPhoto6 from "@/assets/food-photo-6.png";
+import foodPhoto7 from "@/assets/food-photo-7.png";
+import foodPhoto8 from "@/assets/food-photo-8.png";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
+
+const foodShowcase = [
+  { src: foodPhoto3, alt: "Delicious meal from our kitchen", label: "Fresh & Local" },
+  { src: foodPhoto4, alt: "House specialty dish", label: "House Special" },
+  { src: foodPhoto5, alt: "Chef's favorite plate", label: "Chef's Pick" },
+  { src: foodPhoto6, alt: "Popular menu item", label: "Fan Favorite" },
+  { src: foodPhoto7, alt: "Signature sandwich", label: "Signature Subs" },
+  { src: foodPhoto8, alt: "Breakfast classic", label: "Breakfast Classics" },
+];
 
 const menuItems = [
   {
@@ -133,15 +147,47 @@ export function MenuSection() {
             <p className="text-muted-foreground mb-6 text-lg">
               Plus breakfast sandwiches, sides, and daily specials!
             </p>
-            <Link
-              to="/menu"
+            <a
+              href="https://www.thewhistlestop.menu"
+              target="_blank"
+              rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:gap-3"
             >
               View Full Menu
               <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
-            </Link>
+            </a>
           </div>
         </ScrollReveal>
+
+        {/* From Our Kitchen Showcase */}
+        <ScrollReveal delay={0.2}>
+          <h2 className="mt-20 mb-6 text-center font-display text-3xl md:text-4xl font-bold text-foreground">
+            From Our Kitchen
+          </h2>
+        </ScrollReveal>
+        <ScrollRevealStagger className="mx-auto grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3">
+          {foodShowcase.map((food, i) => (
+            <ScrollRevealItem key={food.label}>
+              <motion.div
+                className="group relative overflow-hidden rounded-xl border border-border shadow-md"
+                whileHover={{ scale: 1.03 }}
+                transition={{ duration: 0.3 }}
+              >
+                <img
+                  src={food.src}
+                  alt={food.alt}
+                  className="aspect-square w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                  <span className="font-display text-sm font-bold text-white drop-shadow sm:text-lg">
+                    {food.label}
+                  </span>
+                </div>
+              </motion.div>
+            </ScrollRevealItem>
+          ))}
+        </ScrollRevealStagger>
       </div>
     </section>
   );
