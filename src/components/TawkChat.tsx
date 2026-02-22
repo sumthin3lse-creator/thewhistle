@@ -9,11 +9,18 @@ const TawkChat = () => {
     const style = document.createElement('style');
     style.textContent = `
       .tawk-min-container .tawk-button-circle.tawk-button-large {
-        width: 36px !important;
-        height: 36px !important;
+        width: 28px !important;
+        height: 28px !important;
       }
       .tawk-min-container .tawk-button-circle.tawk-button-large svg {
-        transform: scale(0.6) !important;
+        transform: scale(0.45) !important;
+      }
+      /* Center the widget horizontally */
+      iframe[title="chat widget"][style],
+      .tawk-min-container {
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
       }
       @media (max-width: 1023px) {
         iframe[title="chat widget"],
