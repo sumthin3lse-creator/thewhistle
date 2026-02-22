@@ -113,6 +113,11 @@ export function Navbar() {
                 Order Now
               </a>
             </Button>
+            <a href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/" target="_blank" rel="noopener noreferrer">
+              <Button size="sm" variant="ghost" className="gap-1.5 text-sm underline underline-offset-4">
+                🛵 Order DoorDash
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu Button */}
@@ -173,6 +178,11 @@ export function Navbar() {
                   Order Online
                 </a>
               </Button>
+              <a href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/" target="_blank" rel="noopener noreferrer">
+                <Button variant="ghost" className="w-full gap-1.5 text-sm underline underline-offset-4">
+                  🛵 Order DoorDash
+                </Button>
+              </a>
             </div>
           </div>
         )}
