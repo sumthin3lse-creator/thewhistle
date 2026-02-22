@@ -2,14 +2,15 @@ export function HeroSection() {
   return (
     <section className="relative w-full h-[80vh] md:h-screen overflow-hidden flex items-center justify-center">
       {/* The Background Video */}
-      <video
+     <video
         className="absolute top-0 left-0 w-full h-full object-cover z-0"
         autoPlay
         loop
         muted
         playsInline
       >
-        <source src="/hero-video.mp4" type="video/mp4" />
+        {/* Using a reliable public test video */}
+        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
       </video>
 
       {/* Dark Overlay to make text pop */}
