@@ -9,11 +9,11 @@ const TawkChat = () => {
     const style = document.createElement('style');
     style.textContent = `
       .tawk-min-container .tawk-button-circle.tawk-button-large {
-        width: 45px !important;
-        height: 45px !important;
+        width: 36px !important;
+        height: 36px !important;
       }
       .tawk-min-container .tawk-button-circle.tawk-button-large svg {
-        transform: scale(0.75) !important;
+        transform: scale(0.6) !important;
       }
     `;
     document.head.appendChild(style);
