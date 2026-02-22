@@ -35,9 +35,7 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        isScrolled
-          ? "bg-card/95 backdrop-blur-xl warm-shadow py-2"
-          : "bg-transparent py-4"
+        isScrolled ? "bg-card/95 backdrop-blur-xl warm-shadow py-2" : "bg-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -54,9 +52,7 @@ export function Navbar() {
               src={logo}
               alt="The Whistle Stop by Ariel Seafoods"
               className={`w-auto transition-all duration-500 ease-out ${
-                isScrolled
-                  ? "h-14 md:h-16 scale-95"
-                  : "h-16 md:h-20 scale-100"
+                isScrolled ? "h-14 md:h-16 scale-95" : "h-16 md:h-20 scale-100"
               }`}
             />
           </a>
@@ -71,9 +67,7 @@ export function Navbar() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className={`transition-colors font-medium ${
-                    isScrolled
-                      ? "text-foreground/80 hover:text-primary"
-                      : "text-white hover:text-white/70"
+                    isScrolled ? "text-foreground/80 hover:text-primary" : "text-white hover:text-white/70"
                   }`}
                 >
                   {link.label}
@@ -83,14 +77,12 @@ export function Navbar() {
                   key={link.href}
                   onClick={() => scrollToSection(link.href)}
                   className={`transition-colors font-medium ${
-                    isScrolled
-                      ? "text-foreground/80 hover:text-primary"
-                      : "text-white hover:text-white/70"
+                    isScrolled ? "text-foreground/80 hover:text-primary" : "text-white hover:text-white/70"
                   }`}
                 >
                   {link.label}
                 </button>
-              )
+              ),
             )}
           </div>
 
@@ -99,9 +91,7 @@ export function Navbar() {
             <a
               href="tel:7722201020"
               className={`flex items-center gap-2 transition-colors ${
-                isScrolled
-                  ? "text-muted-foreground hover:text-primary"
-                  : "text-white/80 hover:text-white"
+                isScrolled ? "text-muted-foreground hover:text-primary" : "text-white/80 hover:text-white"
               }`}
             >
               <Phone className="w-4 h-4" />
@@ -112,21 +102,15 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               className={`flex items-center gap-2 transition-colors ${
-                isScrolled
-                  ? "text-muted-foreground hover:text-primary"
-                  : "text-white/80 hover:text-white"
+                isScrolled ? "text-muted-foreground hover:text-primary" : "text-white/80 hover:text-white"
               }`}
             >
               <MapPin className="w-4 h-4" />
               <span className="font-medium text-sm">4920 SE Dixie Hwy</span>
             </a>
             <Button variant="default" size="sm" asChild>
-              <a
-                href="https://thewhistlestop.menu/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Order Online
+              <a href="https://thewhistlestop.menu/" target="_blank" rel="noopener noreferrer">
+                Order Now
               </a>
             </Button>
           </div>
@@ -165,7 +149,7 @@ export function Navbar() {
                   >
                     {link.label}
                   </button>
-                )
+                ),
               )}
               <hr className="border-border" />
               <a
@@ -185,11 +169,7 @@ export function Navbar() {
                 <span className="font-medium">4920 SE Dixie Hwy, Stuart, FL</span>
               </a>
               <Button variant="default" className="w-full" asChild>
-                <a
-                  href="https://thewhistlestop.menu/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://thewhistlestop.menu/" target="_blank" rel="noopener noreferrer">
                   Order Online
                 </a>
               </Button>
