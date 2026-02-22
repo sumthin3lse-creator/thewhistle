@@ -1,10 +1,12 @@
 export const HeroSection = () => (
-  <section className="relative w-full h-[80vh] md:h-screen overflow-hidden flex items-end justify-center pb-12">
-    <video className="absolute top-0 left-0 w-full h-full object-cover z-0" autoPlay loop muted playsInline>
-      <source src="/hero-video.mp4" type="video/mp4" />
-    </video>
+  <section>
+    <div className="relative w-full h-[80vh] md:h-screen overflow-hidden">
+      <video className="absolute top-0 left-0 w-full h-full object-cover z-0" autoPlay loop muted playsInline>
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
+    </div>
 
-    <div className="relative z-10 flex flex-col items-center gap-3">
+    <div className="flex flex-col items-center gap-3 py-6 bg-background">
       <a
         href="https://thewhistlestop.menu/"
         target="_blank"
@@ -17,7 +19,7 @@ export const HeroSection = () => (
         href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-white/90 hover:text-white text-sm font-medium underline underline-offset-4 decoration-white/40 hover:decoration-white transition-colors"
+        className="text-muted-foreground hover:text-primary text-sm font-medium underline underline-offset-4 decoration-muted-foreground/40 hover:decoration-primary transition-colors"
       >
         Order DoorDash
       </a>
