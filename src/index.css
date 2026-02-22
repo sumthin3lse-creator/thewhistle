@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Nunito:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -54,8 +54,8 @@
     --glass-border: hsla(30, 20%, 90%, 0.5);
 
     /* Fonts */
-    --font-display: 'Lora', serif;
-    --font-body: 'Nunito', sans-serif;
+    --font-display: 'Comfortaa', cursive;
+    --font-body: 'Comfortaa', cursive;
 
     --sidebar-background: 30 10% 98%;
     --sidebar-foreground: 20 15% 15%;
