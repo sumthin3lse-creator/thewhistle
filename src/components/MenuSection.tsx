@@ -1,23 +1,63 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import foodPhoto3 from "@/assets/food-photo-3.png";
-import foodPhoto4 from "@/assets/food-photo-4.png";
-import foodPhoto5 from "@/assets/food-photo-5.png";
-import foodPhoto6 from "@/assets/food-photo-6.png";
-import foodPhoto7 from "@/assets/food-photo-7.png";
-import foodPhoto8 from "@/assets/food-photo-8.png";
+import foodPhillys from "@/assets/food-phillys.jpg";
+import foodSalads from "@/assets/food-salads.jpg";
+import foodUnclePumpkin from "@/assets/food-uncle-pumpkin.png";
+import foodSweets from "@/assets/food-sweets.jpg";
+import foodTrainWreck from "@/assets/food-train-wreck.jpg";
+import foodSalernoClub from "@/assets/food-salerno-club.png";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
+import { FoodDetailDialog } from "./FoodDetailDialog";
 
 const foodShowcase = [
-  { src: foodPhoto3, alt: "Delicious meal from our kitchen", label: "Fresh & Local" },
-  { src: foodPhoto4, alt: "House specialty dish", label: "House Special" },
-  { src: foodPhoto5, alt: "Chef's favorite plate", label: "Chef's Pick" },
-  { src: foodPhoto6, alt: "Popular menu item", label: "Fan Favorite" },
-  { src: foodPhoto7, alt: "Signature sandwich", label: "Signature Subs" },
-  { src: foodPhoto8, alt: "Breakfast classic", label: "Breakfast Classics" },
+  {
+    src: foodPhillys,
+    alt: "Our Philly cheesesteaks",
+    label: "Our Philly's",
+    description: "Choose from our legendary Beef Philly, Chicken Philly, or go half & half — all loaded with melted cheese and grilled onions on a fresh hoagie roll.",
+  },
+  {
+    src: foodSalads,
+    alt: "Fresh salads",
+    label: "Our Salads",
+    description: "Fresh, crisp, and packed with flavor — choose from The Titanic, the Chopped Hoagie, or the Deluxe. Every salad is made to order with the freshest ingredients.",
+  },
+  {
+    src: foodUnclePumpkin,
+    alt: "The Uncle Pumpkin burger",
+    label: "The Uncle Pumpkin",
+    description: "A towering double smash burger stacked with crispy bacon, caramelized onions, melted American cheese, and a golden onion ring on top. A Whistle Stop legend.",
+  },
+  {
+    src: foodSweets,
+    alt: "Sweet treats and desserts",
+    label: "The Sweets",
+    description: "Satisfy your sweet tooth with our fresh-baked cinnamon rolls, blueberry muffins, chocolate chip cookies, fudge brownies, and hand-scooped ice cream.",
+  },
+  {
+    src: foodSalads,
+    alt: "The Titanic salad",
+    label: "The Titanic",
+    description: "Our signature salad — a mountain of fresh tuna salad over crisp mixed greens with cucumbers, tomatoes, and your choice of dressing. It's unsinkable.",
+  },
+  {
+    src: foodTrainWreck,
+    alt: "The Train Wreck breakfast",
+    label: "The Train Wreck",
+    description: "A glorious breakfast pile-up: crispy home fries topped with eggs, bacon, sausage, ham, peppers, onions, and smothered in cheese sauce. Our most famous dish.",
+  },
+  {
+    src: foodSalernoClub,
+    alt: "The Salerno Club sandwich",
+    label: "The Salerno Club",
+    description: "A triple-decker club stacked high with turkey, ham, crispy bacon, lettuce, tomato, and mayo on toasted bread. Served with chips — a classic done right.",
+  },
 ];
 
 export function MenuSection() {
+  const [selectedItem, setSelectedItem] = useState<typeof foodShowcase[0] | null>(null);
+
   return (
     <section id="menu" className="section-padding bg-background relative overflow-hidden">
       {/* Subtle background pattern */}
@@ -47,12 +87,16 @@ export function MenuSection() {
           </div>
         </ScrollReveal>
 
-        {/* From Our Kitchen Showcase */}
+        {/* Food Showcase Grid - 7 items */}
         <ScrollRevealStagger className="mx-auto grid max-w-5xl grid-cols-2 gap-3 sm:grid-cols-3">
-          {foodShowcase.map((food) => (
-            <ScrollRevealItem key={food.label}>
-              <motion.div
-                className="group relative overflow-hidden rounded-xl border border-border shadow-md"
+          {foodShowcase.map((food, i) => (
+            <ScrollRevealItem
+              key={food.label}
+              className={i === 6 ? "col-span-2 sm:col-span-1" : ""}
+            >
+              <motion.button
+                onClick={() => setSelectedItem(food)}
+                className="group relative overflow-hidden rounded-xl border border-border shadow-md w-full text-left cursor-pointer"
                 whileHover={{ scale: 1.03 }}
                 transition={{ duration: 0.3 }}
               >
@@ -67,7 +111,7 @@ export function MenuSection() {
                     {food.label}
                   </span>
                 </div>
-              </motion.div>
+              </motion.button>
             </ScrollRevealItem>
           ))}
         </ScrollRevealStagger>
@@ -89,6 +133,12 @@ export function MenuSection() {
           </div>
         </ScrollReveal>
       </div>
+
+      <FoodDetailDialog
+        item={selectedItem}
+        open={!!selectedItem}
+        onOpenChange={(open) => { if (!open) setSelectedItem(null); }}
+      />
     </section>
   );
 }
