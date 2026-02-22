@@ -7,22 +7,22 @@ import exteriorImage from "@/assets/restaurant-exterior.png";
 const features = [
   {
     icon: Heart,
-    title: "Made with Love",
-    description: "Every sandwich crafted with care using quality ingredients",
+    title: "Philly Born",
+    description: "Owners Paul & Nora McGovern brought authentic Philadelphia flavors to Stuart in 2004",
     color: "bg-red-50 dark:bg-red-950/30",
     iconColor: "text-red-500",
   },
   {
     icon: Users,
-    title: "Family-Owned",
-    description: "Locally-owned and operated since re-opening in 2023",
+    title: "20+ Years of Passion",
+    description: "Two decades of Philly-born dedication in every grill press",
     color: "bg-blue-50 dark:bg-blue-950/30",
     iconColor: "text-blue-500",
   },
   {
     icon: Award,
-    title: "Stuart's Favorite",
-    description: "Serving the community with exceptional food & service",
+    title: "Best Philly Ever",
+    description: "Fresh-baked bread & legendary homemade cheese sauce locals travel miles for",
     color: "bg-amber-50 dark:bg-amber-950/30",
     iconColor: "text-amber-500",
   },
@@ -47,13 +47,10 @@ export function AboutSection() {
                 Our Story
               </span>
               <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-8 text-balance">
-                About The Whistle Stop
+                A Real Taste of Philly, Right in the Heart of Port Salerno.
               </h2>
               <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                The Whistle Stop by Ariel Seafoods is a beloved sandwich shop in
-                Stuart, FL, serving up a delicious blend of favorites. Specializing
-                in mouthwatering Philly cheesesteaks and hearty breakfast burritos,
-                our menu is designed to satisfy every craving.
+                Born and raised in Philadelphia, owners Paul and Nora McGovern brought a piece of the City of Brotherly Love to Stuart in 2004. At The Whistle Stop, we don't just make sandwiches; we respect the tradition. That means daily fresh-baked bread with the perfect "crust-to-soft" ratio and our legendary homemade cheese sauce that locals travel miles for. When we say it's the "Best Philly Ever," we aren't just boasting—we're bringing 20+ years of Philly-born passion to every grill press.
               </p>
               <Link
                 to="/about"
@@ -100,11 +97,11 @@ export function AboutSection() {
               </div>
               <div className="bg-card rounded-3xl p-8 md:p-12 warm-shadow border border-border/50">
                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                  From savory Smash Burgers to classic Breakfast Sandwiches and
-                  delectable Subs, we offer a wide variety of options to please all
-                  palates. Re-opened in 2023 under new ownership, we take pride in
-                  providing quality ingredients and exceptional service to customers
-                  throughout Stuart and the surrounding communities.
+                  From our signature Philly Cheesesteaks to savory Smash Burgers,
+                  hearty Breakfast Burritos, and delectable Subs—every item on our
+                  menu carries the same Philadelphia soul. We take pride in quality
+                  ingredients, daily fresh-baked bread, and exceptional service to
+                  the Stuart and Port Salerno communities.
                 </p>
               </div>
             </div>
