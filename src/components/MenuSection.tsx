@@ -13,37 +13,37 @@ import { FoodDetailDialog } from "./FoodDetailDialog";
 const foodShowcase = [
   {
     src: foodPhillys,
-    alt: "Our Philly cheesesteaks",
+    alt: "Philly Cheesesteak at The Whistle Stop Stuart FL",
     label: "Our Philly's",
     description: "Choose from our legendary Beef Philly, Chicken Philly, or go half & half — all loaded with melted cheese and grilled onions on a fresh hoagie roll.",
   },
   {
     src: foodSalernoClub,
-    alt: "The Salerno Club sandwich",
+    alt: "Salerno Club Sandwich at The Whistle Stop Stuart FL",
     label: "The Salerno Club",
     description: "A triple-decker club stacked high with turkey, ham, crispy bacon, lettuce, tomato, and mayo on toasted bread. Served with chips — a classic done right.",
   },
   {
     src: foodUnclePumpkin,
-    alt: "The Uncle Pumpkin burger",
+    alt: "Uncle Pumpkin Smash Burger at The Whistle Stop Stuart FL",
     label: "The Uncle Pumpkin",
     description: "A towering double smash burger stacked with crispy bacon, caramelized onions, melted American cheese, and a golden onion ring on top. A Whistle Stop legend.",
   },
   {
     src: foodSweets,
-    alt: "Sweet treats and desserts",
+    alt: "Fresh Baked Desserts and Sweets at The Whistle Stop Stuart FL",
     label: "The Sweets",
     description: "Satisfy your sweet tooth with our fresh-baked cinnamon rolls, blueberry muffins, chocolate chip cookies, fudge brownies, and hand-scooped ice cream.",
   },
   {
     src: foodSalads,
-    alt: "The Titanic salad",
+    alt: "Titanic Tuna Salad at The Whistle Stop Stuart FL",
     label: "The Titanic",
     description: "Our signature salad — a mountain of fresh tuna salad over crisp mixed greens with cucumbers, tomatoes, and your choice of dressing. It's unsinkable.",
   },
   {
     src: foodTrainWreck,
-    alt: "The Train Wreck breakfast",
+    alt: "Train Wreck Breakfast at The Whistle Stop Stuart FL",
     label: "The Train Wreck",
     description: "A glorious breakfast pile-up: crispy home fries topped with eggs, bacon, sausage, ham, peppers, onions, and smothered in cheese sauce. Our most famous dish.",
   },

@@ -10,7 +10,7 @@ const menuCategories = [
   {
     name: "All Day Breakfast",
     description: "Hearty breakfast favorites served all day long",
-    image: breakfastBurrito,
+    image: breakfastBurrito, imageAlt: "All Day Breakfast at The Whistle Stop Stuart FL",
     items: [
       { name: "Breakfast Platter", description: "2 eggs your way with choice of 1 meat, 1 side and toast", price: "$9.95" },
       { name: "Omelette", description: "\"You build it\" 3 eggs scrambled, cheese, meat or vegetables, served with home fries & toast", price: "$9.95" },
@@ -183,7 +183,7 @@ export default function Menu() {
                 <div className="relative rounded-2xl overflow-hidden warm-shadow aspect-[4/3]">
                   <img
                     src={category.image}
-                    alt={category.name}
+                    alt={`${category.name} at The Whistle Stop Stuart FL`}
                     className="w-full h-full object-cover"
                   />
                 </div>

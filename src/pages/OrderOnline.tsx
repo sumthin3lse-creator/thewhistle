@@ -215,7 +215,7 @@ export default function OrderOnline() {
                 <div className="relative rounded-xl overflow-hidden warm-shadow aspect-[4/3]">
                   <img
                     src={category.image}
-                    alt={category.name}
+                    alt={`${category.name} at The Whistle Stop Stuart FL`}
                     className="w-full h-full object-cover"
                   />
                 </div>
