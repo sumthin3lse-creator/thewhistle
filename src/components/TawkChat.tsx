@@ -15,9 +15,36 @@ const TawkChat = () => {
       .tawk-min-container .tawk-button-circle.tawk-button-large svg {
         transform: scale(0.6) !important;
       }
+      @media (max-width: 1023px) {
+        iframe[title="chat widget"],
+        .tawk-min-container,
+        #tawk-bubble-container {
+          display: none !important;
+          visibility: hidden !important;
+        }
+      }
     `;
     document.head.appendChild(style);
     return () => { document.head.removeChild(style); };
+  }, []);
+
+  // Hide widget on mobile/tablet via API
+  useEffect(() => {
+    const checkAndHide = () => {
+      if (window.innerWidth < 1024 && window.Tawk_API?.hideWidget) {
+        window.Tawk_API.hideWidget();
+      }
+    };
+
+    // Tawk loads async, retry a few times
+    const attempts = [500, 1500, 3000];
+    const timers = attempts.map((ms) => setTimeout(checkAndHide, ms));
+
+    window.addEventListener('resize', checkAndHide);
+    return () => {
+      timers.forEach(clearTimeout);
+      window.removeEventListener('resize', checkAndHide);
+    };
   }, []);
 
   return (

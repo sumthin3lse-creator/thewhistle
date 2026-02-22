@@ -10,6 +10,7 @@ import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import TawkChat from "@/components/TawkChat";
+import { MobileActionBar } from "@/components/MobileActionBar";
 
 const restaurantSchema = {
   "@context": "https://schema.org",
@@ -74,6 +75,9 @@ const Index = () => {
       <ContactSection />
       <Footer />
       <TawkChat />
+      <MobileActionBar />
+      {/* Spacer for mobile bottom bar */}
+      <div className="h-14 lg:hidden" />
     </main>
   );
 };
