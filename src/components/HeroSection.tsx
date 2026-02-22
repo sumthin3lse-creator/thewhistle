@@ -10,7 +10,7 @@ export function HeroSection() {
         playsInline
       >
         {/* Using a reliable public test video */}
-        <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
+        <source src="hero-video.mp4.mp4" type="video/mp4" />
       </video>
 
       {/* Dark Overlay to make text pop */}
