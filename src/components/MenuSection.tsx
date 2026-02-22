@@ -18,10 +18,10 @@ const foodShowcase = [
     description: "Choose from our legendary Beef Philly, Chicken Philly, or go half & half — all loaded with melted cheese and grilled onions on a fresh hoagie roll.",
   },
   {
-    src: foodSalads,
-    alt: "Fresh salads",
-    label: "Our Salads",
-    description: "Fresh, crisp, and packed with flavor — choose from The Titanic, the Chopped Hoagie, or the Deluxe. Every salad is made to order with the freshest ingredients.",
+    src: foodSalernoClub,
+    alt: "The Salerno Club sandwich",
+    label: "The Salerno Club",
+    description: "A triple-decker club stacked high with turkey, ham, crispy bacon, lettuce, tomato, and mayo on toasted bread. Served with chips — a classic done right.",
   },
   {
     src: foodUnclePumpkin,
@@ -46,12 +46,6 @@ const foodShowcase = [
     alt: "The Train Wreck breakfast",
     label: "The Train Wreck",
     description: "A glorious breakfast pile-up: crispy home fries topped with eggs, bacon, sausage, ham, peppers, onions, and smothered in cheese sauce. Our most famous dish.",
-  },
-  {
-    src: foodSalernoClub,
-    alt: "The Salerno Club sandwich",
-    label: "The Salerno Club",
-    description: "A triple-decker club stacked high with turkey, ham, crispy bacon, lettuce, tomato, and mayo on toasted bread. Served with chips — a classic done right.",
   },
 ];
 
