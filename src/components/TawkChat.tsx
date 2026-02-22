@@ -15,9 +15,29 @@ const TawkChat = () => {
       .tawk-min-container .tawk-button-circle.tawk-button-large svg {
         transform: scale(0.6) !important;
       }
+      @media (max-width: 1023px) {
+        #tawk-default-container,
+        .tawk-min-container {
+          display: none !important;
+        }
+      }
     `;
     document.head.appendChild(style);
-    return () => { document.head.removeChild(style); };
+
+    const hideMobileWidget = () => {
+      if (window.innerWidth < 1024 && window.Tawk_API?.hideWidget) {
+        window.Tawk_API.hideWidget();
+      }
+    };
+
+    window.addEventListener('tawk:onLoad', hideMobileWidget);
+    const timeout = setTimeout(hideMobileWidget, 2000);
+
+    return () => {
+      document.head.removeChild(style);
+      window.removeEventListener('tawk:onLoad', hideMobileWidget);
+      clearTimeout(timeout);
+    };
   }, []);
 
   return (
