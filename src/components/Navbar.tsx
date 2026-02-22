@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, Phone, MapPin } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/restaurant-logo.png";
@@ -107,6 +107,19 @@ export function Navbar() {
               <Phone className="w-4 h-4" />
               <span className="font-medium">(772) 220-1020</span>
             </a>
+            <a
+              href="https://maps.google.com/?q=4920+SE+Dixie+Hwy,+Stuart,+FL+34997"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`flex items-center gap-2 transition-colors ${
+                isScrolled
+                  ? "text-muted-foreground hover:text-primary"
+                  : "text-white/80 hover:text-white"
+              }`}
+            >
+              <MapPin className="w-4 h-4" />
+              <span className="font-medium text-sm">4920 SE Dixie Hwy</span>
+            </a>
             <Button variant="default" size="sm" asChild>
               <a
                 href="https://www.thewhistlestop.menu"
@@ -161,6 +174,15 @@ export function Navbar() {
               >
                 <Phone className="w-4 h-4" />
                 <span className="font-medium">(772) 220-1020</span>
+              </a>
+              <a
+                href="https://maps.google.com/?q=4920+SE+Dixie+Hwy,+Stuart,+FL+34997"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors py-2"
+              >
+                <MapPin className="w-4 h-4" />
+                <span className="font-medium">4920 SE Dixie Hwy, Stuart, FL</span>
               </a>
               <Button variant="default" className="w-full" asChild>
                 <a
