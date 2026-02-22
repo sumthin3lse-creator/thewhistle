@@ -87,10 +87,10 @@ export function Navbar() {
           </div>
 
           {/* CTA & Phone */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden lg:flex items-center gap-4">
             <a
               href="tel:7722201020"
-              className={`hidden lg:flex items-center gap-2 transition-colors ${
+              className={`flex items-center gap-2 transition-colors ${
                 isScrolled ? "text-muted-foreground hover:text-primary" : "text-white/80 hover:text-white"
               }`}
             >
@@ -101,7 +101,7 @@ export function Navbar() {
               href="https://maps.google.com/?q=4920+SE+Dixie+Hwy,+Stuart,+FL+34997"
               target="_blank"
               rel="noopener noreferrer"
-              className={`hidden lg:flex items-center gap-2 transition-colors ${
+              className={`flex items-center gap-2 transition-colors ${
                 isScrolled ? "text-muted-foreground hover:text-primary" : "text-white/80 hover:text-white"
               }`}
             >
@@ -111,15 +111,6 @@ export function Navbar() {
             <Button variant="default" size="sm" asChild>
               <a href="https://thewhistlestop.menu/" target="_blank" rel="noopener noreferrer">
                 Order Now
-              </a>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <a
-                href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                DoorDash
               </a>
             </Button>
           </div>

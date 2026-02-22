@@ -1,3 +1,5 @@
+import { ExternalLink } from "lucide-react";
+
 export const HeroSection = () => (
   <section className="relative w-full h-[80vh] md:h-screen overflow-hidden flex items-end justify-center pb-12">
     <video className="absolute top-0 left-0 w-full h-full object-cover z-0" autoPlay loop muted playsInline>
@@ -9,7 +11,7 @@ export const HeroSection = () => (
         href="https://thewhistlestop.menu/"
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-primary hover:bg-primary/85 text-primary-foreground font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg inline-block"
+        className="bg-[#b31b1b] hover:bg-[#8a1515] text-white font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg inline-block"
       >
         We Love Cooking For You
       </a>
@@ -17,8 +19,9 @@ export const HeroSection = () => (
         href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-white/90 hover:text-white font-semibold text-sm underline underline-offset-4 transition-colors"
+        className="inline-flex items-center gap-2 text-white font-semibold text-sm underline underline-offset-4 hover:text-white/80 transition"
       >
+        <ExternalLink className="w-3.5 h-3.5" />
         Order DoorDash
       </a>
     </div>

@@ -8,7 +8,6 @@ const TawkChat = () => {
   useEffect(() => {
     const style = document.createElement('style');
     style.textContent = `
-      /* Compact desktop icon */
       .tawk-min-container .tawk-button-circle.tawk-button-large {
         width: 36px !important;
         height: 36px !important;
@@ -16,28 +15,28 @@ const TawkChat = () => {
       .tawk-min-container .tawk-button-circle.tawk-button-large svg {
         transform: scale(0.6) !important;
       }
-      /* Hide default bubble on mobile/tablet */
       @media (max-width: 1023px) {
-        .tawk-min-container,
-        #tawk-default-container {
+        #tawk-default-container,
+        .tawk-min-container {
           display: none !important;
         }
       }
     `;
     document.head.appendChild(style);
 
-    // Also hide via API on mobile/tablet
-    const hideMobile = () => {
+    const hideMobileWidget = () => {
       if (window.innerWidth < 1024 && window.Tawk_API?.hideWidget) {
         window.Tawk_API.hideWidget();
       }
     };
-    // Try after a delay to ensure Tawk has loaded
-    const timer = setTimeout(hideMobile, 2000);
+
+    window.addEventListener('tawk:onLoad', hideMobileWidget);
+    const timeout = setTimeout(hideMobileWidget, 2000);
 
     return () => {
       document.head.removeChild(style);
-      clearTimeout(timer);
+      window.removeEventListener('tawk:onLoad', hideMobileWidget);
+      clearTimeout(timeout);
     };
   }, []);
 

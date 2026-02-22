@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { Phone, MapPin, MessageCircle } from "lucide-react";
-import { useState, useCallback } from "react";
 
 declare global {
   interface Window {
@@ -16,8 +16,9 @@ declare global {
 export function MobileActionBar() {
   const [chatOpen, setChatOpen] = useState(false);
 
-  const toggleChat = useCallback(() => {
+  const handleChat = () => {
     if (!window.Tawk_API) return;
+
     if (chatOpen) {
       window.Tawk_API.minimize();
       window.Tawk_API.hideWidget();
@@ -27,12 +28,11 @@ export function MobileActionBar() {
       window.Tawk_API.maximize();
       setChatOpen(true);
     }
-  }, [chatOpen]);
+  };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-card/95 backdrop-blur-xl border-t border-border warm-shadow">
-      <div className="flex items-center h-14">
-        {/* Call */}
+    <div className="fixed bottom-0 left-0 right-0 z-50 lg:hidden bg-card/95 backdrop-blur-xl border-t border-border safe-area-bottom">
+      <div className="flex items-stretch h-14">
         <a
           href="tel:7722201020"
           className="flex-1 flex flex-col items-center justify-center gap-0.5 text-muted-foreground hover:text-primary transition-colors"
@@ -41,10 +41,8 @@ export function MobileActionBar() {
           <span className="text-[10px] font-medium">Call</span>
         </a>
 
-        {/* Divider */}
-        <div className="w-px h-8 bg-border" />
+        <div className="w-px bg-border my-2" />
 
-        {/* Map */}
         <a
           href="https://maps.google.com/?q=4920+SE+Dixie+Hwy,+Stuart,+FL+34997"
           target="_blank"
@@ -55,13 +53,12 @@ export function MobileActionBar() {
           <span className="text-[10px] font-medium">Map</span>
         </a>
 
-        {/* Divider */}
-        <div className="w-px h-8 bg-border" />
+        <div className="w-px bg-border my-2" />
 
-        {/* Chat */}
         <button
-          onClick={toggleChat}
+          onClick={handleChat}
           className="flex-1 flex flex-col items-center justify-center gap-0.5 text-muted-foreground hover:text-primary transition-colors"
+          aria-label="Toggle chat"
         >
           <MessageCircle className="h-4 w-4" />
           <span className="text-[10px] font-medium">Chat</span>
