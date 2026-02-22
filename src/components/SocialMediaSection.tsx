@@ -14,15 +14,15 @@ import foodPhoto10 from "@/assets/food-photo-10.png";
 import foodPhoto11 from "@/assets/food-photo-11.png";
 
 const instagramPosts = [
-  { image: foodPhoto3, alt: "Delicious platter" },
-  { image: foodPhoto4, alt: "Fresh sandwich" },
-  { image: foodPhoto5, alt: "Loaded fries" },
-  { image: foodPhoto6, alt: "Seafood special" },
-  { image: foodPhoto7, alt: "Burger close-up" },
-  { image: foodPhoto8, alt: "Daily special" },
-  { image: foodPhoto9, alt: "Breakfast plate" },
-  { image: foodPhoto10, alt: "Sub sandwich" },
-  { image: foodPhoto11, alt: "Combo meal" },
+  { image: foodPhoto3, alt: "Delicious food platter at The Whistle Stop Stuart FL" },
+  { image: foodPhoto4, alt: "Fresh sandwich from The Whistle Stop Stuart FL" },
+  { image: foodPhoto5, alt: "Loaded fries at The Whistle Stop Stuart FL" },
+  { image: foodPhoto6, alt: "Seafood special at The Whistle Stop Stuart FL" },
+  { image: foodPhoto7, alt: "Smash burger close-up at The Whistle Stop Stuart FL" },
+  { image: foodPhoto8, alt: "Daily special at The Whistle Stop Stuart FL" },
+  { image: foodPhoto9, alt: "Breakfast plate at The Whistle Stop Stuart FL" },
+  { image: foodPhoto10, alt: "Sub sandwich from The Whistle Stop Stuart FL" },
+  { image: foodPhoto11, alt: "Combo meal at The Whistle Stop Stuart FL" },
 ];
 
 const facebookReviews = [

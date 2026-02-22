@@ -86,7 +86,7 @@ export function AboutSection() {
               <div className="rounded-2xl overflow-hidden warm-shadow hover-lift">
                 <img 
                   src={exteriorImage} 
-                  alt="The Whistle Stop Exterior" 
+                  alt="The Whistle Stop Restaurant Exterior in Stuart Florida" 
                   className="w-full h-full object-cover"
                 />
               </div>
