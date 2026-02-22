@@ -1,5 +1,5 @@
 export const HeroSection = () => (
-  <section className="relative w-full h-[80vh] md:h-screen overflow-hidden flex items-center justify-center">
+  <section className="relative w-full h-[80vh] md:h-screen overflow-hidden flex items-end justify-center pb-12">
     <video
       className="absolute top-0 left-0 w-full h-full object-cover z-0"
       autoPlay
@@ -10,10 +10,15 @@ export const HeroSection = () => (
       <source src="/hero-video.mp4" type="video/mp4" />
     </video>
 
-    <div className="relative z-10 flex flex-col items-center justify-center text-center px-4">
-      <button className="bg-[#b31b1b] hover:bg-[#8a1515] text-white font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg">
+    <div className="relative z-10">
+      <a
+        href="https://www.thewhistlestop.menu"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="bg-[#b31b1b] hover:bg-[#8a1515] text-white font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg inline-block"
+      >
         View Menu
-      </button>
+      </a>
     </div>
   </section>
 );
