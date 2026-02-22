@@ -15,10 +15,8 @@ export function HeroSection() {
       {/* The Text and Buttons */}
       <div className="relative z-20 flex flex-col items-center justify-center text-center px-4">
         <h1 className="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)] tracking-wide font-serif">
-          The Whistle Stop
-        </h1>
+
         <p className="text-xl md:text-3xl text-white mb-8 drop-shadow-[0_2px_2px_rgba(0,0,0,0.8)] font-medium">
-          We Love Cooking For You!
         </p>
         <button className="bg-[#b31b1b] hover:bg-[#8a1515] text-white font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg">
           View Menu
