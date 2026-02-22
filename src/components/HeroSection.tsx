@@ -4,14 +4,22 @@ export const HeroSection = () => (
       <source src="/hero-video.mp4" type="video/mp4" />
     </video>
 
-    <div className="relative z-10">
+    <div className="relative z-10 flex flex-col items-center gap-3">
       <a
         href="https://thewhistlestop.menu/"
         target="_blank"
         rel="noopener noreferrer"
-        className="bg-[#b31b1b] hover:bg-[#8a1515] text-white font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg inline-block"
+        className="bg-primary hover:bg-primary/85 text-primary-foreground font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg inline-block"
       >
         We Love Cooking For You
+      </a>
+      <a
+        href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white/90 hover:text-white font-semibold text-sm underline underline-offset-4 transition-colors"
+      >
+        Order DoorDash
       </a>
     </div>
   </section>
