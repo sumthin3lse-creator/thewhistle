@@ -91,17 +91,16 @@ export function AboutSection() {
               <div className="rounded-2xl overflow-hidden warm-shadow hover-lift">
                 <img 
                   src={exteriorImage} 
-                  alt="The Whistle Stop Restaurant Exterior in Stuart Florida" 
+                  alt="The Whistle Stop Restaurant Exterior in Port Salerno Florida" 
                   className="w-full h-full object-cover"
                 />
               </div>
               <div className="bg-card rounded-3xl p-8 md:p-12 warm-shadow border border-border/50">
+                <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">
+                  More Than a Meal—It's a Destination.
+                </h3>
                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                  From our signature Philly Cheesesteaks to savory Smash Burgers,
-                  hearty Breakfast Burritos, and delectable Subs—every item on our
-                  menu carries the same Philadelphia soul. We take pride in quality
-                  ingredients, daily fresh-baked bread, and exceptional service to
-                  the Stuart and Port Salerno communities.
+                  Nestled right across from the marina and a stone's throw from the Eastern Coastal Railway, The Whistle Stop captures the funky, laid-back energy of Port Salerno. Whether you're a boater grabbing a "Hungry Engineer" breakfast before heading out or a local enjoying the funky wall art on our enclosed patio, you'll feel the history here. Watch the world go by from our outdoor seating and soak in the salt air and the sound of the train—the true whistle stop experience.
                 </p>
               </div>
             </div>
