@@ -116,7 +116,7 @@ export function MenuSection() {
               Plus breakfast sandwiches, sides, and daily specials!
             </p>
             <a
-              href="https://www.thewhistlestop.menu"
+              href="https://thewhistlestop.menu/"
               target="_blank"
               rel="noopener noreferrer"
               className="group inline-flex items-center gap-2 bg-primary text-primary-foreground px-8 py-4 rounded-xl font-semibold text-lg hover:bg-primary/90 transition-all duration-300 shadow-lg hover:shadow-xl hover:gap-3"

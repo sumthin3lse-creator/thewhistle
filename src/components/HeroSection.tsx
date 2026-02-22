@@ -6,7 +6,7 @@ export const HeroSection = () => (
 
     <div className="relative z-10">
       <a
-        href="https://www.thewhistlestop.menu"
+        href="https://thewhistlestop.menu/"
         target="_blank"
         rel="noopener noreferrer"
         className="bg-[#b31b1b] hover:bg-[#8a1515] text-white font-bold py-3 px-8 rounded-md transition duration-300 shadow-lg text-lg inline-block"

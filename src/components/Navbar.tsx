@@ -7,7 +7,7 @@ import logo from "@/assets/restaurant-logo.png";
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Menu", href: "https://www.thewhistlestop.menu", isExternal: true },
+  { label: "Menu", href: "https://thewhistlestop.menu/", isExternal: true },
   { label: "Specials", href: "#specials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -122,7 +122,7 @@ export function Navbar() {
             </a>
             <Button variant="default" size="sm" asChild>
               <a
-                href="https://www.thewhistlestop.menu"
+                href="https://thewhistlestop.menu/"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -186,7 +186,7 @@ export function Navbar() {
               </a>
               <Button variant="default" className="w-full" asChild>
                 <a
-                  href="https://www.thewhistlestop.menu"
+                  href="https://thewhistlestop.menu/"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
