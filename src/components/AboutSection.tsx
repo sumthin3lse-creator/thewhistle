@@ -1,5 +1,6 @@
-import { Heart, Users, Award, Sparkles } from "lucide-react";
+import { Heart, Users, Award, Sparkles, ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { ScrollReveal, ScrollRevealStagger, ScrollRevealItem } from "./ScrollReveal";
 import exteriorImage from "@/assets/restaurant-exterior.png";
 
@@ -54,6 +55,13 @@ export function AboutSection() {
                 in mouthwatering Philly cheesesteaks and hearty breakfast burritos,
                 our menu is designed to satisfy every craving.
               </p>
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 text-primary font-semibold hover:underline mt-6 text-lg group"
+              >
+                Learn More About Us
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </ScrollReveal>
 
