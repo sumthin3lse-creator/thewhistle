@@ -87,7 +87,7 @@ export function Navbar() {
           </div>
 
           {/* CTA & Phone */}
-          <div className="hidden lg:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <a
               href="tel:7722201020"
               className={`flex items-center gap-2 transition-colors ${
