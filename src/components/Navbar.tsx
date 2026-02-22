@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { Menu, X, Phone } from "lucide-react";
-import { Link } from "react-router-dom";
+
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/restaurant-logo.png";
 
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Menu", href: "/menu", isPage: true },
+  { label: "Menu", href: "https://thewhistlestop.menu", isExternal: true },
   { label: "Specials", href: "#specials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -64,14 +64,16 @@ export function Navbar() {
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              link.isPage ? (
-                <Link
+              link.isExternal ? (
+                <a
                   key={link.href}
-                  to={link.href}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="text-foreground/80 hover:text-primary transition-colors font-medium"
                 >
                   {link.label}
-                </Link>
+                </a>
               ) : (
                 <button
                   key={link.href}
@@ -95,7 +97,7 @@ export function Navbar() {
             </a>
             <Button variant="default" size="sm" asChild>
               <a
-                href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
+                href="https://thewhistlestop.menu"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -119,15 +121,17 @@ export function Navbar() {
           <div className="md:hidden bg-card rounded-lg mb-4 p-4 warm-shadow animate-fade-in">
             <div className="flex flex-col gap-4">
               {navLinks.map((link) => (
-                link.isPage ? (
-                  <Link
+                link.isExternal ? (
+                  <a
                     key={link.href}
-                    to={link.href}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setIsOpen(false)}
                     className="text-foreground/80 hover:text-primary transition-colors font-medium text-left py-2"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 ) : (
                   <button
                     key={link.href}
@@ -148,7 +152,7 @@ export function Navbar() {
               </a>
               <Button variant="default" className="w-full" asChild>
                 <a
-                  href="https://www.doordash.com/store/the-whistle-stop-by-ariel-seafoods-stuart-25598507/"
+                  href="https://thewhistlestop.menu"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
