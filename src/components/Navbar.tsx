@@ -7,7 +7,7 @@ import logo from "@/assets/restaurant-logo.png";
 const navLinks = [
   { label: "Home", href: "#home" },
   { label: "About", href: "#about" },
-  { label: "Menu", href: "https://thewhistlestop.menu", isExternal: true },
+  { label: "Menu", href: "https://www.thewhistlestop.menu", isExternal: true },
   { label: "Specials", href: "#specials" },
   { label: "Contact", href: "#contact" },
 ];
@@ -37,7 +37,7 @@ export function Navbar() {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
           ? "bg-card/95 backdrop-blur-xl warm-shadow py-2"
-          : "bg-gradient-to-b from-black/40 to-transparent py-4"
+          : "bg-transparent py-4"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -50,12 +50,12 @@ export function Navbar() {
               scrollToSection("#home");
             }}
           >
-            <img 
-              src={logo} 
-              alt="The Whistle Stop by Ariel Seafoods" 
+            <img
+              src={logo}
+              alt="The Whistle Stop by Ariel Seafoods"
               className={`w-auto transition-all duration-500 ease-out ${
-                isScrolled 
-                  ? "h-14 md:h-16 scale-95" 
+                isScrolled
+                  ? "h-14 md:h-16 scale-95"
                   : "h-16 md:h-20 scale-100"
               }`}
             />
@@ -63,14 +63,18 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
-            {navLinks.map((link) => (
+            {navLinks.map((link) =>
               link.isExternal ? (
                 <a
                   key={link.href}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-foreground/80 hover:text-primary transition-colors font-medium"
+                  className={`transition-colors font-medium ${
+                    isScrolled
+                      ? "text-foreground/80 hover:text-primary"
+                      : "text-white hover:text-white/70"
+                  }`}
                 >
                   {link.label}
                 </a>
@@ -78,26 +82,34 @@ export function Navbar() {
                 <button
                   key={link.href}
                   onClick={() => scrollToSection(link.href)}
-                  className="text-foreground/80 hover:text-primary transition-colors font-medium"
+                  className={`transition-colors font-medium ${
+                    isScrolled
+                      ? "text-foreground/80 hover:text-primary"
+                      : "text-white hover:text-white/70"
+                  }`}
                 >
                   {link.label}
                 </button>
               )
-            ))}
+            )}
           </div>
 
           {/* CTA & Phone */}
           <div className="hidden md:flex items-center gap-4">
             <a
               href="tel:7722201020"
-              className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+              className={`flex items-center gap-2 transition-colors ${
+                isScrolled
+                  ? "text-muted-foreground hover:text-primary"
+                  : "text-white/80 hover:text-white"
+              }`}
             >
               <Phone className="w-4 h-4" />
               <span className="font-medium">(772) 220-1020</span>
             </a>
             <Button variant="default" size="sm" asChild>
               <a
-                href="https://thewhistlestop.menu"
+                href="https://www.thewhistlestop.menu"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -109,7 +121,7 @@ export function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground"
+            className={`md:hidden p-2 ${isScrolled ? "text-foreground" : "text-white"}`}
             aria-label="Toggle menu"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -120,7 +132,7 @@ export function Navbar() {
         {isOpen && (
           <div className="md:hidden bg-card rounded-lg mb-4 p-4 warm-shadow animate-fade-in">
             <div className="flex flex-col gap-4">
-              {navLinks.map((link) => (
+              {navLinks.map((link) =>
                 link.isExternal ? (
                   <a
                     key={link.href}
@@ -141,7 +153,7 @@ export function Navbar() {
                     {link.label}
                   </button>
                 )
-              ))}
+              )}
               <hr className="border-border" />
               <a
                 href="tel:7722201020"
@@ -152,7 +164,7 @@ export function Navbar() {
               </a>
               <Button variant="default" className="w-full" asChild>
                 <a
-                  href="https://thewhistlestop.menu"
+                  href="https://www.thewhistlestop.menu"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
