@@ -12,25 +12,25 @@ const values = [
     icon: Heart,
     title: "Philly Born",
     description:
-      "Owners Paul & Nora McGovern brought authentic Philadelphia flavors to Stuart in 2004, respecting the tradition with every sandwich.",
+      "Paul & Nora McGovern built a Stuart institution with uncompromising Philadelphia authenticity — the gold standard since 2004.",
   },
   {
     icon: Users,
-    title: "20+ Years of Passion",
+    title: "A New Era",
     description:
-      "Two decades of Philly-born dedication in every grill press — from daily fresh-baked bread to our legendary homemade cheese sauce.",
+      "Acquired by Ariel Seafoods in 2023 — same DNA, now backed by the infrastructure and premium supply chain of a globally recognized operation.",
   },
   {
     icon: Award,
-    title: "Best Philly Ever",
+    title: "Next-Level Execution",
     description:
-      "Fresh-baked bread with the perfect 'crust-to-soft' ratio and legendary homemade cheese sauce that locals travel miles for.",
+      "Same recipes, same legendary homemade cheese sauce and fresh-baked bread — now fueled by world-class quality control.",
   },
   {
     icon: MapPin,
-    title: "A True Destination",
+    title: "Your Hometown Staple",
     description:
-      "Nestled across from the marina and a stone's throw from the Eastern Coastal Railway, we capture the funky, laid-back energy of Port Salerno.",
+      "Still your Port Salerno destination. Heavy-hitting, Pennsylvania-style comfort food — elevated. We love cooking for you.",
   },
 ];
 
@@ -38,17 +38,17 @@ const timeline = [
   {
     year: "2004 — Philly Comes to Florida",
     description:
-      "Born and raised in Philadelphia, owners Paul and Nora McGovern brought a piece of the City of Brotherly Love to Stuart, opening The Whistle Stop with a mission to serve authentic Philly flavors.",
+      "Paul and Nora McGovern brought a piece of the City of Brotherly Love to Stuart, building The Whistle Stop into more than a restaurant — a Stuart institution. The gold standard was set with uncompromising authenticity.",
   },
   {
-    year: "The Tradition",
+    year: "2023 — A New Era",
     description:
-      "Daily fresh-baked bread with the perfect 'crust-to-soft' ratio. Legendary homemade cheese sauce. When we say 'Best Philly Ever,' we aren't just boasting — we're honoring 20+ years of Philly-born passion.",
+      "The Whistle Stop was acquired by Ariel Seafoods. The mission was simple: do not change the DNA — preserve it, protect it, and back it with the power of a globally recognized wholesale operation.",
   },
   {
-    year: "Today — A Port Salerno Landmark",
+    year: "Today — Tradition, Elevated",
     description:
-      "Nestled right across from the marina and a stone's throw from the Eastern Coastal Railway, The Whistle Stop captures the funky, laid-back energy of Port Salerno — a true destination for locals and visitors alike.",
+      "Same corner. Same recipes. Next-level execution. Still serving heavy-hitting, Pennsylvania-style comfort food, now fueled by the infrastructure, quality control, and premium supply chain of an international powerhouse. We love cooking for you.",
   },
 ];
 
@@ -56,10 +56,10 @@ export default function About() {
   return (
     <main className="min-h-screen">
       <Helmet>
-        <title>About Us | The Whistle Stop — Authentic Philly in Port Salerno</title>
+        <title>About Us | The Whistle Stop by Ariel Seafoods — Port Salerno</title>
         <meta
           name="description"
-          content="Learn about The Whistle Stop — owners Paul & Nora McGovern brought authentic Philadelphia flavors to Port Salerno in 2004. 20+ years of Philly-born passion in every grill press."
+          content="A Port Salerno tradition, elevated. Nearly two decades of Philly authenticity, now powered by Ariel Seafoods. Same corner, same recipes, next-level execution."
         />
       </Helmet>
       <Navbar />
@@ -76,10 +76,10 @@ export default function About() {
               Our Story
             </span>
             <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-6 text-balance">
-              A Real Taste of Philly, Right in Port Salerno.
+              A Port Salerno Tradition, Elevated.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Born in Philadelphia. Built in Port Salerno. 20+ years of passion in every grill press.
+              Same corner. Same recipes. Next-level execution. We love cooking for you.
             </p>
           </ScrollReveal>
         </div>
@@ -101,14 +101,14 @@ export default function About() {
             <ScrollReveal delay={0.2}>
               <div>
                 <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground mb-6">
-                  The Philly Connection
+                  Built on Legacy, Backed by Power.
                 </h2>
                 <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
                   <p>
-                    Born and raised in Philadelphia, owners Paul and Nora McGovern brought a piece of the City of Brotherly Love to Stuart in 2004. At The Whistle Stop, we don't just make sandwiches; we respect the tradition.
+                    For nearly two decades, Paul and Nora McGovern built The Whistle Stop into more than just a restaurant — they built a Stuart institution. The gold standard was set with uncompromising authenticity, from the homemade cheese sauce to the fresh-baked bread. It became the heartbeat of the community.
                   </p>
                   <p>
-                    That means daily fresh-baked bread with the perfect "crust-to-soft" ratio and our legendary homemade cheese sauce that locals travel miles for. When we say it's the "Best Philly Ever," we aren't just boasting — we're bringing 20+ years of Philly-born passion to every grill press.
+                    In 2023, The Whistle Stop entered a new era when it was acquired by Ariel Seafoods. The mission was simple: do not change the DNA — preserve it, protect it, and back it with the power of a globally recognized wholesale operation. Today, we are still serving the heavy-hitting, Pennsylvania-style comfort food you grew up on, now fueled by world-class infrastructure and quality control.
                   </p>
                 </div>
               </div>
