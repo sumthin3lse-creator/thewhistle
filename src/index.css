@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -54,7 +54,7 @@
     --glass-border: hsla(30, 20%, 90%, 0.5);
 
     /* Fonts */
-    --font-display: 'Comfortaa', cursive;
+    --font-display: 'Playfair Display', serif;
     --font-body: 'Comfortaa', cursive;
 
     --sidebar-background: 30 10% 98%;
