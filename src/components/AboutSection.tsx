@@ -8,21 +8,21 @@ const features = [
   {
     icon: Heart,
     title: "Philly Born",
-    description: "Owners Paul & Nora McGovern brought authentic Philadelphia flavors to Stuart in 2004",
+    description: "Paul & Nora McGovern built The Whistle Stop into a Stuart institution with uncompromising Philadelphia authenticity since 2004",
     color: "bg-red-50 dark:bg-red-950/30",
     iconColor: "text-red-500",
   },
   {
     icon: Users,
-    title: "20+ Years of Passion",
-    description: "Two decades of Philly-born dedication in every grill press",
+    title: "A New Era",
+    description: "Acquired by Ariel Seafoods in 2023 — same DNA, now backed by the infrastructure of a globally recognized wholesale operation",
     color: "bg-blue-50 dark:bg-blue-950/30",
     iconColor: "text-blue-500",
   },
   {
     icon: Award,
-    title: "Best Philly Ever",
-    description: "Fresh-baked bread & legendary homemade cheese sauce locals travel miles for",
+    title: "Next-Level Execution",
+    description: "Same recipes and legendary homemade cheese sauce, now fueled by premium supply chain and quality control",
     color: "bg-amber-50 dark:bg-amber-950/30",
     iconColor: "text-amber-500",
   },
@@ -47,10 +47,10 @@ export function AboutSection() {
                 Our Story
               </span>
               <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-8 text-balance">
-                A Real Taste of Philly, Right in the Heart of Port Salerno.
+                A Port Salerno Tradition, Elevated.
               </h2>
               <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-                Born and raised in Philadelphia, owners Paul and Nora McGovern brought a piece of the City of Brotherly Love to Stuart in 2004. At The Whistle Stop, we don't just make sandwiches; we respect the tradition. That means daily fresh-baked bread with the perfect "crust-to-soft" ratio and our legendary homemade cheese sauce that locals travel miles for. When we say it's the "Best Philly Ever," we aren't just boasting—we're bringing 20+ years of Philly-born passion to every grill press.
+                For nearly two decades, Paul and Nora McGovern built The Whistle Stop into more than just a restaurant — they built a Stuart institution. The gold standard was set with uncompromising authenticity, from the homemade cheese sauce to the fresh-baked bread. In 2023, The Whistle Stop entered a new era when it was acquired by Ariel Seafoods. The mission was simple: preserve the DNA and back it with the power of a globally recognized wholesale operation. Same corner. Same recipes. Next-level execution.
               </p>
               <Link
                 to="/about"
@@ -97,10 +97,10 @@ export function AboutSection() {
               </div>
               <div className="bg-card rounded-3xl p-8 md:p-12 warm-shadow border border-border/50">
                 <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-4">
-                  More Than a Meal—It's a Destination.
+                  Your Hometown Staple, Powered by a Powerhouse.
                 </h3>
                 <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
-                  Nestled right across from the marina and a stone's throw from the Eastern Coastal Railway, The Whistle Stop captures the funky, laid-back energy of Port Salerno. Whether you're a boater grabbing a "Hungry Engineer" breakfast before heading out or a local enjoying the funky wall art on our enclosed patio, you'll feel the history here. Watch the world go by from our outdoor seating and soak in the salt air and the sound of the train—the true whistle stop experience.
+                  Today, The Whistle Stop remains your hometown staple. We are still serving the heavy-hitting, Pennsylvania-style comfort food you grew up on, but now we are fueled by the infrastructure, quality control, and premium supply chain of an international powerhouse. Nestled across from the marina in Port Salerno, we're the same destination you know and love — elevated. We love cooking for you.
                 </p>
               </div>
             </div>

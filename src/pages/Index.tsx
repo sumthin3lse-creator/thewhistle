@@ -16,6 +16,7 @@ const restaurantSchema = {
   "@context": "https://schema.org",
   "@type": "Restaurant",
   "name": "The Whistle Stop by Ariel Seafoods",
+  "description": "A Port Salerno tradition, elevated. Nearly two decades of authentic Philly comfort food, now powered by the infrastructure and premium supply chain of Ariel Seafoods. Same corner. Same recipes. Next-level execution.",
   "image": "https://thewhistle.lovable.app/favicon.ico",
   "url": "https://thewhistle.lovable.app",
   "telephone": "(772) 220-1020",
