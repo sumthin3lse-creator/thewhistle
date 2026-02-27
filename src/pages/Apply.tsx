@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollReveal } from "@/components/ScrollReveal";
 import { Briefcase, Send } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Employer {
   from: string;
@@ -99,15 +100,27 @@ const Apply = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate submission
-    await new Promise((r) => setTimeout(r, 1500));
+    try {
+      const { data, error } = await supabase.functions.invoke("send-application-email", {
+        body: { form, employers, references },
+      });
 
-    toast({
-      title: "Application Submitted!",
-      description: "Thank you for your interest. We'll be in touch soon!",
-    });
+      if (error) throw error;
 
-    setIsSubmitting(false);
+      toast({
+        title: "Application Submitted!",
+        description: "Thank you for your interest. We'll be in touch soon!",
+      });
+    } catch (err) {
+      console.error("Submission error:", err);
+      toast({
+        title: "Submission Failed",
+        description: "Something went wrong. Please try again or call us directly.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const sectionClass = "bg-card rounded-2xl p-6 md:p-8 warm-shadow space-y-5";
