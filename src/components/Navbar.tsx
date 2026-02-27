@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Menu, X, Phone, MapPin } from "lucide-react";
+import { Menu, X, Phone, MapPin, Briefcase } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/restaurant-logo.png";
@@ -10,6 +11,7 @@ const navLinks = [
   { label: "Menu", href: "https://thewhistlestop.menu/", isExternal: true },
   { label: "Specials", href: "#specials" },
   { label: "Contact", href: "#contact" },
+  { label: "Apply Here", href: "/apply", isRoute: true },
 ];
 
 export function Navbar() {
@@ -72,6 +74,17 @@ export function Navbar() {
                 >
                   {link.label}
                 </a>
+              ) : (link as any).isRoute ? (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className={`transition-colors font-medium flex items-center gap-1.5 ${
+                    isScrolled ? "text-primary font-bold" : "text-white hover:text-white/70"
+                  }`}
+                >
+                  <Briefcase className="w-3.5 h-3.5" />
+                  {link.label}
+                </Link>
               ) : (
                 <button
                   key={link.href}
@@ -141,6 +154,16 @@ export function Navbar() {
                   >
                     {link.label}
                   </a>
+                ) : (link as any).isRoute ? (
+                  <Link
+                    key={link.href}
+                    to={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-primary font-bold text-left py-2 flex items-center gap-2"
+                  >
+                    <Briefcase className="w-4 h-4" />
+                    {link.label}
+                  </Link>
                 ) : (
                   <button
                     key={link.href}

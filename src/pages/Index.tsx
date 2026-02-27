@@ -9,6 +9,7 @@ import { AwardsSection } from "@/components/AwardsSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { HiringBanner } from "@/components/HiringBanner";
 import TawkChat from "@/components/TawkChat";
 import { MobileActionBar } from "@/components/MobileActionBar";
 
@@ -73,6 +74,7 @@ const Index = () => {
       <SocialMediaSection />
       <AwardsSection />
       <TestimonialsSection />
+      <HiringBanner />
       <ContactSection />
       <Footer />
       <TawkChat />
