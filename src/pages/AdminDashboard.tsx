@@ -19,7 +19,9 @@ import {
   Copy,
   Check,
   Trash2,
-  RefreshCw
+  RefreshCw,
+  ImageIcon,
+  Download
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 
