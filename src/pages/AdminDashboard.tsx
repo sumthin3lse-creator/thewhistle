@@ -71,6 +71,7 @@ const adTypeLabels: Record<AdType, string> = {
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [regeneratingImageId, setRegeneratingImageId] = useState<string | null>(null);
   const [ads, setAds] = useState<GeneratedAd[]>([]);
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [adType, setAdType] = useState<AdType>("menu_highlight");
