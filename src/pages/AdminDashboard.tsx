@@ -427,6 +427,15 @@ export default function AdminDashboard() {
                               )}
 
                               <div className="flex items-center gap-2 flex-wrap">
+                                <PlatformPreviewDialog
+                                  ad={ad}
+                                  trigger={
+                                    <Button size="sm" variant="outline">
+                                      <Eye className="h-4 w-4 mr-1" />
+                                      Preview
+                                    </Button>
+                                  }
+                                />
                                 <Button
                                   size="sm"
                                   variant="outline"
