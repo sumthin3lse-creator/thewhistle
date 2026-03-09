@@ -21,9 +21,11 @@ import {
   Trash2,
   RefreshCw,
   ImageIcon,
-  Download
+  Download,
+  Eye
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
+import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
 
 type Platform = "instagram" | "facebook" | "tiktok" | "twitter";
 type AdType = "promo" | "menu_highlight" | "seasonal" | "event" | "trending";
@@ -425,6 +427,15 @@ export default function AdminDashboard() {
                               )}
 
                               <div className="flex items-center gap-2 flex-wrap">
+                                <PlatformPreviewDialog
+                                  ad={ad}
+                                  trigger={
+                                    <Button size="sm" variant="outline">
+                                      <Eye className="h-4 w-4 mr-1" />
+                                      Preview
+                                    </Button>
+                                  }
+                                />
                                 <Button
                                   size="sm"
                                   variant="outline"
