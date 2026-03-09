@@ -14,6 +14,81 @@ export type Database = {
   }
   public: {
     Tables: {
+      generated_ads: {
+        Row: {
+          ad_type: string
+          ai_reasoning: string | null
+          call_to_action: string | null
+          caption: string
+          created_at: string
+          created_by: string | null
+          hashtags: string[] | null
+          headline: string
+          id: string
+          image_url: string | null
+          menu_items_featured: string[] | null
+          platform: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          ad_type: string
+          ai_reasoning?: string | null
+          call_to_action?: string | null
+          caption: string
+          created_at?: string
+          created_by?: string | null
+          hashtags?: string[] | null
+          headline: string
+          id?: string
+          image_url?: string | null
+          menu_items_featured?: string[] | null
+          platform: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          ad_type?: string
+          ai_reasoning?: string | null
+          call_to_action?: string | null
+          caption?: string
+          created_at?: string
+          created_by?: string | null
+          hashtags?: string[] | null
+          headline?: string
+          id?: string
+          image_url?: string | null
+          menu_items_featured?: string[] | null
+          platform?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           created_at: string
