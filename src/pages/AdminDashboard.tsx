@@ -301,18 +301,18 @@ export default function AdminDashboard() {
                   {isGenerating ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Generating...
+                      Generating ad & image...
                     </>
                   ) : (
                     <>
                       <Sparkles className="mr-2 h-4 w-4" />
-                      Generate Ad
+                      Generate Ad + Image
                     </>
                   )}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Logo, menu, phone & address are automatically included
+                  AI generates caption + image with your branding embedded
                 </p>
               </CardContent>
             </Card>
