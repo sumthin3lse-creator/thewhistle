@@ -511,6 +511,19 @@ export default function AdminDashboard() {
                                     </a>
                                   </Button>
                                 )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => regenerateImage(ad)}
+                                  disabled={regeneratingImageId === ad.id}
+                                >
+                                  {regeneratingImageId === ad.id ? (
+                                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                                  ) : (
+                                    <RefreshCcw className="h-4 w-4 mr-1" />
+                                  )}
+                                  {regeneratingImageId === ad.id ? "Generating..." : "New Image"}
+                                </Button>
                                 {ad.status === "draft" && (
                                   <Button
                                     size="sm"
