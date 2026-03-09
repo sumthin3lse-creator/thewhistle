@@ -62,24 +62,38 @@ const PLATFORM_SPECS = {
   instagram: {
     maxCaptionLength: 2200,
     hashtagLimit: 30,
-    style: "Visual-first, lifestyle-focused, use emojis moderately, engaging storytelling"
+    style: "Visual-first, lifestyle-focused, use emojis moderately, engaging storytelling",
+    imageSize: "1080x1080"
   },
   facebook: {
     maxCaptionLength: 63206,
     hashtagLimit: 10,
-    style: "Community-focused, informative, can be longer-form, shareable content"
+    style: "Community-focused, informative, can be longer-form, shareable content",
+    imageSize: "1200x630"
   },
   tiktok: {
     maxCaptionLength: 2200,
     hashtagLimit: 5,
-    style: "Trendy, casual, fun, use current slang appropriately, hook in first line"
+    style: "Trendy, casual, fun, use current slang appropriately, hook in first line",
+    imageSize: "1080x1920"
   },
   twitter: {
     maxCaptionLength: 280,
     hashtagLimit: 3,
-    style: "Punchy, witty, concise, conversational"
+    style: "Punchy, witty, concise, conversational",
+    imageSize: "1200x675"
   }
 };
+
+// Helper to decode base64 to Uint8Array
+function base64ToUint8Array(base64: string): Uint8Array {
+  const binaryString = atob(base64);
+  const bytes = new Uint8Array(binaryString.length);
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i);
+  }
+  return bytes;
+}
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -100,9 +114,14 @@ serve(async (req) => {
     // Verify user is admin
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const serviceRoleKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    
     const supabase = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } }
     });
+    
+    // Service role client for storage uploads
+    const supabaseAdmin = createClient(supabaseUrl, serviceRoleKey);
 
     const { data: { user }, error: userError } = await supabase.auth.getUser();
     if (userError || !user) {
@@ -171,11 +190,14 @@ Respond with a JSON object containing:
   "hashtags": ["array", "of", "relevant", "hashtags"],
   "callToAction": "A clear call to action",
   "menuItemsFeatured": ["Array of menu items mentioned"],
-  "imagePrompt": "A detailed description for generating an ad image (describe composition, food styling, lighting, mood)",
+  "imagePrompt": "A detailed, vivid description for generating an appetizing food photography ad image. Include: specific dish details, plating style, lighting (warm/natural), background (rustic wood, marble, etc), props, camera angle, mood. Make it mouth-watering.",
   "reasoning": "Brief explanation of why this ad would perform well"
 }`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    console.log("Generating ad copy...");
+    
+    // Step 1: Generate ad copy
+    const copyResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${LOVABLE_API_KEY}`,
@@ -191,32 +213,32 @@ Respond with a JSON object containing:
       }),
     });
 
-    if (!response.ok) {
-      if (response.status === 429) {
+    if (!copyResponse.ok) {
+      if (copyResponse.status === 429) {
         return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (response.status === 402) {
+      if (copyResponse.status === 402) {
         return new Response(JSON.stringify({ error: "AI credits exhausted. Please add funds." }), {
           status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const errorText = await response.text();
-      console.error("AI Gateway error:", response.status, errorText);
-      throw new Error(`AI Gateway error: ${response.status}`);
+      const errorText = await copyResponse.text();
+      console.error("AI Gateway error:", copyResponse.status, errorText);
+      throw new Error(`AI Gateway error: ${copyResponse.status}`);
     }
 
-    const aiResponse = await response.json();
+    const aiResponse = await copyResponse.json();
     const content = aiResponse.choices?.[0]?.message?.content;
 
     if (!content) {
       throw new Error("No content in AI response");
     }
 
-    // Parse JSON from response (handle markdown code blocks)
+    // Parse JSON from response
     let adData;
     try {
       const jsonMatch = content.match(/```json\s*([\s\S]*?)\s*```/) || content.match(/\{[\s\S]*\}/);
@@ -227,7 +249,81 @@ Respond with a JSON object containing:
       throw new Error("Failed to parse AI response as JSON");
     }
 
-    // Save to database
+    console.log("Generating ad image...");
+
+    // Step 2: Generate image using the image prompt
+    const imagePrompt = `Professional food photography advertisement for a restaurant called "The Whistle Stop". ${adData.imagePrompt}. 
+Style: High-end food photography, appetizing, warm lighting, shallow depth of field. 
+Include subtle text overlay: "${adData.headline}" in a modern sans-serif font.
+Do NOT include any phone numbers, addresses, or URLs in the image.
+Make it look like a professional social media ad that would stop someone scrolling.`;
+
+    let imageUrl: string | null = null;
+
+    try {
+      const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash-image",
+          messages: [
+            {
+              role: "user",
+              content: imagePrompt
+            }
+          ],
+          modalities: ["image", "text"]
+        }),
+      });
+
+      if (imageResponse.ok) {
+        const imageResult = await imageResponse.json();
+        const generatedImage = imageResult.choices?.[0]?.message?.images?.[0]?.image_url?.url;
+
+        if (generatedImage && generatedImage.startsWith("data:image/")) {
+          console.log("Image generated, uploading to storage...");
+          
+          // Extract base64 data
+          const base64Match = generatedImage.match(/^data:image\/(\w+);base64,(.+)$/);
+          if (base64Match) {
+            const imageFormat = base64Match[1];
+            const base64Data = base64Match[2];
+            const imageBytes = base64ToUint8Array(base64Data);
+            
+            // Upload to storage
+            const fileName = `${platform}-${adType}-${Date.now()}.${imageFormat}`;
+            const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
+              .from("ad-images")
+              .upload(fileName, imageBytes, {
+                contentType: `image/${imageFormat}`,
+                upsert: false
+              });
+
+            if (uploadError) {
+              console.error("Upload error:", uploadError);
+            } else {
+              // Get public URL
+              const { data: urlData } = supabaseAdmin.storage
+                .from("ad-images")
+                .getPublicUrl(fileName);
+              
+              imageUrl = urlData.publicUrl;
+              console.log("Image uploaded:", imageUrl);
+            }
+          }
+        }
+      } else {
+        console.error("Image generation failed:", imageResponse.status);
+      }
+    } catch (imgError) {
+      console.error("Image generation error:", imgError);
+      // Continue without image - not a fatal error
+    }
+
+    // Step 3: Save to database
     const { data: savedAd, error: saveError } = await supabase
       .from("generated_ads")
       .insert({
@@ -239,6 +335,7 @@ Respond with a JSON object containing:
         call_to_action: adData.callToAction,
         menu_items_featured: adData.menuItemsFeatured,
         ai_reasoning: adData.reasoning,
+        image_url: imageUrl,
         created_by: user.id,
         status: "draft"
       })
