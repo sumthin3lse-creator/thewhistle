@@ -353,8 +353,33 @@ export default function AdminDashboard() {
                       .filter(ad => tab === "all" || ad.status === tab)
                       .map((ad) => (
                         <Card key={ad.id} className="overflow-hidden">
-                          <div className="flex">
-                            <div className={`w-1.5 ${platformColors[ad.platform]}`} />
+                          <div className="flex flex-col md:flex-row">
+                            <div className={`w-full md:w-1.5 h-1.5 md:h-auto ${platformColors[ad.platform]}`} />
+                            
+                            {/* Image Section */}
+                            {ad.image_url ? (
+                              <div className="w-full md:w-48 h-48 md:h-auto flex-shrink-0 bg-muted relative group">
+                                <img 
+                                  src={ad.image_url} 
+                                  alt={ad.headline}
+                                  className="w-full h-full object-cover"
+                                />
+                                <a
+                                  href={ad.image_url}
+                                  download
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="absolute bottom-2 right-2 p-2 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                >
+                                  <Download className="h-4 w-4 text-white" />
+                                </a>
+                              </div>
+                            ) : (
+                              <div className="hidden md:flex w-48 h-auto flex-shrink-0 bg-muted items-center justify-center">
+                                <ImageIcon className="h-8 w-8 text-muted-foreground/50" />
+                              </div>
+                            )}
+                            
                             <div className="flex-1 p-6">
                               <div className="flex items-start justify-between mb-4">
                                 <div className="flex items-center gap-2">
@@ -376,18 +401,18 @@ export default function AdminDashboard() {
                                 </Badge>
                               </div>
 
-                              <p className="text-sm mb-4 whitespace-pre-wrap">{ad.caption}</p>
+                              <p className="text-sm mb-4 whitespace-pre-wrap line-clamp-4">{ad.caption}</p>
 
                               {ad.hashtags && ad.hashtags.length > 0 && (
                                 <div className="flex flex-wrap gap-1 mb-4">
-                                  {ad.hashtags.slice(0, 10).map((tag, i) => (
+                                  {ad.hashtags.slice(0, 8).map((tag, i) => (
                                     <Badge key={i} variant="outline" className="text-xs">
                                       #{tag}
                                     </Badge>
                                   ))}
-                                  {ad.hashtags.length > 10 && (
+                                  {ad.hashtags.length > 8 && (
                                     <Badge variant="outline" className="text-xs">
-                                      +{ad.hashtags.length - 10} more
+                                      +{ad.hashtags.length - 8} more
                                     </Badge>
                                   )}
                                 </div>
@@ -412,6 +437,18 @@ export default function AdminDashboard() {
                                   )}
                                   Copy
                                 </Button>
+                                {ad.image_url && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    asChild
+                                  >
+                                    <a href={ad.image_url} download target="_blank" rel="noopener noreferrer">
+                                      <Download className="h-4 w-4 mr-1" />
+                                      Image
+                                    </a>
+                                  </Button>
+                                )}
                                 {ad.status === "draft" && (
                                   <Button
                                     size="sm"
