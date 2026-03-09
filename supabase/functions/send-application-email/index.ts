@@ -98,7 +98,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         from: "Whistle Stop Applications <onboarding@resend.dev>",
-        to: ["admin@thewhistlestopstuart.com"],
+        to: ["lordamos@outlook.com"],
         subject: `New Application: ${form.fullName} — ${form.position || "General"}`,
         html,
       }),
