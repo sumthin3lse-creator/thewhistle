@@ -22,7 +22,8 @@ import {
   RefreshCw,
   ImageIcon,
   Download,
-  Eye
+  Eye,
+  RefreshCcw
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
