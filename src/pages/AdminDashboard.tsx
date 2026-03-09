@@ -22,7 +22,8 @@ import {
   RefreshCw,
   ImageIcon,
   Download,
-  Eye
+  Eye,
+  RefreshCcw
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
@@ -71,6 +72,7 @@ const adTypeLabels: Record<AdType, string> = {
 export default function AdminDashboard() {
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [regeneratingImageId, setRegeneratingImageId] = useState<string | null>(null);
   const [ads, setAds] = useState<GeneratedAd[]>([]);
   const [platform, setPlatform] = useState<Platform>("instagram");
   const [adType, setAdType] = useState<AdType>("menu_highlight");
@@ -196,6 +198,55 @@ export default function AdminDashboard() {
     } else {
       toast({ title: "Deleted", description: "Ad removed successfully" });
       loadAds();
+    }
+  };
+
+  const regenerateImage = async (ad: GeneratedAd) => {
+    setRegeneratingImageId(ad.id);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ad`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            platform: ad.platform,
+            adType: ad.ad_type,
+            regenerateImageOnly: true,
+            adId: ad.id,
+            existingHeadline: ad.headline,
+            existingCaption: ad.caption,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to regenerate image");
+      }
+
+      toast({
+        title: "Image Regenerated!",
+        description: "New image has been generated for this ad.",
+      });
+
+      loadAds();
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Regeneration failed";
+      toast({
+        title: "Regeneration Failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setRegeneratingImageId(null);
     }
   };
 
@@ -460,6 +511,19 @@ export default function AdminDashboard() {
                                     </a>
                                   </Button>
                                 )}
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => regenerateImage(ad)}
+                                  disabled={regeneratingImageId === ad.id}
+                                >
+                                  {regeneratingImageId === ad.id ? (
+                                    <Loader2 className="h-4 w-4 mr-1 animate-spin" />
+                                  ) : (
+                                    <RefreshCcw className="h-4 w-4 mr-1" />
+                                  )}
+                                  {regeneratingImageId === ad.id ? "Generating..." : "New Image"}
+                                </Button>
                                 {ad.status === "draft" && (
                                   <Button
                                     size="sm"
