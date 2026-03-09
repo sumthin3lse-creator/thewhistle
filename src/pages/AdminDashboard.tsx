@@ -200,6 +200,55 @@ export default function AdminDashboard() {
     }
   };
 
+  const regenerateImage = async (ad: GeneratedAd) => {
+    setRegeneratingImageId(ad.id);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) throw new Error("Not authenticated");
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-ad`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            platform: ad.platform,
+            adType: ad.ad_type,
+            regenerateImageOnly: true,
+            adId: ad.id,
+            existingHeadline: ad.headline,
+            existingCaption: ad.caption,
+          }),
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Failed to regenerate image");
+      }
+
+      toast({
+        title: "Image Regenerated!",
+        description: "New image has been generated for this ad.",
+      });
+
+      loadAds();
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Regeneration failed";
+      toast({
+        title: "Regeneration Failed",
+        description: message,
+        variant: "destructive",
+      });
+    } finally {
+      setRegeneratingImageId(null);
+    }
+  };
+
   const handleLogout = async () => {
     await supabase.auth.signOut();
     navigate("/admin/login");
