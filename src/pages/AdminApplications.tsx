@@ -58,8 +58,103 @@ export default function AdminApplications() {
   const [loading, setLoading] = useState(true);
   const [apps, setApps] = useState<ApplicationRow[]>([]);
   const [selected, setSelected] = useState<ApplicationRow | null>(null);
+  const [replyTo, setReplyTo] = useState<ApplicationRow | null>(null);
+  const [replySubject, setReplySubject] = useState("");
+  const [replyBody, setReplyBody] = useState("");
+  const [emailCopied, setEmailCopied] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const buildTemplate = (
+    kind: "interview" | "info" | "decline",
+    app: ApplicationRow
+  ): { subject: string; body: string } => {
+    const firstName = (app.full_name || "").trim().split(/\s+/)[0] || "there";
+    const position = app.position || "the position";
+    const signoff = "\n\nThank you,\nThe Whistle Stop Team\nPort Salerno, FL";
+
+    switch (kind) {
+      case "interview":
+        return {
+          subject: `Interview Invitation — ${position} at The Whistle Stop`,
+          body:
+            `Hi ${firstName},\n\n` +
+            `Thank you for applying to The Whistle Stop for the ${position} role. ` +
+            `We'd love to invite you in for a quick interview.\n\n` +
+            `Could you let us know a few times that work for you this week? ` +
+            `We're located at 4290 SE Salerno Rd, Stuart, FL.${signoff}`,
+        };
+      case "info":
+        return {
+          subject: `Quick follow-up on your application — The Whistle Stop`,
+          body:
+            `Hi ${firstName},\n\n` +
+            `Thanks for your application for ${position}. Before we move forward, ` +
+            `could you share a bit more about:\n\n` +
+            `  • Your availability (days/hours)\n` +
+            `  • Relevant experience\n` +
+            `  • Earliest start date\n\n` +
+            `Just reply to this email when you get a chance.${signoff}`,
+        };
+      case "decline":
+        return {
+          subject: `Update on your application — The Whistle Stop`,
+          body:
+            `Hi ${firstName},\n\n` +
+            `Thank you so much for your interest in joining The Whistle Stop and for taking the time to apply. ` +
+            `After reviewing your application, we've decided to move forward with other candidates at this time.\n\n` +
+            `We truly appreciate you considering us and wish you the very best in your search.${signoff}`,
+        };
+    }
+  };
+
+  const openReply = (app: ApplicationRow) => {
+    if (!app.email) {
+      toast({
+        title: "No email on file",
+        description: "This applicant did not provide an email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    const tpl = buildTemplate("interview", app);
+    setReplySubject(tpl.subject);
+    setReplyBody(tpl.body);
+    setReplyTo(app);
+  };
+
+  const applyTemplate = (kind: "interview" | "info" | "decline") => {
+    if (!replyTo) return;
+    const tpl = buildTemplate(kind, replyTo);
+    setReplySubject(tpl.subject);
+    setReplyBody(tpl.body);
+  };
+
+  const sendViaMailClient = async () => {
+    if (!replyTo?.email) return;
+    const url =
+      `mailto:${encodeURIComponent(replyTo.email)}` +
+      `?subject=${encodeURIComponent(replySubject)}` +
+      `&body=${encodeURIComponent(replyBody)}`;
+    window.location.href = url;
+    // Auto-mark as contacted so the list reflects outreach
+    if (replyTo.status === "new" || replyTo.status === "reviewed") {
+      await updateStatus(replyTo.id, "contacted");
+    }
+    toast({
+      title: "Email client opened",
+      description: "Finish and send the message from your mail app.",
+    });
+    setReplyTo(null);
+  };
+
+  const copyEmail = async () => {
+    if (!replyTo?.email) return;
+    await navigator.clipboard.writeText(replyTo.email);
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 1500);
+  };
+
 
   useEffect(() => {
     (async () => {
