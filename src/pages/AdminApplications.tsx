@@ -395,6 +395,77 @@ export default function AdminApplications() {
           )}
         </DialogContent>
       </Dialog>
+
+      {/* Reply Dialog */}
+      <Dialog open={!!replyTo} onOpenChange={(o) => !o && setReplyTo(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {replyTo && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Reply to {replyTo.full_name}</DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground w-12">To</Label>
+                  <Input value={replyTo.email || ""} readOnly className="font-mono text-sm" />
+                  <Button size="sm" variant="outline" onClick={copyEmail}>
+                    {emailCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground">Quick template</Label>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate("interview")}>
+                      Invite to interview
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate("info")}>
+                      Request more info
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate("decline")}>
+                      Politely decline
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground">Subject</Label>
+                  <Input
+                    value={replySubject}
+                    onChange={(e) => setReplySubject(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground">Message</Label>
+                  <Textarea
+                    value={replyBody}
+                    onChange={(e) => setReplyBody(e.target.value)}
+                    rows={12}
+                    className="mt-1 font-sans"
+                  />
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Sending opens your default email app (Gmail, Outlook, Mail) with this message
+                  pre-filled. The applicant will reply directly to you.
+                </p>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setReplyTo(null)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={sendViaMailClient}>
+                    <Mail className="h-4 w-4 mr-2" /> Open in Email App
+                  </Button>
+                </div>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
