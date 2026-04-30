@@ -160,12 +160,25 @@ const Apply = () => {
     const updated = [...references];
     updated[index] = { ...updated[index], [field]: value };
     setReferences(updated);
+    // Clear that specific field's error
+    if (errors.referenceRows?.[index]?.[field]) {
+      setErrors((prev) => {
+        const rows = { ...(prev.referenceRows || {}) };
+        const row = { ...(rows[index] || {}) };
+        delete row[field];
+        if (Object.keys(row).length === 0) delete rows[index];
+        else rows[index] = row;
+        return { ...prev, referenceRows: rows, references: undefined };
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate required contact fields BEFORE doing anything
+    const newErrors: FieldErrors = {};
+
+    // 1. Validate required contact fields
     const result = applicationSchema.safeParse({
       fullName: form.fullName,
       email: form.email,
@@ -174,24 +187,67 @@ const Apply = () => {
     });
 
     if (!result.success) {
-      const fieldErrors: FieldErrors = {};
       for (const issue of result.error.issues) {
-        const key = issue.path[0] as keyof FieldErrors;
-        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+        const key = issue.path[0] as "fullName" | "email" | "phone" | "position";
+        if (key && !newErrors[key]) newErrors[key] = issue.message;
       }
-      setErrors(fieldErrors);
+    }
+
+    // 2. Validate references — at least one fully-completed valid reference
+    //    Any row that has ANY field filled in must be fully valid.
+    const refRowErrors: Record<number, ReferenceErrors> = {};
+    let validReferenceCount = 0;
+
+    references.forEach((ref, i) => {
+      const hasAnyValue = Boolean(
+        ref.name?.trim() || ref.address?.trim() || ref.business?.trim() || ref.yearsKnown?.trim()
+      );
+      if (!hasAnyValue) return; // empty row is fine — just skip it
+
+      const parsed = referenceSchema.safeParse(ref);
+      if (parsed.success) {
+        validReferenceCount += 1;
+      } else {
+        const rowErr: ReferenceErrors = {};
+        for (const issue of parsed.error.issues) {
+          const key = issue.path[0] as keyof ReferenceErrors;
+          if (key && !rowErr[key]) rowErr[key] = issue.message;
+        }
+        refRowErrors[i] = rowErr;
+      }
+    });
+
+    if (Object.keys(refRowErrors).length > 0) {
+      newErrors.referenceRows = refRowErrors;
+    }
+
+    if (validReferenceCount === 0 && Object.keys(refRowErrors).length === 0) {
+      newErrors.references = "Please provide at least one personal reference.";
+    } else if (validReferenceCount === 0) {
+      newErrors.references = "Please complete the reference details below.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       toast({
         title: "Please fix the highlighted fields",
-        description: "We need a valid name, email, and phone number to contact you.",
+        description: newErrors.references
+          ? "At least one complete personal reference is required."
+          : "We need valid contact details to continue.",
         variant: "destructive",
       });
-      // Scroll to the first error
       requestAnimationFrame(() => {
-        const firstKey = Object.keys(fieldErrors)[0];
-        if (firstKey) {
+        // Scroll to the first contact error, or to references section if that's the only issue
+        const contactKeys = ["fullName", "email", "phone", "position"] as const;
+        const firstContact = contactKeys.find((k) => newErrors[k]);
+        if (firstContact) {
           document
-            .querySelector(`[name="${firstKey}"]`)
+            .querySelector(`[name="${firstContact}"]`)
             ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          document
+            .getElementById("references-section")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       });
       return;
