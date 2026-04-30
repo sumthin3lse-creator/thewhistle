@@ -370,6 +370,43 @@ export default function AdminApplications() {
               </div>
 
               <div className="space-y-6 text-sm">
+                {/* Private admin notes */}
+                <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs uppercase tracking-wide text-primary font-semibold">
+                      Private Admin Notes
+                    </Label>
+                    <span className="text-[10px] text-muted-foreground">
+                      Visible only to admins
+                    </span>
+                  </div>
+                  <Textarea
+                    value={notesDraft}
+                    onChange={(e) => setNotesDraft(e.target.value)}
+                    rows={4}
+                    placeholder="Interview notes, follow-up reminders, screening details..."
+                    className="bg-background"
+                  />
+                  <div className="flex items-center justify-end gap-2">
+                    {notesDraft !== (selected.notes ?? "") && (
+                      <span className="text-xs text-muted-foreground">Unsaved changes</span>
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={saveNotes}
+                      disabled={savingNotes || notesDraft === (selected.notes ?? "")}
+                    >
+                      {savingNotes ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-1 animate-spin" /> Saving...
+                        </>
+                      ) : (
+                        "Save Notes"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
                 <Section title="Contact">
                   <Field label="Email" value={selected.email} />
                   <Field label="Phone" value={selected.phone} />
