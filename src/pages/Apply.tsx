@@ -38,7 +38,38 @@ const applicationSchema = z.object({
     .or(z.literal("")),
 });
 
-type FieldErrors = Partial<Record<"fullName" | "email" | "phone" | "position", string>>;
+const referenceSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Reference name is required")
+    .max(100, "Name must be under 100 characters"),
+  address: z
+    .string()
+    .trim()
+    .min(5, "Please enter a full address")
+    .max(200, "Address must be under 200 characters"),
+  business: z
+    .string()
+    .trim()
+    .min(2, "Business or occupation is required")
+    .max(100, "Business must be under 100 characters"),
+  yearsKnown: z
+    .string()
+    .trim()
+    .min(1, "Years known is required")
+    .regex(/^\d+(\.\d+)?$/, "Years known must be a number")
+    .refine((v) => Number(v) >= 1 && Number(v) <= 80, {
+      message: "Must be between 1 and 80 years",
+    }),
+});
+
+type ReferenceErrors = Partial<Record<"name" | "address" | "business" | "yearsKnown", string>>;
+
+type FieldErrors = Partial<Record<"fullName" | "email" | "phone" | "position", string>> & {
+  references?: string;
+  referenceRows?: Record<number, ReferenceErrors>;
+};
 
 
 interface Employer {
