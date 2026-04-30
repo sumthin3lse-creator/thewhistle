@@ -321,6 +321,26 @@ export default function AdminApplications() {
                 </DialogTitle>
               </DialogHeader>
 
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" onClick={() => openReply(selected)} disabled={!selected.email}>
+                  <Reply className="h-4 w-4 mr-1" /> Reply by Email
+                </Button>
+                {selected.email && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={`mailto:${selected.email}`}>
+                      <Mail className="h-4 w-4 mr-1" /> Blank Email
+                    </a>
+                  </Button>
+                )}
+                {selected.phone && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={`tel:${selected.phone}`}>
+                      <Phone className="h-4 w-4 mr-1" /> Call
+                    </a>
+                  </Button>
+                )}
+              </div>
+
               <div className="space-y-6 text-sm">
                 <Section title="Contact">
                   <Field label="Email" value={selected.email} />
