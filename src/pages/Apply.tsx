@@ -112,7 +112,11 @@ const Apply = () => {
   ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    if (errors[name as keyof FieldErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleEmployerChange = (index: number, field: keyof Employer, value: string) => {
@@ -129,19 +133,65 @@ const Apply = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate required contact fields BEFORE doing anything
+    const result = applicationSchema.safeParse({
+      fullName: form.fullName,
+      email: form.email,
+      phone: form.phone,
+      position: form.position,
+    });
+
+    if (!result.success) {
+      const fieldErrors: FieldErrors = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as keyof FieldErrors;
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      toast({
+        title: "Please fix the highlighted fields",
+        description: "We need a valid name, email, and phone number to contact you.",
+        variant: "destructive",
+      });
+      // Scroll to the first error
+      requestAnimationFrame(() => {
+        const firstKey = Object.keys(fieldErrors)[0];
+        if (firstKey) {
+          document
+            .querySelector(`[name="${firstKey}"]`)
+            ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+      return;
+    }
+
+    setErrors({});
     setIsSubmitting(true);
+
+    // Use sanitized values from zod
+    const cleanForm = { ...form, ...result.data };
 
     try {
       // Save to database first so we always have a record
       const { error: dbError } = await supabase.from("applications").insert([{
-        full_name: form.fullName,
-        email: form.email || null,
-        phone: form.phone || null,
-        position: form.position || null,
-        form_data: form as any,
+        full_name: cleanForm.fullName,
+        email: cleanForm.email,
+        phone: cleanForm.phone,
+        position: cleanForm.position || null,
+        form_data: cleanForm as any,
         employers: employers as any,
         personal_references: references as any,
       }]);
+
+      if (dbError) throw dbError;
+
+      // Then send the email notification (best-effort)
+      const { error } = await supabase.functions.invoke("send-application-email", {
+        body: { form: cleanForm, employers, references },
+      });
+
+      if (error) console.error("Email notification failed:", error);
 
       if (dbError) throw dbError;
 
