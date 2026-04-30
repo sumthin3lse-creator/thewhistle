@@ -38,7 +38,38 @@ const applicationSchema = z.object({
     .or(z.literal("")),
 });
 
-type FieldErrors = Partial<Record<"fullName" | "email" | "phone" | "position", string>>;
+const referenceSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, "Reference name is required")
+    .max(100, "Name must be under 100 characters"),
+  address: z
+    .string()
+    .trim()
+    .min(5, "Please enter a full address")
+    .max(200, "Address must be under 200 characters"),
+  business: z
+    .string()
+    .trim()
+    .min(2, "Business or occupation is required")
+    .max(100, "Business must be under 100 characters"),
+  yearsKnown: z
+    .string()
+    .trim()
+    .min(1, "Years known is required")
+    .regex(/^\d+(\.\d+)?$/, "Years known must be a number")
+    .refine((v) => Number(v) >= 1 && Number(v) <= 80, {
+      message: "Must be between 1 and 80 years",
+    }),
+});
+
+type ReferenceErrors = Partial<Record<"name" | "address" | "business" | "yearsKnown", string>>;
+
+type FieldErrors = Partial<Record<"fullName" | "email" | "phone" | "position", string>> & {
+  references?: string;
+  referenceRows?: Record<number, ReferenceErrors>;
+};
 
 
 interface Employer {
@@ -129,12 +160,25 @@ const Apply = () => {
     const updated = [...references];
     updated[index] = { ...updated[index], [field]: value };
     setReferences(updated);
+    // Clear that specific field's error
+    if (errors.referenceRows?.[index]?.[field]) {
+      setErrors((prev) => {
+        const rows = { ...(prev.referenceRows || {}) };
+        const row = { ...(rows[index] || {}) };
+        delete row[field];
+        if (Object.keys(row).length === 0) delete rows[index];
+        else rows[index] = row;
+        return { ...prev, referenceRows: rows, references: undefined };
+      });
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validate required contact fields BEFORE doing anything
+    const newErrors: FieldErrors = {};
+
+    // 1. Validate required contact fields
     const result = applicationSchema.safeParse({
       fullName: form.fullName,
       email: form.email,
@@ -143,24 +187,67 @@ const Apply = () => {
     });
 
     if (!result.success) {
-      const fieldErrors: FieldErrors = {};
       for (const issue of result.error.issues) {
-        const key = issue.path[0] as keyof FieldErrors;
-        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+        const key = issue.path[0] as "fullName" | "email" | "phone" | "position";
+        if (key && !newErrors[key]) newErrors[key] = issue.message;
       }
-      setErrors(fieldErrors);
+    }
+
+    // 2. Validate references — at least one fully-completed valid reference
+    //    Any row that has ANY field filled in must be fully valid.
+    const refRowErrors: Record<number, ReferenceErrors> = {};
+    let validReferenceCount = 0;
+
+    references.forEach((ref, i) => {
+      const hasAnyValue = Boolean(
+        ref.name?.trim() || ref.address?.trim() || ref.business?.trim() || ref.yearsKnown?.trim()
+      );
+      if (!hasAnyValue) return; // empty row is fine — just skip it
+
+      const parsed = referenceSchema.safeParse(ref);
+      if (parsed.success) {
+        validReferenceCount += 1;
+      } else {
+        const rowErr: ReferenceErrors = {};
+        for (const issue of parsed.error.issues) {
+          const key = issue.path[0] as keyof ReferenceErrors;
+          if (key && !rowErr[key]) rowErr[key] = issue.message;
+        }
+        refRowErrors[i] = rowErr;
+      }
+    });
+
+    if (Object.keys(refRowErrors).length > 0) {
+      newErrors.referenceRows = refRowErrors;
+    }
+
+    if (validReferenceCount === 0 && Object.keys(refRowErrors).length === 0) {
+      newErrors.references = "Please provide at least one personal reference.";
+    } else if (validReferenceCount === 0) {
+      newErrors.references = "Please complete the reference details below.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
       toast({
         title: "Please fix the highlighted fields",
-        description: "We need a valid name, email, and phone number to contact you.",
+        description: newErrors.references
+          ? "At least one complete personal reference is required."
+          : "We need valid contact details to continue.",
         variant: "destructive",
       });
-      // Scroll to the first error
       requestAnimationFrame(() => {
-        const firstKey = Object.keys(fieldErrors)[0];
-        if (firstKey) {
+        // Scroll to the first contact error, or to references section if that's the only issue
+        const contactKeys = ["fullName", "email", "phone", "position"] as const;
+        const firstContact = contactKeys.find((k) => newErrors[k]);
+        if (firstContact) {
           document
-            .querySelector(`[name="${firstKey}"]`)
+            .querySelector(`[name="${firstContact}"]`)
             ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        } else {
+          document
+            .getElementById("references-section")
+            ?.scrollIntoView({ behavior: "smooth", block: "start" });
         }
       });
       return;
@@ -470,33 +557,87 @@ const Apply = () => {
 
             {/* References */}
             <ScrollReveal>
-              <div className={sectionClass}>
+              <div id="references-section" className={sectionClass}>
                 <h2 className="text-2xl font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
-                  References
+                  References *
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   Three persons not related to you, whom you have known at least one year.
+                  At least one complete reference is required.
                 </p>
-                {references.map((ref, i) => (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-4 gap-4 pb-4 border-b border-border last:border-0">
-                    <div>
-                      <Label className={labelClass}>Name</Label>
-                      <Input value={ref.name} onChange={(e) => handleReferenceChange(i, "name", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label className={labelClass}>Address</Label>
-                      <Input value={ref.address} onChange={(e) => handleReferenceChange(i, "address", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label className={labelClass}>Business</Label>
-                      <Input value={ref.business} onChange={(e) => handleReferenceChange(i, "business", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label className={labelClass}>Years Known</Label>
-                      <Input value={ref.yearsKnown} onChange={(e) => handleReferenceChange(i, "yearsKnown", e.target.value)} />
-                    </div>
+                {errors.references && (
+                  <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" /> {errors.references}
                   </div>
-                ))}
+                )}
+                {references.map((ref, i) => {
+                  const rowErr = errors.referenceRows?.[i];
+                  const fieldClass = (k: keyof Reference) =>
+                    rowErr?.[k] ? "border-destructive focus-visible:ring-destructive" : "";
+                  return (
+                    <div key={i} className="space-y-2 pb-4 border-b border-border last:border-0">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                          <Label className={labelClass}>Name</Label>
+                          <Input
+                            value={ref.name}
+                            onChange={(e) => handleReferenceChange(i, "name", e.target.value)}
+                            aria-invalid={!!rowErr?.name}
+                            className={fieldClass("name")}
+                          />
+                          {rowErr?.name && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.name}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label className={labelClass}>Address</Label>
+                          <Input
+                            value={ref.address}
+                            onChange={(e) => handleReferenceChange(i, "address", e.target.value)}
+                            aria-invalid={!!rowErr?.address}
+                            className={fieldClass("address")}
+                          />
+                          {rowErr?.address && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.address}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label className={labelClass}>Business</Label>
+                          <Input
+                            value={ref.business}
+                            onChange={(e) => handleReferenceChange(i, "business", e.target.value)}
+                            aria-invalid={!!rowErr?.business}
+                            className={fieldClass("business")}
+                          />
+                          {rowErr?.business && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.business}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label className={labelClass}>Years Known</Label>
+                          <Input
+                            inputMode="numeric"
+                            value={ref.yearsKnown}
+                            onChange={(e) => handleReferenceChange(i, "yearsKnown", e.target.value)}
+                            aria-invalid={!!rowErr?.yearsKnown}
+                            className={fieldClass("yearsKnown")}
+                          />
+                          {rowErr?.yearsKnown && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.yearsKnown}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </ScrollReveal>
 
