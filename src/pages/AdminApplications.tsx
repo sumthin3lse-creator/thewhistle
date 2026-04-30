@@ -26,7 +26,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Loader2, Trash2, Eye, Mail, Phone } from "lucide-react";
+import { ArrowLeft, Loader2, Trash2, Eye, Mail, Phone, Reply, Copy, Check } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 type Status = "new" | "reviewed" | "contacted" | "hired" | "rejected";
 
@@ -56,8 +59,103 @@ export default function AdminApplications() {
   const [loading, setLoading] = useState(true);
   const [apps, setApps] = useState<ApplicationRow[]>([]);
   const [selected, setSelected] = useState<ApplicationRow | null>(null);
+  const [replyTo, setReplyTo] = useState<ApplicationRow | null>(null);
+  const [replySubject, setReplySubject] = useState("");
+  const [replyBody, setReplyBody] = useState("");
+  const [emailCopied, setEmailCopied] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+
+  const buildTemplate = (
+    kind: "interview" | "info" | "decline",
+    app: ApplicationRow
+  ): { subject: string; body: string } => {
+    const firstName = (app.full_name || "").trim().split(/\s+/)[0] || "there";
+    const position = app.position || "the position";
+    const signoff = "\n\nThank you,\nThe Whistle Stop Team\nPort Salerno, FL";
+
+    switch (kind) {
+      case "interview":
+        return {
+          subject: `Interview Invitation — ${position} at The Whistle Stop`,
+          body:
+            `Hi ${firstName},\n\n` +
+            `Thank you for applying to The Whistle Stop for the ${position} role. ` +
+            `We'd love to invite you in for a quick interview.\n\n` +
+            `Could you let us know a few times that work for you this week? ` +
+            `We're located at 4290 SE Salerno Rd, Stuart, FL.${signoff}`,
+        };
+      case "info":
+        return {
+          subject: `Quick follow-up on your application — The Whistle Stop`,
+          body:
+            `Hi ${firstName},\n\n` +
+            `Thanks for your application for ${position}. Before we move forward, ` +
+            `could you share a bit more about:\n\n` +
+            `  • Your availability (days/hours)\n` +
+            `  • Relevant experience\n` +
+            `  • Earliest start date\n\n` +
+            `Just reply to this email when you get a chance.${signoff}`,
+        };
+      case "decline":
+        return {
+          subject: `Update on your application — The Whistle Stop`,
+          body:
+            `Hi ${firstName},\n\n` +
+            `Thank you so much for your interest in joining The Whistle Stop and for taking the time to apply. ` +
+            `After reviewing your application, we've decided to move forward with other candidates at this time.\n\n` +
+            `We truly appreciate you considering us and wish you the very best in your search.${signoff}`,
+        };
+    }
+  };
+
+  const openReply = (app: ApplicationRow) => {
+    if (!app.email) {
+      toast({
+        title: "No email on file",
+        description: "This applicant did not provide an email address.",
+        variant: "destructive",
+      });
+      return;
+    }
+    const tpl = buildTemplate("interview", app);
+    setReplySubject(tpl.subject);
+    setReplyBody(tpl.body);
+    setReplyTo(app);
+  };
+
+  const applyTemplate = (kind: "interview" | "info" | "decline") => {
+    if (!replyTo) return;
+    const tpl = buildTemplate(kind, replyTo);
+    setReplySubject(tpl.subject);
+    setReplyBody(tpl.body);
+  };
+
+  const sendViaMailClient = async () => {
+    if (!replyTo?.email) return;
+    const url =
+      `mailto:${encodeURIComponent(replyTo.email)}` +
+      `?subject=${encodeURIComponent(replySubject)}` +
+      `&body=${encodeURIComponent(replyBody)}`;
+    window.location.href = url;
+    // Auto-mark as contacted so the list reflects outreach
+    if (replyTo.status === "new" || replyTo.status === "reviewed") {
+      await updateStatus(replyTo.id, "contacted");
+    }
+    toast({
+      title: "Email client opened",
+      description: "Finish and send the message from your mail app.",
+    });
+    setReplyTo(null);
+  };
+
+  const copyEmail = async () => {
+    if (!replyTo?.email) return;
+    await navigator.clipboard.writeText(replyTo.email);
+    setEmailCopied(true);
+    setTimeout(() => setEmailCopied(false), 1500);
+  };
+
 
   useEffect(() => {
     (async () => {
@@ -176,6 +274,15 @@ export default function AdminApplications() {
                           <Button size="sm" variant="outline" onClick={() => setSelected(a)}>
                             <Eye className="h-4 w-4 mr-1" /> View
                           </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => openReply(a)}
+                            disabled={!a.email}
+                            title={a.email ? "Reply to applicant" : "No email on file"}
+                          >
+                            <Reply className="h-4 w-4 mr-1" /> Reply
+                          </Button>
                           <Button size="sm" variant="ghost" onClick={() => remove(a.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
@@ -214,6 +321,26 @@ export default function AdminApplications() {
                   </Select>
                 </DialogTitle>
               </DialogHeader>
+
+              <div className="flex flex-wrap gap-2">
+                <Button size="sm" onClick={() => openReply(selected)} disabled={!selected.email}>
+                  <Reply className="h-4 w-4 mr-1" /> Reply by Email
+                </Button>
+                {selected.email && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={`mailto:${selected.email}`}>
+                      <Mail className="h-4 w-4 mr-1" /> Blank Email
+                    </a>
+                  </Button>
+                )}
+                {selected.phone && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={`tel:${selected.phone}`}>
+                      <Phone className="h-4 w-4 mr-1" /> Call
+                    </a>
+                  </Button>
+                )}
+              </div>
 
               <div className="space-y-6 text-sm">
                 <Section title="Contact">
@@ -264,6 +391,77 @@ export default function AdminApplications() {
                     ))}
                   </Section>
                 )}
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Reply Dialog */}
+      <Dialog open={!!replyTo} onOpenChange={(o) => !o && setReplyTo(null)}>
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+          {replyTo && (
+            <>
+              <DialogHeader>
+                <DialogTitle>Reply to {replyTo.full_name}</DialogTitle>
+              </DialogHeader>
+
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground w-12">To</Label>
+                  <Input value={replyTo.email || ""} readOnly className="font-mono text-sm" />
+                  <Button size="sm" variant="outline" onClick={copyEmail}>
+                    {emailCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </div>
+
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground">Quick template</Label>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate("interview")}>
+                      Invite to interview
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate("info")}>
+                      Request more info
+                    </Button>
+                    <Button size="sm" variant="secondary" onClick={() => applyTemplate("decline")}>
+                      Politely decline
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground">Subject</Label>
+                  <Input
+                    value={replySubject}
+                    onChange={(e) => setReplySubject(e.target.value)}
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label className="text-xs uppercase tracking-wide text-muted-foreground">Message</Label>
+                  <Textarea
+                    value={replyBody}
+                    onChange={(e) => setReplyBody(e.target.value)}
+                    rows={12}
+                    className="mt-1 font-sans"
+                  />
+                </div>
+
+                <p className="text-xs text-muted-foreground">
+                  Sending opens your default email app (Gmail, Outlook, Mail) with this message
+                  pre-filled. The applicant will reply directly to you.
+                </p>
+
+                <div className="flex justify-end gap-2 pt-2">
+                  <Button variant="outline" onClick={() => setReplyTo(null)}>
+                    Cancel
+                  </Button>
+                  <Button onClick={sendViaMailClient}>
+                    <Mail className="h-4 w-4 mr-2" /> Open in Email App
+                  </Button>
+                </div>
               </div>
             </>
           )}
