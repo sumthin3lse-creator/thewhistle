@@ -273,6 +273,15 @@ export default function AdminApplications() {
                           <Button size="sm" variant="outline" onClick={() => setSelected(a)}>
                             <Eye className="h-4 w-4 mr-1" /> View
                           </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => openReply(a)}
+                            disabled={!a.email}
+                            title={a.email ? "Reply to applicant" : "No email on file"}
+                          >
+                            <Reply className="h-4 w-4 mr-1" /> Reply
+                          </Button>
                           <Button size="sm" variant="ghost" onClick={() => remove(a.id)}>
                             <Trash2 className="h-4 w-4" />
                           </Button>
