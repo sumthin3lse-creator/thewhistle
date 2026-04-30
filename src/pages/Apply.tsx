@@ -62,6 +62,7 @@ const emptyReference: Reference = { name: "", address: "", business: "", yearsKn
 const Apply = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FieldErrors>({});
 
   const [form, setForm] = useState({
     fullName: "",
