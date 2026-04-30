@@ -282,8 +282,12 @@ const Apply = () => {
     setErrors({});
     setIsSubmitting(true);
 
-    // Use sanitized values from zod
-    const cleanForm = { ...form, ...result.data };
+    // Use sanitized values from zod, plus normalize the optional secondary phone
+    const cleanForm = {
+      ...form,
+      ...result.data,
+      secondaryPhone: form.secondaryPhone ? sanitizePhone(form.secondaryPhone) : "",
+    };
 
     try {
       // Save to database first so we always have a record
