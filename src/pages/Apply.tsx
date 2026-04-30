@@ -12,28 +12,54 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 import { Briefcase, Send, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 
+// Strip control chars and collapse whitespace; keep printable ASCII + common unicode
+const sanitizeText = (s: string) =>
+  s
+    .replace(/[\u0000-\u001F\u007F]/g, "") // strip control chars
+    .replace(/\s+/g, " ")
+    .trim();
+
+// Keep only digits and + ( ) - . space
+const sanitizePhone = (s: string) =>
+  s.replace(/[^0-9+()\-.\s]/g, "").replace(/\s+/g, " ").trim();
+
+// Lowercase + trim + strip whitespace inside
+const sanitizeEmail = (s: string) => s.trim().toLowerCase().replace(/\s+/g, "");
+
 const applicationSchema = z.object({
   fullName: z
     .string()
-    .trim()
-    .min(2, "Please enter your full name")
-    .max(100, "Name must be under 100 characters"),
+    .transform(sanitizeText)
+    .pipe(
+      z
+        .string()
+        .min(2, "Please enter your full name")
+        .max(100, "Name must be under 100 characters")
+    ),
   email: z
     .string()
-    .trim()
-    .min(1, "Email is required so we can contact you")
-    .email("Please enter a valid email address")
-    .max(255, "Email must be under 255 characters"),
+    .transform(sanitizeEmail)
+    .pipe(
+      z
+        .string()
+        .min(1, "Email is required so we can contact you")
+        .email("Please enter a valid email address")
+        .max(255, "Email must be under 255 characters")
+    ),
   phone: z
     .string()
-    .trim()
-    .min(7, "Please enter a valid phone number")
-    .max(25, "Phone number is too long")
-    .regex(/^[0-9+()\-.\s]+$/, "Phone can only contain digits and + ( ) - ."),
+    .transform(sanitizePhone)
+    .pipe(
+      z
+        .string()
+        .min(7, "Please enter a valid phone number")
+        .max(25, "Phone number is too long")
+        .regex(/^[0-9+()\-.\s]+$/, "Phone can only contain digits and + ( ) - .")
+    ),
   position: z
     .string()
-    .trim()
-    .max(100, "Position must be under 100 characters")
+    .transform(sanitizeText)
+    .pipe(z.string().max(100, "Position must be under 100 characters"))
     .optional()
     .or(z.literal("")),
 });
