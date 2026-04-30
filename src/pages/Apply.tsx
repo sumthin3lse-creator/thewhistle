@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { z } from "zod";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -8,8 +9,37 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { Briefcase, Send } from "lucide-react";
+import { Briefcase, Send, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+
+const applicationSchema = z.object({
+  fullName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your full name")
+    .max(100, "Name must be under 100 characters"),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required so we can contact you")
+    .email("Please enter a valid email address")
+    .max(255, "Email must be under 255 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Please enter a valid phone number")
+    .max(25, "Phone number is too long")
+    .regex(/^[0-9+()\-.\s]+$/, "Phone can only contain digits and + ( ) - ."),
+  position: z
+    .string()
+    .trim()
+    .max(100, "Position must be under 100 characters")
+    .optional()
+    .or(z.literal("")),
+});
+
+type FieldErrors = Partial<Record<"fullName" | "email" | "phone" | "position", string>>;
+
 
 interface Employer {
   from: string;
@@ -32,6 +62,7 @@ const emptyReference: Reference = { name: "", address: "", business: "", yearsKn
 const Apply = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState<FieldErrors>({});
 
   const [form, setForm] = useState({
     fullName: "",
@@ -81,7 +112,11 @@ const Apply = () => {
   ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    if (errors[name as keyof FieldErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleEmployerChange = (index: number, field: keyof Employer, value: string) => {
@@ -98,28 +133,66 @@ const Apply = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Validate required contact fields BEFORE doing anything
+    const result = applicationSchema.safeParse({
+      fullName: form.fullName,
+      email: form.email,
+      phone: form.phone,
+      position: form.position,
+    });
+
+    if (!result.success) {
+      const fieldErrors: FieldErrors = {};
+      for (const issue of result.error.issues) {
+        const key = issue.path[0] as keyof FieldErrors;
+        if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+      }
+      setErrors(fieldErrors);
+      toast({
+        title: "Please fix the highlighted fields",
+        description: "We need a valid name, email, and phone number to contact you.",
+        variant: "destructive",
+      });
+      // Scroll to the first error
+      requestAnimationFrame(() => {
+        const firstKey = Object.keys(fieldErrors)[0];
+        if (firstKey) {
+          document
+            .querySelector(`[name="${firstKey}"]`)
+            ?.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      });
+      return;
+    }
+
+    setErrors({});
     setIsSubmitting(true);
+
+    // Use sanitized values from zod
+    const cleanForm = { ...form, ...result.data };
 
     try {
       // Save to database first so we always have a record
       const { error: dbError } = await supabase.from("applications").insert([{
-        full_name: form.fullName,
-        email: form.email || null,
-        phone: form.phone || null,
-        position: form.position || null,
-        form_data: form as any,
+        full_name: cleanForm.fullName,
+        email: cleanForm.email,
+        phone: cleanForm.phone,
+        position: cleanForm.position || null,
+        form_data: cleanForm as any,
         employers: employers as any,
         personal_references: references as any,
       }]);
 
       if (dbError) throw dbError;
 
-      // Then send the email notification (non-blocking for the user if it fails)
+      // Then send the email notification (best-effort)
       const { error } = await supabase.functions.invoke("send-application-email", {
-        body: { form, employers, references },
+        body: { form: cleanForm, employers, references },
       });
 
       if (error) console.error("Email notification failed:", error);
+
 
       toast({
         title: "Application Submitted!",
@@ -182,7 +255,19 @@ const Apply = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
                     <Label className={labelClass}>Full Name (Last, First, Middle) *</Label>
-                    <Input name="fullName" value={form.fullName} onChange={handleChange} required />
+                    <Input
+                      name="fullName"
+                      value={form.fullName}
+                      onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.fullName}
+                      className={errors.fullName ? "border-destructive focus-visible:ring-destructive" : ""}
+                    />
+                    {errors.fullName && (
+                      <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.fullName}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Label className={labelClass}>Present Address</Label>
@@ -204,7 +289,20 @@ const Apply = () => {
                   </div>
                   <div>
                     <Label className={labelClass}>Phone No. *</Label>
-                    <Input name="phone" type="tel" value={form.phone} onChange={handleChange} required />
+                    <Input
+                      name="phone"
+                      type="tel"
+                      value={form.phone}
+                      onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.phone}
+                      className={errors.phone ? "border-destructive focus-visible:ring-destructive" : ""}
+                    />
+                    {errors.phone && (
+                      <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.phone}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <Label className={labelClass}>Secondary Phone No.</Label>
@@ -212,7 +310,20 @@ const Apply = () => {
                   </div>
                   <div className="md:col-span-2">
                     <Label className={labelClass}>Email Address *</Label>
-                    <Input name="email" type="email" value={form.email} onChange={handleChange} required />
+                    <Input
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.email}
+                      className={errors.email ? "border-destructive focus-visible:ring-destructive" : ""}
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
