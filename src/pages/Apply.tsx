@@ -557,33 +557,87 @@ const Apply = () => {
 
             {/* References */}
             <ScrollReveal>
-              <div className={sectionClass}>
+              <div id="references-section" className={sectionClass}>
                 <h2 className="text-2xl font-bold text-foreground" style={{ fontFamily: "Playfair Display, serif" }}>
-                  References
+                  References *
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   Three persons not related to you, whom you have known at least one year.
+                  At least one complete reference is required.
                 </p>
-                {references.map((ref, i) => (
-                  <div key={i} className="grid grid-cols-1 md:grid-cols-4 gap-4 pb-4 border-b border-border last:border-0">
-                    <div>
-                      <Label className={labelClass}>Name</Label>
-                      <Input value={ref.name} onChange={(e) => handleReferenceChange(i, "name", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label className={labelClass}>Address</Label>
-                      <Input value={ref.address} onChange={(e) => handleReferenceChange(i, "address", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label className={labelClass}>Business</Label>
-                      <Input value={ref.business} onChange={(e) => handleReferenceChange(i, "business", e.target.value)} />
-                    </div>
-                    <div>
-                      <Label className={labelClass}>Years Known</Label>
-                      <Input value={ref.yearsKnown} onChange={(e) => handleReferenceChange(i, "yearsKnown", e.target.value)} />
-                    </div>
+                {errors.references && (
+                  <div className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-sm text-destructive flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 shrink-0" /> {errors.references}
                   </div>
-                ))}
+                )}
+                {references.map((ref, i) => {
+                  const rowErr = errors.referenceRows?.[i];
+                  const fieldClass = (k: keyof Reference) =>
+                    rowErr?.[k] ? "border-destructive focus-visible:ring-destructive" : "";
+                  return (
+                    <div key={i} className="space-y-2 pb-4 border-b border-border last:border-0">
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                          <Label className={labelClass}>Name</Label>
+                          <Input
+                            value={ref.name}
+                            onChange={(e) => handleReferenceChange(i, "name", e.target.value)}
+                            aria-invalid={!!rowErr?.name}
+                            className={fieldClass("name")}
+                          />
+                          {rowErr?.name && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.name}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label className={labelClass}>Address</Label>
+                          <Input
+                            value={ref.address}
+                            onChange={(e) => handleReferenceChange(i, "address", e.target.value)}
+                            aria-invalid={!!rowErr?.address}
+                            className={fieldClass("address")}
+                          />
+                          {rowErr?.address && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.address}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label className={labelClass}>Business</Label>
+                          <Input
+                            value={ref.business}
+                            onChange={(e) => handleReferenceChange(i, "business", e.target.value)}
+                            aria-invalid={!!rowErr?.business}
+                            className={fieldClass("business")}
+                          />
+                          {rowErr?.business && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.business}
+                            </p>
+                          )}
+                        </div>
+                        <div>
+                          <Label className={labelClass}>Years Known</Label>
+                          <Input
+                            inputMode="numeric"
+                            value={ref.yearsKnown}
+                            onChange={(e) => handleReferenceChange(i, "yearsKnown", e.target.value)}
+                            aria-invalid={!!rowErr?.yearsKnown}
+                            className={fieldClass("yearsKnown")}
+                          />
+                          {rowErr?.yearsKnown && (
+                            <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                              <AlertCircle className="w-3 h-3" /> {rowErr.yearsKnown}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </ScrollReveal>
 
