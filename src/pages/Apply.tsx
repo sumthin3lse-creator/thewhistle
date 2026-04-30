@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { z } from "zod";
 import { Helmet } from "react-helmet-async";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
@@ -8,8 +9,37 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { ScrollReveal } from "@/components/ScrollReveal";
-import { Briefcase, Send } from "lucide-react";
+import { Briefcase, Send, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+
+const applicationSchema = z.object({
+  fullName: z
+    .string()
+    .trim()
+    .min(2, "Please enter your full name")
+    .max(100, "Name must be under 100 characters"),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Email is required so we can contact you")
+    .email("Please enter a valid email address")
+    .max(255, "Email must be under 255 characters"),
+  phone: z
+    .string()
+    .trim()
+    .min(7, "Please enter a valid phone number")
+    .max(25, "Phone number is too long")
+    .regex(/^[0-9+()\-.\s]+$/, "Phone can only contain digits and + ( ) - ."),
+  position: z
+    .string()
+    .trim()
+    .max(100, "Position must be under 100 characters")
+    .optional()
+    .or(z.literal("")),
+});
+
+type FieldErrors = Partial<Record<"fullName" | "email" | "phone" | "position", string>>;
+
 
 interface Employer {
   from: string;
