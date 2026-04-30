@@ -26,7 +26,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Loader2, Trash2, Eye, Mail, Phone } from "lucide-react";
+import { ArrowLeft, Loader2, Trash2, Eye, Mail, Phone, Reply, Copy, Check } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 type Status = "new" | "reviewed" | "contacted" | "hired" | "rejected";
 
