@@ -156,6 +156,33 @@ export default function AdminApplications() {
     setTimeout(() => setEmailCopied(false), 1500);
   };
 
+  // Notes state for the currently-open application
+  const [notesDraft, setNotesDraft] = useState("");
+  const [savingNotes, setSavingNotes] = useState(false);
+
+  useEffect(() => {
+    setNotesDraft(selected?.notes ?? "");
+  }, [selected?.id]);
+
+  const saveNotes = async () => {
+    if (!selected) return;
+    setSavingNotes(true);
+    const { error } = await supabase
+      .from("applications")
+      .update({ notes: notesDraft })
+      .eq("id", selected.id);
+    setSavingNotes(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
+    setApps((prev) =>
+      prev.map((a) => (a.id === selected.id ? { ...a, notes: notesDraft } : a))
+    );
+    setSelected({ ...selected, notes: notesDraft });
+    toast({ title: "Notes saved" });
+  };
+
 
   useEffect(() => {
     (async () => {
@@ -343,6 +370,43 @@ export default function AdminApplications() {
               </div>
 
               <div className="space-y-6 text-sm">
+                {/* Private admin notes */}
+                <div className="rounded-lg border border-primary/30 bg-primary/5 p-4 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-xs uppercase tracking-wide text-primary font-semibold">
+                      Private Admin Notes
+                    </Label>
+                    <span className="text-[10px] text-muted-foreground">
+                      Visible only to admins
+                    </span>
+                  </div>
+                  <Textarea
+                    value={notesDraft}
+                    onChange={(e) => setNotesDraft(e.target.value)}
+                    rows={4}
+                    placeholder="Interview notes, follow-up reminders, screening details..."
+                    className="bg-background"
+                  />
+                  <div className="flex items-center justify-end gap-2">
+                    {notesDraft !== (selected.notes ?? "") && (
+                      <span className="text-xs text-muted-foreground">Unsaved changes</span>
+                    )}
+                    <Button
+                      size="sm"
+                      onClick={saveNotes}
+                      disabled={savingNotes || notesDraft === (selected.notes ?? "")}
+                    >
+                      {savingNotes ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-1 animate-spin" /> Saving...
+                        </>
+                      ) : (
+                        "Save Notes"
+                      )}
+                    </Button>
+                  </div>
+                </div>
+
                 <Section title="Contact">
                   <Field label="Email" value={selected.email} />
                   <Field label="Phone" value={selected.phone} />
