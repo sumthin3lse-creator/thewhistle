@@ -29,6 +29,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Loader2, Trash2, Eye, Mail, Phone, Reply, Copy, Check } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
 type Status = "new" | "reviewed" | "contacted" | "hired" | "rejected";
 
