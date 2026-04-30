@@ -102,15 +102,15 @@ const Apply = () => {
 
     try {
       // Save to database first so we always have a record
-      const { error: dbError } = await supabase.from("applications").insert({
+      const { error: dbError } = await supabase.from("applications").insert([{
         full_name: form.fullName,
         email: form.email || null,
         phone: form.phone || null,
         position: form.position || null,
-        form_data: form,
-        employers: employers,
-        personal_references: references,
-      });
+        form_data: form as any,
+        employers: employers as any,
+        personal_references: references as any,
+      }]);
 
       if (dbError) throw dbError;
 
