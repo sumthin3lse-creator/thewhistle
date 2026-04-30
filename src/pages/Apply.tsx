@@ -193,14 +193,6 @@ const Apply = () => {
 
       if (error) console.error("Email notification failed:", error);
 
-      if (dbError) throw dbError;
-
-      // Then send the email notification (non-blocking for the user if it fails)
-      const { error } = await supabase.functions.invoke("send-application-email", {
-        body: { form, employers, references },
-      });
-
-      if (error) console.error("Email notification failed:", error);
 
       toast({
         title: "Application Submitted!",
