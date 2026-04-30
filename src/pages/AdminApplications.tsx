@@ -156,6 +156,33 @@ export default function AdminApplications() {
     setTimeout(() => setEmailCopied(false), 1500);
   };
 
+  // Notes state for the currently-open application
+  const [notesDraft, setNotesDraft] = useState("");
+  const [savingNotes, setSavingNotes] = useState(false);
+
+  useEffect(() => {
+    setNotesDraft(selected?.notes ?? "");
+  }, [selected?.id]);
+
+  const saveNotes = async () => {
+    if (!selected) return;
+    setSavingNotes(true);
+    const { error } = await supabase
+      .from("applications")
+      .update({ notes: notesDraft })
+      .eq("id", selected.id);
+    setSavingNotes(false);
+    if (error) {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
+      return;
+    }
+    setApps((prev) =>
+      prev.map((a) => (a.id === selected.id ? { ...a, notes: notesDraft } : a))
+    );
+    setSelected({ ...selected, notes: notesDraft });
+    toast({ title: "Notes saved" });
+  };
+
 
   useEffect(() => {
     (async () => {
