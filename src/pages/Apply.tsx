@@ -101,11 +101,25 @@ const Apply = () => {
     setIsSubmitting(true);
 
     try {
-      const { data, error } = await supabase.functions.invoke("send-application-email", {
+      // Save to database first so we always have a record
+      const { error: dbError } = await supabase.from("applications").insert([{
+        full_name: form.fullName,
+        email: form.email || null,
+        phone: form.phone || null,
+        position: form.position || null,
+        form_data: form as any,
+        employers: employers as any,
+        personal_references: references as any,
+      }]);
+
+      if (dbError) throw dbError;
+
+      // Then send the email notification (non-blocking for the user if it fails)
+      const { error } = await supabase.functions.invoke("send-application-email", {
         body: { form, employers, references },
       });
 
-      if (error) throw error;
+      if (error) console.error("Email notification failed:", error);
 
       toast({
         title: "Application Submitted!",

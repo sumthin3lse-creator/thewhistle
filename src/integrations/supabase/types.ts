@@ -14,6 +14,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          created_at: string
+          email: string | null
+          employers: Json | null
+          form_data: Json
+          full_name: string
+          id: string
+          notes: string | null
+          personal_references: Json | null
+          phone: string | null
+          position: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          employers?: Json | null
+          form_data: Json
+          full_name: string
+          id?: string
+          notes?: string | null
+          personal_references?: Json | null
+          phone?: string | null
+          position?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          employers?: Json | null
+          form_data?: Json
+          full_name?: string
+          id?: string
+          notes?: string | null
+          personal_references?: Json | null
+          phone?: string | null
+          position?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       generated_ads: {
         Row: {
           ad_type: string
