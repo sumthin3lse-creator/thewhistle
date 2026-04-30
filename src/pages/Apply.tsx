@@ -255,7 +255,19 @@ const Apply = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="md:col-span-2">
                     <Label className={labelClass}>Full Name (Last, First, Middle) *</Label>
-                    <Input name="fullName" value={form.fullName} onChange={handleChange} required />
+                    <Input
+                      name="fullName"
+                      value={form.fullName}
+                      onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.fullName}
+                      className={errors.fullName ? "border-destructive focus-visible:ring-destructive" : ""}
+                    />
+                    {errors.fullName && (
+                      <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.fullName}
+                      </p>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <Label className={labelClass}>Present Address</Label>
@@ -277,7 +289,20 @@ const Apply = () => {
                   </div>
                   <div>
                     <Label className={labelClass}>Phone No. *</Label>
-                    <Input name="phone" type="tel" value={form.phone} onChange={handleChange} required />
+                    <Input
+                      name="phone"
+                      type="tel"
+                      value={form.phone}
+                      onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.phone}
+                      className={errors.phone ? "border-destructive focus-visible:ring-destructive" : ""}
+                    />
+                    {errors.phone && (
+                      <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.phone}
+                      </p>
+                    )}
                   </div>
                   <div>
                     <Label className={labelClass}>Secondary Phone No.</Label>
@@ -285,7 +310,20 @@ const Apply = () => {
                   </div>
                   <div className="md:col-span-2">
                     <Label className={labelClass}>Email Address *</Label>
-                    <Input name="email" type="email" value={form.email} onChange={handleChange} required />
+                    <Input
+                      name="email"
+                      type="email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                      aria-invalid={!!errors.email}
+                      className={errors.email ? "border-destructive focus-visible:ring-destructive" : ""}
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-destructive flex items-center gap-1">
+                        <AlertCircle className="w-3 h-3" /> {errors.email}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
