@@ -10,8 +10,7 @@ import { Loader2, Lock } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 
 export default function AdminLogin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [pin, setPin] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -19,41 +18,26 @@ export default function AdminLogin() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+      const { data, error } = await supabase.functions.invoke("admin-pin-login", {
+        body: { pin },
       });
-
-      if (error) throw error;
-
-      // Check if user has admin role
-      const { data: isAdmin, error: roleError } = await supabase.rpc("has_role", {
-        _user_id: data.user.id,
-        _role: "admin",
-      });
-
-      if (roleError) throw roleError;
-
-      if (!isAdmin) {
-        await supabase.auth.signOut();
-        throw new Error("You do not have admin access");
+      if (error || !data?.token_hash) {
+        throw new Error(data?.error || error?.message || "Invalid PIN");
       }
 
-      toast({
-        title: "Welcome back!",
-        description: "Redirecting to admin dashboard...",
+      const { error: vErr } = await supabase.auth.verifyOtp({
+        type: "magiclink",
+        email: data.email,
+        token_hash: data.token_hash,
       });
+      if (vErr) throw vErr;
 
+      toast({ title: "Welcome back!", description: "Redirecting to admin dashboard..." });
       navigate("/admin");
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : "Login failed";
-      toast({
-        title: "Login Failed",
-        description: message,
-        variant: "destructive",
-      });
+      toast({ title: "Login Failed", description: message, variant: "destructive" });
     } finally {
       setIsLoading(false);
     }
@@ -66,46 +50,32 @@ export default function AdminLogin() {
           <div className="flex justify-center mb-4">
             <img src={logo} alt="The Whistle Stop" className="h-16 w-auto" />
           </div>
-          <CardTitle className="text-2xl font-display">Admin Login</CardTitle>
-          <CardDescription>
-            Sign in to access the ad generator dashboard
-          </CardDescription>
+          <CardTitle className="text-2xl font-display">Admin Access</CardTitle>
+          <CardDescription>Enter your admin PIN to continue</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="pin">PIN</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="admin@thewhistlestopstuart.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
+                id="pin"
                 type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                placeholder="••••"
+                value={pin}
+                onChange={(e) => setPin(e.target.value.replace(/\D/g, ""))}
+                maxLength={10}
                 required
+                autoFocus
+                className="text-center text-2xl tracking-widest"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={isLoading}>
+            <Button type="submit" className="w-full" disabled={isLoading || pin.length === 0}>
               {isLoading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Signing in...
-                </>
+                <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Signing in...</>
               ) : (
-                <>
-                  <Lock className="mr-2 h-4 w-4" />
-                  Sign In
-                </>
+                <><Lock className="mr-2 h-4 w-4" /> Unlock</>
               )}
             </Button>
           </form>
