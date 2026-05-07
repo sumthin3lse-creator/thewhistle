@@ -390,11 +390,11 @@ const Apply = () => {
                     <Label className={labelClass}>Present Address</Label>
                     <Input name="presentAddress" value={form.presentAddress} onChange={handleChange} />
                   </div>
-                  <div>
-                    <Label className={labelClass}>City</Label>
-                    <Input name="city" value={form.city} onChange={handleChange} />
-                  </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="md:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="col-span-2">
+                      <Label className={labelClass}>City</Label>
+                      <Input name="city" value={form.city} onChange={handleChange} />
+                    </div>
                     <div>
                       <Label className={labelClass}>State</Label>
                       <Input name="state" value={form.state} onChange={handleChange} />
