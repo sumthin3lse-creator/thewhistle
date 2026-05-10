@@ -8,7 +8,6 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import Apply from "./pages/Apply";
 import AdminLogin from "./pages/AdminLogin";
-import AdminRecovery from "./pages/AdminRecovery";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminApplications from "./pages/AdminApplications";
 import AdminUsers from "./pages/AdminUsers";
@@ -28,7 +27,6 @@ const App = () => (
             <Route path="/about" element={<About />} />
             <Route path="/apply" element={<Apply />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            <Route path="/admin/login/recovery" element={<AdminRecovery />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/applications" element={<AdminApplications />} />
             <Route path="/admin/users" element={<AdminUsers />} />
