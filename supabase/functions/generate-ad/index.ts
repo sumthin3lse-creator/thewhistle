@@ -340,79 +340,9 @@ Respond with a JSON object containing:
       throw new Error("Failed to parse AI response as JSON");
     }
 
-    console.log("Generating ad image...");
-
-    // Step 2: Generate image using the image prompt
-    const imagePrompt = `Professional food photography advertisement for a restaurant called "The Whistle Stop". ${adData.imagePrompt}. 
-Style: High-end food photography, appetizing, warm lighting, shallow depth of field. 
-Include subtle text overlay: "${adData.headline}" in a modern sans-serif font.
-Do NOT include any phone numbers, addresses, or URLs in the image.
-Make it look like a professional social media ad that would stop someone scrolling.`;
-
-    let imageUrl: string | null = null;
-
-    try {
-      const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
-          messages: [
-            {
-              role: "user",
-              content: imagePrompt
-            }
-          ],
-          modalities: ["image", "text"]
-        }),
-      });
-
-      if (imageResponse.ok) {
-        const imageResult = await imageResponse.json();
-        const generatedImage = imageResult.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
-        if (generatedImage && generatedImage.startsWith("data:image/")) {
-          console.log("Image generated, uploading to storage...");
-          
-          // Extract base64 data
-          const base64Match = generatedImage.match(/^data:image\/(\w+);base64,(.+)$/);
-          if (base64Match) {
-            const imageFormat = base64Match[1];
-            const base64Data = base64Match[2];
-            const imageBytes = base64ToUint8Array(base64Data);
-            
-            // Upload to storage
-            const fileName = `${platform}-${adType}-${Date.now()}.${imageFormat}`;
-            const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
-              .from("ad-images")
-              .upload(fileName, imageBytes, {
-                contentType: `image/${imageFormat}`,
-                upsert: false
-              });
-
-            if (uploadError) {
-              console.error("Upload error:", uploadError);
-            } else {
-              // Get public URL
-              const { data: urlData } = supabaseAdmin.storage
-                .from("ad-images")
-                .getPublicUrl(fileName);
-              
-              imageUrl = urlData.publicUrl;
-              console.log("Image uploaded:", imageUrl);
-            }
-          }
-        }
-      } else {
-        console.error("Image generation failed:", imageResponse.status);
-      }
-    } catch (imgError) {
-      console.error("Image generation error:", imgError);
-      // Continue without image - not a fatal error
-    }
+    // Step 2: Pick the best matching real photo from the imgbb library
+    const imageUrl: string = pickPhotoByTitle(adData.selectedPhotoTitle);
+    console.log("Selected photo:", adData.selectedPhotoTitle, "->", imageUrl);
 
     // Step 3: Save to database
     const { data: savedAd, error: saveError } = await supabase
