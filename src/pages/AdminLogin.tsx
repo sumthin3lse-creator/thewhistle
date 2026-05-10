@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -77,12 +77,6 @@ export default function AdminLogin() {
                 <><Lock className="mr-2 h-4 w-4" /> Unlock</>
               )}
             </Button>
-            <Link
-              to="/admin/login/recovery"
-              className="block text-center text-sm text-muted-foreground hover:text-foreground"
-            >
-              Lost or compromised PIN? Use recovery sign-in
-            </Link>
           </form>
         </CardContent>
       </Card>
