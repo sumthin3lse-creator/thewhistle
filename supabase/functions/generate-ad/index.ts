@@ -274,6 +274,9 @@ PLATFORM REQUIREMENTS:
 
 ${customPrompt ? `ADDITIONAL INSTRUCTIONS: ${customPrompt}` : ''}
 
+AVAILABLE REAL PHOTOS (you MUST pick one — never invent a title):
+${PHOTO_LIBRARY.map(p => `- ${p.title} [tags: ${p.tags.join(", ")}]`).join("\n")}
+
 Respond with a JSON object containing:
 {
   "headline": "A catchy headline (max 60 chars)",
@@ -281,8 +284,8 @@ Respond with a JSON object containing:
   "hashtags": ["array", "of", "relevant", "hashtags"],
   "callToAction": "A clear call to action",
   "menuItemsFeatured": ["Array of menu items mentioned"],
-  "imagePrompt": "A detailed, vivid description for generating an appetizing food photography ad image. Include: specific dish details, plating style, lighting (warm/natural), background (rustic wood, marble, etc), props, camera angle, mood. Make it mouth-watering.",
-  "reasoning": "Brief explanation of why this ad would perform well"
+  "selectedPhotoTitle": "EXACT title from the AVAILABLE REAL PHOTOS list above that best visually matches this ad",
+  "reasoning": "Brief explanation of why this ad would perform well and why this photo was chosen"
 }`;
 
     console.log("Generating ad copy...");
