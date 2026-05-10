@@ -58,6 +58,51 @@ const RESTAURANT_DATA = {
   ]
 };
 
+// Curated real-world photo library hosted on imgbb (album: 9Gvs30).
+// AI must pick from these — never generate images.
+const PHOTO_LIBRARY: { title: string; url: string; tags: string[] }[] = [
+  { title: "The Uncle Pumpkin", url: "https://i.ibb.co/CxTPTS8/The-Uncle-Pumpkin.png", tags: ["burger", "uncle pumpkin", "smash burger", "bacon", "onion ring"] },
+  { title: "The Uncle Pumpkin (alt)", url: "https://i.ibb.co/YzfL0D3/The-Uncle-Pumpkin-2.png", tags: ["burger", "uncle pumpkin"] },
+  { title: "The Train Wreck", url: "https://i.ibb.co/b5dhbb4J/The-Train-Wreck.png", tags: ["train wreck", "breakfast", "home fries", "eggs", "bacon", "sausage"] },
+  { title: "Train Wreck (photo)", url: "https://i.ibb.co/20SgwYhH/Train-Wreck.jpg", tags: ["train wreck", "breakfast"] },
+  { title: "Salads — The Titanic", url: "https://i.ibb.co/GfXx357h/Salads.jpg", tags: ["salad", "titanic", "tuna", "healthy", "greens"] },
+  { title: "Philly Cheesesteaks", url: "https://i.ibb.co/KjQdrZ1k/Phillys.jpg", tags: ["philly", "cheesesteak", "sandwich", "beef", "chicken"] },
+  { title: "Fresh Baked Sweets", url: "https://i.ibb.co/k2Ktzm16/Sweets.jpg", tags: ["sweets", "dessert", "cinnamon roll", "muffin", "cookie", "brownie", "ice cream"] },
+  { title: "The Salerno Club", url: "https://i.ibb.co/3986r9sz/Salerno-Club.png", tags: ["club", "salerno", "sandwich", "turkey", "ham", "bacon"] },
+  { title: "Whistle Stop Storefront 1", url: "https://i.ibb.co/DPS1cghn/20251226-094425-IMG-STYLE.jpg", tags: ["storefront", "exterior", "diner", "stuart"] },
+  { title: "Whistle Stop Storefront 2", url: "https://i.ibb.co/NdtGvMvH/20251226-094406-IMG-STYLE.jpg", tags: ["storefront", "exterior"] },
+  { title: "Whistle Stop Interior 1", url: "https://i.ibb.co/1fWBhKxw/20251226-094311-IMG-STYLE.jpg", tags: ["interior", "diner", "rustic"] },
+  { title: "Whistle Stop Interior 2", url: "https://i.ibb.co/gZs09TD2/20251226-094336-IMG-STYLE.jpg", tags: ["interior", "diner"] },
+  { title: "Food Spread 1", url: "https://i.ibb.co/84rYVcHv/1766830983687.png", tags: ["food", "spread", "menu"] },
+  { title: "Food Spread 2", url: "https://i.ibb.co/4ggWpdng/1766576070028-1.png", tags: ["food", "spread"] },
+  { title: "Food Spread 3", url: "https://i.ibb.co/v4dY7Wdj/1766575756820.png", tags: ["food", "spread"] },
+  { title: "Branded Photo 1", url: "https://i.ibb.co/Ld6syvpZ/Copy-of-1767528845674.avif", tags: ["branded", "promo"] },
+  { title: "Branded Photo 2", url: "https://i.ibb.co/1GzB6cC5/Copy-of-1767528844604.avif", tags: ["branded", "promo"] },
+  { title: "Branded Photo 3", url: "https://i.ibb.co/TB2d8sTP/Copy-of-1767528629267.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 4", url: "https://i.ibb.co/LzcNYLcF/Copy-of-1767528118231.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 5", url: "https://i.ibb.co/XZsYYPmM/Copy-of-1767527433314.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 6", url: "https://i.ibb.co/3yZXwv27/Copy-of-1767527335740.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 7", url: "https://i.ibb.co/Q7Bq2TQJ/Copy-of-1767527279645.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 8", url: "https://i.ibb.co/ynQtHMH3/Copy-of-1767527013006.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 9", url: "https://i.ibb.co/CK8wWyxt/Copy-of-1767526936940.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 10", url: "https://i.ibb.co/JW15HVKk/Copy-of-1767526873725.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 11", url: "https://i.ibb.co/TM42grhT/Copy-of-1767526793913.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 12", url: "https://i.ibb.co/8DhC1bY4/Copy-of-1767526726058.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 13", url: "https://i.ibb.co/kVzzRNmV/Copy-of-1767526620985.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 14", url: "https://i.ibb.co/Fqxq0MX5/Copy-of-1767526556042.png", tags: ["branded", "promo"] },
+  { title: "Branded Photo 15", url: "https://i.ibb.co/xKpXy5n0/Copy-of-1767526456450.png", tags: ["branded", "promo"] },
+];
+
+function pickPhotoByTitle(title: string | undefined): string {
+  if (title) {
+    const exact = PHOTO_LIBRARY.find(p => p.title.toLowerCase() === title.toLowerCase());
+    if (exact) return exact.url;
+    const partial = PHOTO_LIBRARY.find(p => p.title.toLowerCase().includes(title.toLowerCase()) || title.toLowerCase().includes(p.title.toLowerCase()));
+    if (partial) return partial.url;
+  }
+  return PHOTO_LIBRARY[Math.floor(Math.random() * PHOTO_LIBRARY.length)].url;
+}
+
 const PLATFORM_SPECS = {
   instagram: {
     maxCaptionLength: 2200,
@@ -145,104 +190,36 @@ serve(async (req) => {
 
     const platformSpec = PLATFORM_SPECS[platform as keyof typeof PLATFORM_SPECS];
 
-    // Handle image-only regeneration
+    // Handle image-only regeneration: rotate to a different photo from the library
     if (regenerateImageOnly && adId) {
-      console.log("Regenerating image only for ad:", adId);
-      
-      // Generate a new image prompt based on existing content
-      const imagePromptRequest = `Based on this restaurant ad headline and caption, create a detailed image prompt:
-Headline: "${existingHeadline}"
+      console.log("Rotating photo for ad:", adId);
+
+      // Ask AI to pick the best matching photo title for this ad
+      const photoList = PHOTO_LIBRARY.map(p => `- ${p.title} [tags: ${p.tags.join(", ")}]`).join("\n");
+      const pickRequest = `Restaurant ad headline: "${existingHeadline}"
 Caption: "${existingCaption}"
 
-Create a vivid, detailed description for generating an appetizing food photography ad image. Include: specific dish details based on the caption, plating style, lighting (warm/natural), background (rustic wood, marble, etc), props, camera angle, mood. Make it mouth-watering.`;
+Pick the SINGLE best matching photo title from this library that visually represents the ad. Reply with ONLY the exact title, nothing else.
 
-      const promptResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+${photoList}`;
+
+      const pickResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
-          messages: [
-            { role: "user", content: imagePromptRequest }
-          ],
+          messages: [{ role: "user", content: pickRequest }],
           temperature: 0.9,
         }),
       });
 
-      if (!promptResponse.ok) {
-        throw new Error("Failed to generate image prompt");
+      let pickedTitle = "";
+      if (pickResp.ok) {
+        const r = await pickResp.json();
+        pickedTitle = (r.choices?.[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "");
       }
+      const imageUrl = pickPhotoByTitle(pickedTitle);
 
-      const promptResult = await promptResponse.json();
-      const generatedImagePrompt = promptResult.choices?.[0]?.message?.content || "";
-
-      const imagePrompt = `Professional food photography advertisement for a restaurant called "The Whistle Stop". ${generatedImagePrompt}. 
-Style: High-end food photography, appetizing, warm lighting, shallow depth of field. 
-Include subtle text overlay: "${existingHeadline}" in a modern sans-serif font.
-Do NOT include any phone numbers, addresses, or URLs in the image.
-Make it look like a professional social media ad that would stop someone scrolling.`;
-
-      let imageUrl: string | null = null;
-
-      const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
-          messages: [
-            {
-              role: "user",
-              content: imagePrompt
-            }
-          ],
-          modalities: ["image", "text"]
-        }),
-      });
-
-      if (!imageResponse.ok) {
-        throw new Error("Failed to generate image");
-      }
-
-      const imageResult = await imageResponse.json();
-      const generatedImage = imageResult.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
-      if (generatedImage && generatedImage.startsWith("data:image/")) {
-        const base64Match = generatedImage.match(/^data:image\/(\w+);base64,(.+)$/);
-        if (base64Match) {
-          const imageFormat = base64Match[1];
-          const base64Data = base64Match[2];
-          const imageBytes = base64ToUint8Array(base64Data);
-          
-          const fileName = `${platform}-regen-${Date.now()}.${imageFormat}`;
-          const { error: uploadError } = await supabaseAdmin.storage
-            .from("ad-images")
-            .upload(fileName, imageBytes, {
-              contentType: `image/${imageFormat}`,
-              upsert: false
-            });
-
-          if (uploadError) {
-            throw new Error("Failed to upload image");
-          }
-
-          const { data: urlData } = supabaseAdmin.storage
-            .from("ad-images")
-            .getPublicUrl(fileName);
-          
-          imageUrl = urlData.publicUrl;
-        }
-      }
-
-      if (!imageUrl) {
-        throw new Error("Failed to generate new image");
-      }
-
-      // Update the ad with new image
       const { data: updatedAd, error: updateError } = await supabase
         .from("generated_ads")
         .update({ image_url: imageUrl, updated_at: new Date().toISOString() })
@@ -254,11 +231,7 @@ Make it look like a professional social media ad that would stop someone scrolli
         throw new Error("Failed to update ad with new image");
       }
 
-      return new Response(JSON.stringify({
-        success: true,
-        ad: updatedAd,
-        imageOnly: true
-      }), {
+      return new Response(JSON.stringify({ success: true, ad: updatedAd, imageOnly: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -301,6 +274,9 @@ PLATFORM REQUIREMENTS:
 
 ${customPrompt ? `ADDITIONAL INSTRUCTIONS: ${customPrompt}` : ''}
 
+AVAILABLE REAL PHOTOS (you MUST pick one — never invent a title):
+${PHOTO_LIBRARY.map(p => `- ${p.title} [tags: ${p.tags.join(", ")}]`).join("\n")}
+
 Respond with a JSON object containing:
 {
   "headline": "A catchy headline (max 60 chars)",
@@ -308,8 +284,8 @@ Respond with a JSON object containing:
   "hashtags": ["array", "of", "relevant", "hashtags"],
   "callToAction": "A clear call to action",
   "menuItemsFeatured": ["Array of menu items mentioned"],
-  "imagePrompt": "A detailed, vivid description for generating an appetizing food photography ad image. Include: specific dish details, plating style, lighting (warm/natural), background (rustic wood, marble, etc), props, camera angle, mood. Make it mouth-watering.",
-  "reasoning": "Brief explanation of why this ad would perform well"
+  "selectedPhotoTitle": "EXACT title from the AVAILABLE REAL PHOTOS list above that best visually matches this ad",
+  "reasoning": "Brief explanation of why this ad would perform well and why this photo was chosen"
 }`;
 
     console.log("Generating ad copy...");
@@ -367,79 +343,9 @@ Respond with a JSON object containing:
       throw new Error("Failed to parse AI response as JSON");
     }
 
-    console.log("Generating ad image...");
-
-    // Step 2: Generate image using the image prompt
-    const imagePrompt = `Professional food photography advertisement for a restaurant called "The Whistle Stop". ${adData.imagePrompt}. 
-Style: High-end food photography, appetizing, warm lighting, shallow depth of field. 
-Include subtle text overlay: "${adData.headline}" in a modern sans-serif font.
-Do NOT include any phone numbers, addresses, or URLs in the image.
-Make it look like a professional social media ad that would stop someone scrolling.`;
-
-    let imageUrl: string | null = null;
-
-    try {
-      const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
-          messages: [
-            {
-              role: "user",
-              content: imagePrompt
-            }
-          ],
-          modalities: ["image", "text"]
-        }),
-      });
-
-      if (imageResponse.ok) {
-        const imageResult = await imageResponse.json();
-        const generatedImage = imageResult.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
-        if (generatedImage && generatedImage.startsWith("data:image/")) {
-          console.log("Image generated, uploading to storage...");
-          
-          // Extract base64 data
-          const base64Match = generatedImage.match(/^data:image\/(\w+);base64,(.+)$/);
-          if (base64Match) {
-            const imageFormat = base64Match[1];
-            const base64Data = base64Match[2];
-            const imageBytes = base64ToUint8Array(base64Data);
-            
-            // Upload to storage
-            const fileName = `${platform}-${adType}-${Date.now()}.${imageFormat}`;
-            const { data: uploadData, error: uploadError } = await supabaseAdmin.storage
-              .from("ad-images")
-              .upload(fileName, imageBytes, {
-                contentType: `image/${imageFormat}`,
-                upsert: false
-              });
-
-            if (uploadError) {
-              console.error("Upload error:", uploadError);
-            } else {
-              // Get public URL
-              const { data: urlData } = supabaseAdmin.storage
-                .from("ad-images")
-                .getPublicUrl(fileName);
-              
-              imageUrl = urlData.publicUrl;
-              console.log("Image uploaded:", imageUrl);
-            }
-          }
-        }
-      } else {
-        console.error("Image generation failed:", imageResponse.status);
-      }
-    } catch (imgError) {
-      console.error("Image generation error:", imgError);
-      // Continue without image - not a fatal error
-    }
+    // Step 2: Pick the best matching real photo from the imgbb library
+    const imageUrl: string = pickPhotoByTitle(adData.selectedPhotoTitle);
+    console.log("Selected photo:", adData.selectedPhotoTitle, "->", imageUrl);
 
     // Step 3: Save to database
     const { data: savedAd, error: saveError } = await supabase
@@ -468,7 +374,7 @@ Make it look like a professional social media ad that would stop someone scrolli
     return new Response(JSON.stringify({
       success: true,
       ad: savedAd,
-      imagePrompt: adData.imagePrompt
+      selectedPhoto: adData.selectedPhotoTitle
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
