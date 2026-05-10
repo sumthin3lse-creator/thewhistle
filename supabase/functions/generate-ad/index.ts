@@ -190,104 +190,36 @@ serve(async (req) => {
 
     const platformSpec = PLATFORM_SPECS[platform as keyof typeof PLATFORM_SPECS];
 
-    // Handle image-only regeneration
+    // Handle image-only regeneration: rotate to a different photo from the library
     if (regenerateImageOnly && adId) {
-      console.log("Regenerating image only for ad:", adId);
-      
-      // Generate a new image prompt based on existing content
-      const imagePromptRequest = `Based on this restaurant ad headline and caption, create a detailed image prompt:
-Headline: "${existingHeadline}"
+      console.log("Rotating photo for ad:", adId);
+
+      // Ask AI to pick the best matching photo title for this ad
+      const photoList = PHOTO_LIBRARY.map(p => `- ${p.title} [tags: ${p.tags.join(", ")}]`).join("\n");
+      const pickRequest = `Restaurant ad headline: "${existingHeadline}"
 Caption: "${existingCaption}"
 
-Create a vivid, detailed description for generating an appetizing food photography ad image. Include: specific dish details based on the caption, plating style, lighting (warm/natural), background (rustic wood, marble, etc), props, camera angle, mood. Make it mouth-watering.`;
+Pick the SINGLE best matching photo title from this library that visually represents the ad. Reply with ONLY the exact title, nothing else.
 
-      const promptResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+${photoList}`;
+
+      const pickResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
         body: JSON.stringify({
           model: "google/gemini-2.5-flash",
-          messages: [
-            { role: "user", content: imagePromptRequest }
-          ],
+          messages: [{ role: "user", content: pickRequest }],
           temperature: 0.9,
         }),
       });
 
-      if (!promptResponse.ok) {
-        throw new Error("Failed to generate image prompt");
+      let pickedTitle = "";
+      if (pickResp.ok) {
+        const r = await pickResp.json();
+        pickedTitle = (r.choices?.[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "");
       }
+      const imageUrl = pickPhotoByTitle(pickedTitle);
 
-      const promptResult = await promptResponse.json();
-      const generatedImagePrompt = promptResult.choices?.[0]?.message?.content || "";
-
-      const imagePrompt = `Professional food photography advertisement for a restaurant called "The Whistle Stop". ${generatedImagePrompt}. 
-Style: High-end food photography, appetizing, warm lighting, shallow depth of field. 
-Include subtle text overlay: "${existingHeadline}" in a modern sans-serif font.
-Do NOT include any phone numbers, addresses, or URLs in the image.
-Make it look like a professional social media ad that would stop someone scrolling.`;
-
-      let imageUrl: string | null = null;
-
-      const imageResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.5-flash-image",
-          messages: [
-            {
-              role: "user",
-              content: imagePrompt
-            }
-          ],
-          modalities: ["image", "text"]
-        }),
-      });
-
-      if (!imageResponse.ok) {
-        throw new Error("Failed to generate image");
-      }
-
-      const imageResult = await imageResponse.json();
-      const generatedImage = imageResult.choices?.[0]?.message?.images?.[0]?.image_url?.url;
-
-      if (generatedImage && generatedImage.startsWith("data:image/")) {
-        const base64Match = generatedImage.match(/^data:image\/(\w+);base64,(.+)$/);
-        if (base64Match) {
-          const imageFormat = base64Match[1];
-          const base64Data = base64Match[2];
-          const imageBytes = base64ToUint8Array(base64Data);
-          
-          const fileName = `${platform}-regen-${Date.now()}.${imageFormat}`;
-          const { error: uploadError } = await supabaseAdmin.storage
-            .from("ad-images")
-            .upload(fileName, imageBytes, {
-              contentType: `image/${imageFormat}`,
-              upsert: false
-            });
-
-          if (uploadError) {
-            throw new Error("Failed to upload image");
-          }
-
-          const { data: urlData } = supabaseAdmin.storage
-            .from("ad-images")
-            .getPublicUrl(fileName);
-          
-          imageUrl = urlData.publicUrl;
-        }
-      }
-
-      if (!imageUrl) {
-        throw new Error("Failed to generate new image");
-      }
-
-      // Update the ad with new image
       const { data: updatedAd, error: updateError } = await supabase
         .from("generated_ads")
         .update({ image_url: imageUrl, updated_at: new Date().toISOString() })
@@ -299,11 +231,7 @@ Make it look like a professional social media ad that would stop someone scrolli
         throw new Error("Failed to update ad with new image");
       }
 
-      return new Response(JSON.stringify({
-        success: true,
-        ad: updatedAd,
-        imageOnly: true
-      }), {
+      return new Response(JSON.stringify({ success: true, ad: updatedAd, imageOnly: true }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
