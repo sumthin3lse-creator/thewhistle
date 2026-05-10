@@ -374,7 +374,7 @@ Respond with a JSON object containing:
     return new Response(JSON.stringify({
       success: true,
       ad: savedAd,
-      imagePrompt: adData.imagePrompt
+      selectedPhoto: adData.selectedPhotoTitle
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
