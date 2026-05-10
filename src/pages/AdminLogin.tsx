@@ -28,7 +28,6 @@ export default function AdminLogin() {
 
       const { error: vErr } = await supabase.auth.verifyOtp({
         type: "magiclink",
-        email: data.email,
         token_hash: data.token_hash,
       });
       if (vErr) throw vErr;
