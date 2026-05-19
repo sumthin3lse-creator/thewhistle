@@ -27,6 +27,9 @@ import {
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
+import PhotoOverrideDialog from "@/components/PhotoOverrideDialog";
+import { findPhotoByUrl } from "@/data/photoLibrary";
+import { Images } from "lucide-react";
 
 type Platform = "instagram" | "facebook" | "tiktok" | "twitter";
 type AdType = "promo" | "menu_highlight" | "seasonal" | "event" | "trending";
@@ -419,21 +422,27 @@ export default function AdminDashboard() {
                             
                             {/* Image Section */}
                             {ad.image_url ? (
-                              <div className="w-full md:w-48 h-48 md:h-auto flex-shrink-0 bg-muted relative group">
-                                <img 
-                                  src={ad.image_url} 
-                                  alt={ad.headline}
-                                  className="w-full h-full object-cover"
-                                />
-                                <a
-                                  href={ad.image_url}
-                                  download
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="absolute bottom-2 right-2 p-2 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                                >
-                                  <Download className="h-4 w-4 text-white" />
-                                </a>
+                              <div className="w-full md:w-48 flex-shrink-0 flex flex-col">
+                                <div className="w-full h-48 bg-muted relative group">
+                                  <img
+                                    src={ad.image_url}
+                                    alt={ad.headline}
+                                    className="w-full h-full object-cover"
+                                  />
+                                  <a
+                                    href={ad.image_url}
+                                    download
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="absolute bottom-2 right-2 p-2 bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                                  >
+                                    <Download className="h-4 w-4 text-white" />
+                                  </a>
+                                </div>
+                                <div className="p-2 text-[11px] text-muted-foreground bg-muted/40 border-t">
+                                  <span className="font-semibold">Photo:</span>{" "}
+                                  {findPhotoByUrl(ad.image_url)?.title ?? "Custom / unknown"}
+                                </div>
                               </div>
                             ) : (
                               <div className="hidden md:flex w-48 h-auto flex-shrink-0 bg-muted items-center justify-center">
@@ -532,6 +541,17 @@ export default function AdminDashboard() {
                                   )}
                                   {regeneratingImageId === ad.id ? "Generating..." : "New Image"}
                                 </Button>
+                                <PhotoOverrideDialog
+                                  adId={ad.id}
+                                  currentUrl={ad.image_url}
+                                  onUpdated={loadAds}
+                                  trigger={
+                                    <Button size="sm" variant="outline">
+                                      <Images className="h-4 w-4 mr-1" />
+                                      Change Photo
+                                    </Button>
+                                  }
+                                />
                                 {ad.status === "draft" && (
                                   <Button
                                     size="sm"
