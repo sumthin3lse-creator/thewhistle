@@ -617,6 +617,15 @@ export default function AdminDashboard() {
                                     </Button>
                                   }
                                 />
+                                <PhotoAuditLogDialog
+                                  adId={ad.id}
+                                  trigger={
+                                    <Button size="sm" variant="outline">
+                                      <History className="h-4 w-4 mr-1" />
+                                      History
+                                    </Button>
+                                  }
+                                />
                                 {ad.status === "draft" && (
                                   <Button
                                     size="sm"
