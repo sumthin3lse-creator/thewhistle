@@ -24,11 +24,13 @@ import {
   ImageIcon,
   Download,
   Eye,
-  RefreshCcw
+  RefreshCcw,
+  History as HistoryIcon
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
 import PhotoOverrideDialog from "@/components/PhotoOverrideDialog";
+import PhotoAuditLogDialog from "@/components/PhotoAuditLogDialog";
 import { findPhotoByUrl } from "@/data/photoLibrary";
 import { Images } from "lucide-react";
 
@@ -614,6 +616,15 @@ export default function AdminDashboard() {
                                     <Button size="sm" variant="outline">
                                       <Images className="h-4 w-4 mr-1" />
                                       Change Photo
+                                    </Button>
+                                  }
+                                />
+                                <PhotoAuditLogDialog
+                                  adId={ad.id}
+                                  trigger={
+                                    <Button size="sm" variant="outline">
+                                      <HistoryIcon className="h-4 w-4 mr-1" />
+                                      History
                                     </Button>
                                   }
                                 />

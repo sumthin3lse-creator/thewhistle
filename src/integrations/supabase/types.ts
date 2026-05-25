@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      ad_photo_audit_log: {
+        Row: {
+          ad_id: string
+          changed_by: string | null
+          changed_by_email: string | null
+          created_at: string
+          id: string
+          new_image_url: string | null
+          new_photo_title: string | null
+          previous_image_url: string | null
+          previous_photo_title: string | null
+          source: string
+        }
+        Insert: {
+          ad_id: string
+          changed_by?: string | null
+          changed_by_email?: string | null
+          created_at?: string
+          id?: string
+          new_image_url?: string | null
+          new_photo_title?: string | null
+          previous_image_url?: string | null
+          previous_photo_title?: string | null
+          source?: string
+        }
+        Update: {
+          ad_id?: string
+          changed_by?: string | null
+          changed_by_email?: string | null
+          created_at?: string
+          id?: string
+          new_image_url?: string | null
+          new_photo_title?: string | null
+          previous_image_url?: string | null
+          previous_photo_title?: string | null
+          source?: string
+        }
+        Relationships: []
+      }
       applications: {
         Row: {
           created_at: string

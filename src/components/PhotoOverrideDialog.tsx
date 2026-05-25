@@ -39,15 +39,41 @@ export default function PhotoOverrideDialog({ adId, adIds, currentUrl, trigger, 
     if (targetIds.length === 0) return;
     setSavingUrl(url);
     const photo = PHOTO_LIBRARY.find((p) => p.url === url);
+
+    // Snapshot previous state for audit log
+    const { data: prevRows } = await supabase
+      .from("generated_ads")
+      .select("id, image_url, selected_photo_title")
+      .in("id", targetIds);
+
     const { error } = await supabase
       .from("generated_ads")
       .update({ image_url: url, selected_photo_title: photo?.title ?? null, updated_at: new Date().toISOString() })
       .in("id", targetIds);
-    setSavingUrl(null);
     if (error) {
+      setSavingUrl(null);
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
     }
+
+    // Write audit log entries
+    const { data: { user } } = await supabase.auth.getUser();
+    const auditRows = (prevRows ?? []).map((row) => ({
+      ad_id: row.id,
+      changed_by: user?.id ?? null,
+      changed_by_email: user?.email ?? null,
+      previous_image_url: row.image_url,
+      previous_photo_title: row.selected_photo_title,
+      new_image_url: url,
+      new_photo_title: photo?.title ?? null,
+      source: isBulk ? "bulk_override" : "manual_override",
+    }));
+    if (auditRows.length > 0) {
+      const { error: logError } = await supabase.from("ad_photo_audit_log").insert(auditRows);
+      if (logError) console.error("Audit log insert failed:", logError);
+    }
+
+    setSavingUrl(null);
     toast({
       title: isBulk ? `Updated ${targetIds.length} ads` : "Photo updated",
       description: isBulk ? `All selected ads now use "${photo?.title ?? "custom photo"}".` : "Ad image has been overridden.",
