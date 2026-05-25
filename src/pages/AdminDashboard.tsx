@@ -48,6 +48,7 @@ interface GeneratedAd {
   status: AdStatus;
   created_at: string;
   image_url: string | null;
+  selected_photo_title: string | null;
 }
 
 const platformIcons: Record<Platform, React.ReactNode> = {
@@ -441,7 +442,7 @@ export default function AdminDashboard() {
                                 </div>
                                 <div className="p-2 text-[11px] text-muted-foreground bg-muted/40 border-t">
                                   <span className="font-semibold">Photo:</span>{" "}
-                                  {findPhotoByUrl(ad.image_url)?.title ?? "Custom / unknown"}
+                                  {ad.selected_photo_title ?? findPhotoByUrl(ad.image_url)?.title ?? "Custom / unknown"}
                                 </div>
                               </div>
                             ) : (

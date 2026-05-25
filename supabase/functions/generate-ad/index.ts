@@ -219,10 +219,12 @@ ${photoList}`;
         pickedTitle = (r.choices?.[0]?.message?.content || "").trim().replace(/^["']|["']$/g, "");
       }
       const imageUrl = pickPhotoByTitle(pickedTitle);
+      const matchedPhoto = PHOTO_LIBRARY.find(p => p.url === imageUrl);
+      const finalTitle = matchedPhoto?.title ?? pickedTitle;
 
       const { data: updatedAd, error: updateError } = await supabase
         .from("generated_ads")
-        .update({ image_url: imageUrl, updated_at: new Date().toISOString() })
+        .update({ image_url: imageUrl, selected_photo_title: finalTitle, updated_at: new Date().toISOString() })
         .eq("id", adId)
         .select()
         .single();
@@ -345,7 +347,9 @@ Respond with a JSON object containing:
 
     // Step 2: Pick the best matching real photo from the imgbb library
     const imageUrl: string = pickPhotoByTitle(adData.selectedPhotoTitle);
-    console.log("Selected photo:", adData.selectedPhotoTitle, "->", imageUrl);
+    const matchedPhoto = PHOTO_LIBRARY.find(p => p.url === imageUrl);
+    const finalPhotoTitle: string = matchedPhoto?.title ?? adData.selectedPhotoTitle ?? "";
+    console.log("Selected photo:", finalPhotoTitle, "->", imageUrl);
 
     // Step 3: Save to database
     const { data: savedAd, error: saveError } = await supabase
@@ -360,6 +364,7 @@ Respond with a JSON object containing:
         menu_items_featured: adData.menuItemsFeatured,
         ai_reasoning: adData.reasoning,
         image_url: imageUrl,
+        selected_photo_title: finalPhotoTitle,
         created_by: user.id,
         status: "draft"
       })

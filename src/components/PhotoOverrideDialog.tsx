@@ -34,9 +34,10 @@ export default function PhotoOverrideDialog({ adId, currentUrl, trigger, onUpdat
 
   const selectPhoto = async (url: string) => {
     setSavingUrl(url);
+    const photo = PHOTO_LIBRARY.find((p) => p.url === url);
     const { error } = await supabase
       .from("generated_ads")
-      .update({ image_url: url, updated_at: new Date().toISOString() })
+      .update({ image_url: url, selected_photo_title: photo?.title ?? null, updated_at: new Date().toISOString() })
       .eq("id", adId);
     setSavingUrl(null);
     if (error) {
