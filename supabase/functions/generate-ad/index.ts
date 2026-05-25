@@ -58,6 +58,85 @@ const RESTAURANT_DATA = {
   ]
 };
 
+// Full menu sourced from the Whistle Stop Menu project (src/data/menuData.ts)
+const FULL_MENU: { category: string; items: { name: string; description: string; price: string }[] }[] = [
+  { category: "Breakfast", items: [
+    { name: "Train Wreck", description: "3 Eggs, loaded with bacon, sausage & ham, peppers, onions, and our signature cheese sauce over homefries & toast.", price: "$10.95" },
+    { name: "Breakfast Hoagie", description: "3 eggs, cheese, meat and crispy homefries on a toasted 10\" hoagie roll.", price: "$10.95" },
+    { name: "Omelette", description: "\"You Build It\" 3 eggs, choice of cheese, meat or veggies. Served with homefries & toast.", price: "$9.95" },
+    { name: "Burrito", description: "3 eggs, cheese, meat, and homefries tucked in a flour tortilla.", price: "$9.95" },
+    { name: "Breakfast Platter", description: "2 eggs your way, choice of 1 meat, 1 side, and toast.", price: "$8.95" },
+    { name: "Biscuits & Gravy", description: "Two fluffy biscuits smothered in our savory sausage gravy.", price: "$5.95" },
+    { name: "French Toast", description: "2 thick, deep-fried slices (4 triangles) dusted with powdered sugar.", price: "$4.95" },
+    { name: "Egg & Cheese", description: "Served on a fresh Kaiser roll (add meat +$1).", price: "$4.95" },
+  ]},
+  { category: "Burgers", items: [
+    { name: "Uncle Pumpkin", description: "2 fresh 5 oz patties, sharp cheddar, grilled onions, bacon, and a crispy onion ring.", price: "$12.95" },
+    { name: "Smash Burger", description: "Hand-pressed and seared. Build it your way.", price: "$9.95" },
+    { name: "Double Smash Burger", description: "Two hand-pressed and seared patties. Build it your way.", price: "$11.95" },
+    { name: "Patty Melt", description: "Grilled patty on seeded rye with Swiss cheese and caramelized onions.", price: "$9.95" },
+    { name: "Veggie Burger", description: "Grilled meatless patty with choice of toppings.", price: "$6.99" },
+  ]},
+  { category: "More Favorites", items: [
+    { name: "Reuben", description: "Corned beef or turkey, sauerkraut, and Swiss on grilled rye.", price: "$9.95" },
+    { name: "Corky Chicken", description: "2 golden tenders on a Kaiser with honey mustard, lettuce, tomato & bacon.", price: "$9.95" },
+    { name: "Grilled Chicken", description: "Grilled chicken breast on a grilled Kaiser with provolone, lettuce, tomato, onion & mayo.", price: "$10.95" },
+    { name: "Hot Dog", description: "All-beef; build it your way (add chili & cheese or kraut +$1).", price: "$4.95" },
+    { name: "Homemade Chicken Noodle Soup", description: "Cup of chicken noodle soup (add grilled cheese combo +$5.50).", price: "$4.25" },
+  ]},
+  { category: "Cold Sandwiches", items: [
+    { name: "Italian (Hot or Cold)", description: "Salami, pepperoni, capicola, provolone on a hoagie roll.", price: "$11.95" },
+    { name: "Ham & Cheese / Turkey & Cheese", description: "On a hoagie roll with your choice of toppings.", price: "$10.75" },
+    { name: "Salerno Club", description: "Turkey, ham, bacon, lettuce, tomato and mayo stacked on 3 slices of toast.", price: "$11.95" },
+    { name: "B.L.T.", description: "No explanation needed! Just choose your toast.", price: "$9.95" },
+    { name: "Homemade Salad Sandwich or Wrap", description: "Choice of Tuna, Egg or Chicken (melt +$2).", price: "$9.95" },
+    { name: "Salad by the Scoop", description: "Tuna, Egg, Chicken, or Potato.", price: "$4.25–$5.25" },
+    { name: "Salad by the 1/2 LB", description: "Tuna, Chicken, Egg or Potato.", price: "$5.25–$6.95" },
+  ]},
+  { category: "Salads", items: [
+    { name: "Deluxe", description: "Grilled chicken, bacon, tomato, onion, banana peppers, hard-boiled egg, cucumber, cheddar & homemade croutons.", price: "$12.95" },
+    { name: "Titanic", description: "Large scoop of Tuna, Chicken, or Egg salad on garden greens.", price: "$11.95" },
+    { name: "Cobb", description: "Grilled or crispy chicken, bacon, hard-boiled egg, cheddar, cucumber, onion.", price: "$11.95" },
+    { name: "Chopped Hoagie", description: "Salami, pepperoni, provolone, hard-boiled egg, lettuce, tomato, onion and banana peppers — chopped, no bread.", price: "$11.95" },
+  ]},
+  { category: "Wraps", items: [
+    { name: "Buffalo Chicken Wrap", description: "Crispy chicken tossed in buffalo, ranch, lettuce, tomato, onion.", price: "$11.95" },
+    { name: "Grilled Chicken Wrap", description: "Chicken breast, cheddar, rice, beans, salsa.", price: "$11.95" },
+    { name: "Veggie Wrap", description: "Grilled onions, peppers, mushrooms, provolone, banana peppers.", price: "$9.95" },
+    { name: "Deli Scoop Wrap", description: "Choice of Tuna, Chicken, or Egg salad in a fresh wrap.", price: "$9.95" },
+  ]},
+  { category: "Philly's", items: [
+    { name: "1/2 & 1/2 Philly", description: "Beef and Chicken mixed (~10 inches).", price: "$14.95" },
+    { name: "Whole Philly", description: "Beef or Chicken (~10 inches) with onions & cheese sauce.", price: "$13.95" },
+    { name: "Half Philly", description: "Beef or Chicken (~5 inches) with onions & cheese sauce.", price: "$9.95" },
+  ]},
+  { category: "Kids", items: [
+    { name: "2 Tenders", description: "Crispy tenders served with fries or chips.", price: "$7.95" },
+    { name: "Kids Smash Burger", description: "Smashed thin with crispy edges, served with fries or chips.", price: "$7.95" },
+    { name: "Grilled Cheese", description: "Golden, buttery bread hugging melted cheese, served with fries or chips.", price: "$7.95" },
+    { name: "Mac & Cheese", description: "Creamy bowl of nostalgia, served with fries or chips.", price: "$7.95" },
+    { name: "Kids Hot Dog", description: "Classic snap, soft bun, served with fries or chips.", price: "$7.95" },
+  ]},
+  { category: "Sides", items: [
+    { name: "Fries", description: "Classic golden fries.", price: "$3.50" },
+    { name: "Chips", description: "Crispy chips.", price: "$2.25" },
+    { name: "Coleslaw", description: "Creamy homemade coleslaw.", price: "$2.95" },
+    { name: "Onion Rings", description: "Crispy battered onion rings.", price: "$4.95" },
+    { name: "Mac & Cheese Side", description: "Creamy mac & cheese.", price: "$4.95" },
+    { name: "Mozzarella Sticks", description: "Golden fried mozzarella sticks.", price: "$4.95" },
+    { name: "Loaded Fries", description: "Chili, onions, jalapeños & cheese sauce.", price: "$5.95" },
+    { name: "Chicken Tenders (4 pc)", description: "Regular or Buffalo.", price: "$8.00–$8.50" },
+    { name: "Potato Salad", description: "Creamy homemade potato salad.", price: "$2.95" },
+  ]},
+  { category: "Sweets", items: [
+    { name: "Cinnamon Roll", description: "Buttered and grilled with a side of icing.", price: "$5.95" },
+    { name: "Grilled Muffins", description: "Blueberry or Chocolate Chip, buttered & grilled.", price: "$3.50" },
+    { name: "Brownie", description: "Freshly baked chocolate brownie.", price: "$2.00" },
+    { name: "Chocolate Chip Cookie", description: "Freshly baked decadent cookie.", price: "$2.50" },
+    { name: "Ice Cream", description: "4 oz Strawberry, Vanilla, or Chocolate.", price: "$2.50" },
+  ]},
+];
+
 // Curated real-world photo library hosted on imgbb (album: 9Gvs30).
 // AI must pick from these — never generate images.
 const PHOTO_LIBRARY: { title: string; url: string; tags: string[] }[] = [
@@ -255,7 +334,10 @@ ${RESTAURANT_DATA.signatureDishes.map(d => `- ${d.name}: ${d.description}`).join
 UNIQUE SELLING POINTS:
 ${RESTAURANT_DATA.uniqueSellingPoints.map(p => `- ${p}`).join('\n')}
 
-You must create ads that feel authentic, local, and appetizing. Always incorporate the restaurant's branding and contact information naturally.`;
+FULL MENU (use real item names, prices, and descriptions verbatim when relevant):
+${FULL_MENU.map(c => `${c.category}:\n${c.items.map(i => `  • ${i.name} — ${i.price} — ${i.description}`).join('\n')}`).join('\n\n')}
+
+You must create ads that feel authentic, local, and appetizing. Always incorporate the restaurant's branding and contact information naturally. When mentioning menu items, use the EXACT names and prices listed above.`;
 
     const adTypePrompts: Record<string, string> = {
       promo: "Create a promotional ad for a special deal or discount. Make it urgent and compelling.",
