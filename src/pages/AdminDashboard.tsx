@@ -403,25 +403,87 @@ export default function AdminDashboard() {
                 <TabsTrigger value="published">Published</TabsTrigger>
               </TabsList>
 
-              {["all", "draft", "approved", "published"].map((tab) => (
+              {["all", "draft", "approved", "published"].map((tab) => {
+                const visibleAds = ads.filter(ad => tab === "all" || ad.status === tab);
+                const visibleIds = visibleAds.map(a => a.id);
+                const visibleSelectedIds = visibleIds.filter(id => selectedIds.has(id));
+                const allVisibleSelected = visibleIds.length > 0 && visibleSelectedIds.length === visibleIds.length;
+                const toggleAllVisible = () => {
+                  setSelectedIds(prev => {
+                    const next = new Set(prev);
+                    if (allVisibleSelected) visibleIds.forEach(id => next.delete(id));
+                    else visibleIds.forEach(id => next.add(id));
+                    return next;
+                  });
+                };
+                const toggleOne = (id: string) => {
+                  setSelectedIds(prev => {
+                    const next = new Set(prev);
+                    if (next.has(id)) next.delete(id); else next.add(id);
+                    return next;
+                  });
+                };
+                return (
                 <TabsContent key={tab} value={tab} className="space-y-4">
+                  {visibleAds.length > 0 && (
+                    <div className="flex items-center justify-between gap-3 p-3 rounded-lg border bg-card">
+                      <div className="flex items-center gap-3">
+                        <Checkbox
+                          checked={allVisibleSelected}
+                          onCheckedChange={toggleAllVisible}
+                          aria-label="Select all visible ads"
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {visibleSelectedIds.length > 0
+                            ? `${visibleSelectedIds.length} selected`
+                            : `Select all (${visibleIds.length})`}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {visibleSelectedIds.length > 0 && (
+                          <>
+                            <Button size="sm" variant="ghost" onClick={() => setSelectedIds(new Set())}>
+                              Clear
+                            </Button>
+                            <PhotoOverrideDialog
+                              adIds={visibleSelectedIds}
+                              onUpdated={() => { setSelectedIds(new Set()); loadAds(); }}
+                              trigger={
+                                <Button size="sm">
+                                  <Images className="h-4 w-4 mr-1" />
+                                  Change Photo ({visibleSelectedIds.length})
+                                </Button>
+                              }
+                            />
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  )}
                   {isLoading ? (
                     <div className="flex items-center justify-center py-12">
                       <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
                     </div>
-                  ) : ads.filter(ad => tab === "all" || ad.status === tab).length === 0 ? (
+                  ) : visibleAds.length === 0 ? (
                     <Card className="py-12">
                       <CardContent className="text-center text-muted-foreground">
                         No ads found. Generate your first ad!
                       </CardContent>
                     </Card>
                   ) : (
-                    ads
-                      .filter(ad => tab === "all" || ad.status === tab)
+                    visibleAds
                       .map((ad) => (
                         <Card key={ad.id} className="overflow-hidden">
                           <div className="flex flex-col md:flex-row">
                             <div className={`w-full md:w-1.5 h-1.5 md:h-auto ${platformColors[ad.platform]}`} />
+                            <div className="flex items-start pt-4 pl-4 md:pl-3">
+                              <Checkbox
+                                checked={selectedIds.has(ad.id)}
+                                onCheckedChange={() => toggleOne(ad.id)}
+                                aria-label={`Select ad ${ad.headline}`}
+                              />
+                            </div>
+                            
                             
                             {/* Image Section */}
                             {ad.image_url ? (
