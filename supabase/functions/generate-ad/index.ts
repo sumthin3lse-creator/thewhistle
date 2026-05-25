@@ -334,7 +334,10 @@ ${RESTAURANT_DATA.signatureDishes.map(d => `- ${d.name}: ${d.description}`).join
 UNIQUE SELLING POINTS:
 ${RESTAURANT_DATA.uniqueSellingPoints.map(p => `- ${p}`).join('\n')}
 
-You must create ads that feel authentic, local, and appetizing. Always incorporate the restaurant's branding and contact information naturally.`;
+FULL MENU (use real item names, prices, and descriptions verbatim when relevant):
+${FULL_MENU.map(c => `${c.category}:\n${c.items.map(i => `  • ${i.name} — ${i.price} — ${i.description}`).join('\n')}`).join('\n\n')}
+
+You must create ads that feel authentic, local, and appetizing. Always incorporate the restaurant's branding and contact information naturally. When mentioning menu items, use the EXACT names and prices listed above.`;
 
     const adTypePrompts: Record<string, string> = {
       promo: "Create a promotional ad for a special deal or discount. Make it urgent and compelling.",
