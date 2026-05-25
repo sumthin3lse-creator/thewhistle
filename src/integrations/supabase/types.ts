@@ -73,6 +73,7 @@ export type Database = {
           image_url: string | null
           menu_items_featured: string[] | null
           platform: string
+          selected_photo_title: string | null
           status: string
           updated_at: string
         }
@@ -89,6 +90,7 @@ export type Database = {
           image_url?: string | null
           menu_items_featured?: string[] | null
           platform: string
+          selected_photo_title?: string | null
           status?: string
           updated_at?: string
         }
@@ -105,6 +107,7 @@ export type Database = {
           image_url?: string | null
           menu_items_featured?: string[] | null
           platform?: string
+          selected_photo_title?: string | null
           status?: string
           updated_at?: string
         }
