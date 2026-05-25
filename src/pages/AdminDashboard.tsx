@@ -48,6 +48,7 @@ interface GeneratedAd {
   status: AdStatus;
   created_at: string;
   image_url: string | null;
+  selected_photo_title: string | null;
 }
 
 const platformIcons: Record<Platform, React.ReactNode> = {
