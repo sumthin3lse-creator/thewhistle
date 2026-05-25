@@ -61,9 +61,11 @@ export default function PhotoOverrideDialog({ adId, adIds, currentUrl, trigger, 
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Override Ad Photo</DialogTitle>
+          <DialogTitle>{isBulk ? `Override Photo for ${targetIds.length} Ads` : "Override Ad Photo"}</DialogTitle>
           <DialogDescription>
-            {currentPhoto ? (
+            {isBulk ? (
+              <>Pick a photo to apply to all {targetIds.length} selected ads.</>
+            ) : currentPhoto ? (
               <>Currently selected: <span className="font-semibold">{currentPhoto.title}</span></>
             ) : currentUrl ? (
               <>Currently set to an image outside the library.</>
