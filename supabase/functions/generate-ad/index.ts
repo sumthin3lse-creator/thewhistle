@@ -447,6 +447,8 @@ Respond with a JSON object containing:
         ai_reasoning: adData.reasoning,
         image_url: imageUrl,
         selected_photo_title: finalPhotoTitle,
+        original_image_url: imageUrl,
+        original_photo_title: finalPhotoTitle,
         created_by: user.id,
         status: "draft"
       })

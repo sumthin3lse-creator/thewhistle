@@ -25,7 +25,8 @@ import {
   Download,
   Eye,
   RefreshCcw,
-  History as HistoryIcon
+  History as HistoryIcon,
+  Undo2
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
@@ -52,6 +53,8 @@ interface GeneratedAd {
   created_at: string;
   image_url: string | null;
   selected_photo_title: string | null;
+  original_image_url: string | null;
+  original_photo_title: string | null;
 }
 
 const platformIcons: Record<Platform, React.ReactNode> = {
@@ -207,6 +210,49 @@ export default function AdminDashboard() {
       toast({ title: "Deleted", description: "Ad removed successfully" });
       loadAds();
     }
+  };
+
+  const resetToAiChoice = async (ad: GeneratedAd) => {
+    if (!ad.original_image_url) {
+      toast({ title: "No original photo", description: "No AI choice recorded for this ad.", variant: "destructive" });
+      return;
+    }
+    if (ad.image_url === ad.original_image_url) {
+      toast({ title: "Already on AI choice", description: "This ad already uses the originally selected photo." });
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    const previousImageUrl = ad.image_url;
+    const previousPhotoTitle = ad.selected_photo_title;
+
+    const { error } = await supabase
+      .from("generated_ads")
+      .update({
+        image_url: ad.original_image_url,
+        selected_photo_title: ad.original_photo_title,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", ad.id);
+
+    if (error) {
+      toast({ title: "Reset failed", description: error.message, variant: "destructive" });
+      return;
+    }
+
+    await supabase.from("ad_photo_audit_log").insert({
+      ad_id: ad.id,
+      changed_by: user?.id ?? null,
+      changed_by_email: user?.email ?? null,
+      previous_image_url: previousImageUrl,
+      previous_photo_title: previousPhotoTitle,
+      new_image_url: ad.original_image_url,
+      new_photo_title: ad.original_photo_title,
+      source: "reset_to_ai_choice",
+    });
+
+    toast({ title: "Reset to AI choice", description: `Reverted to "${ad.original_photo_title ?? "original photo"}".` });
+    loadAds();
   };
 
   const regenerateImage = async (ad: GeneratedAd) => {
@@ -619,6 +665,17 @@ export default function AdminDashboard() {
                                     </Button>
                                   }
                                 />
+                                {ad.original_image_url && ad.image_url !== ad.original_image_url && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => resetToAiChoice(ad)}
+                                    title={`Revert to "${ad.original_photo_title ?? "AI choice"}"`}
+                                  >
+                                    <Undo2 className="h-4 w-4 mr-1" />
+                                    Reset to AI choice
+                                  </Button>
+                                )}
                                 <PhotoAuditLogDialog
                                   adId={ad.id}
                                   trigger={
