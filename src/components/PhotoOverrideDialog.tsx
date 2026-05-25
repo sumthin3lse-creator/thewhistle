@@ -10,18 +10,21 @@ import { useToast } from "@/hooks/use-toast";
 import { cn } from "@/lib/utils";
 
 interface Props {
-  adId: string;
-  currentUrl: string | null;
+  adId?: string;
+  adIds?: string[];
+  currentUrl?: string | null;
   trigger: React.ReactNode;
   onUpdated?: () => void;
 }
 
-export default function PhotoOverrideDialog({ adId, currentUrl, trigger, onUpdated }: Props) {
+export default function PhotoOverrideDialog({ adId, adIds, currentUrl, trigger, onUpdated }: Props) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const [savingUrl, setSavingUrl] = useState<string | null>(null);
   const { toast } = useToast();
   const currentPhoto = findPhotoByUrl(currentUrl);
+  const targetIds = adIds && adIds.length > 0 ? adIds : adId ? [adId] : [];
+  const isBulk = targetIds.length > 1;
 
   const filtered = PHOTO_LIBRARY.filter((p) => {
     const q = query.trim().toLowerCase();
@@ -33,18 +36,22 @@ export default function PhotoOverrideDialog({ adId, currentUrl, trigger, onUpdat
   });
 
   const selectPhoto = async (url: string) => {
+    if (targetIds.length === 0) return;
     setSavingUrl(url);
     const photo = PHOTO_LIBRARY.find((p) => p.url === url);
     const { error } = await supabase
       .from("generated_ads")
       .update({ image_url: url, selected_photo_title: photo?.title ?? null, updated_at: new Date().toISOString() })
-      .eq("id", adId);
+      .in("id", targetIds);
     setSavingUrl(null);
     if (error) {
       toast({ title: "Update failed", description: error.message, variant: "destructive" });
       return;
     }
-    toast({ title: "Photo updated", description: "Ad image has been overridden." });
+    toast({
+      title: isBulk ? `Updated ${targetIds.length} ads` : "Photo updated",
+      description: isBulk ? `All selected ads now use "${photo?.title ?? "custom photo"}".` : "Ad image has been overridden.",
+    });
     setOpen(false);
     onUpdated?.();
   };
@@ -54,9 +61,11 @@ export default function PhotoOverrideDialog({ adId, currentUrl, trigger, onUpdat
       <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Override Ad Photo</DialogTitle>
+          <DialogTitle>{isBulk ? `Override Photo for ${targetIds.length} Ads` : "Override Ad Photo"}</DialogTitle>
           <DialogDescription>
-            {currentPhoto ? (
+            {isBulk ? (
+              <>Pick a photo to apply to all {targetIds.length} selected ads.</>
+            ) : currentPhoto ? (
               <>Currently selected: <span className="font-semibold">{currentPhoto.title}</span></>
             ) : currentUrl ? (
               <>Currently set to an image outside the library.</>
