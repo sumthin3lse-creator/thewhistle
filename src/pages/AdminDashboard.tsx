@@ -83,6 +83,7 @@ export default function AdminDashboard() {
   const [adType, setAdType] = useState<AdType>("menu_highlight");
   const [customPrompt, setCustomPrompt] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const navigate = useNavigate();
   const { toast } = useToast();
 
