@@ -665,6 +665,17 @@ export default function AdminDashboard() {
                                     </Button>
                                   }
                                 />
+                                {ad.original_image_url && ad.image_url !== ad.original_image_url && (
+                                  <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={() => resetToAiChoice(ad)}
+                                    title={`Revert to "${ad.original_photo_title ?? "AI choice"}"`}
+                                  >
+                                    <Undo2 className="h-4 w-4 mr-1" />
+                                    Reset to AI choice
+                                  </Button>
+                                )}
                                 <PhotoAuditLogDialog
                                   adId={ad.id}
                                   trigger={
