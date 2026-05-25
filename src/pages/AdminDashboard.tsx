@@ -24,7 +24,8 @@ import {
   ImageIcon,
   Download,
   Eye,
-  RefreshCcw
+  RefreshCcw,
+  History as HistoryIcon
 } from "lucide-react";
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
