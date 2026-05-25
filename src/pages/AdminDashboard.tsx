@@ -30,6 +30,7 @@ import {
 import logo from "@/assets/restaurant-logo.png";
 import PlatformPreviewDialog from "@/components/PlatformPreviewDialog";
 import PhotoOverrideDialog from "@/components/PhotoOverrideDialog";
+import PhotoAuditLogDialog from "@/components/PhotoAuditLogDialog";
 import { findPhotoByUrl } from "@/data/photoLibrary";
 import { Images } from "lucide-react";
 
