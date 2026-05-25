@@ -212,6 +212,49 @@ export default function AdminDashboard() {
     }
   };
 
+  const resetToAiChoice = async (ad: GeneratedAd) => {
+    if (!ad.original_image_url) {
+      toast({ title: "No original photo", description: "No AI choice recorded for this ad.", variant: "destructive" });
+      return;
+    }
+    if (ad.image_url === ad.original_image_url) {
+      toast({ title: "Already on AI choice", description: "This ad already uses the originally selected photo." });
+      return;
+    }
+
+    const { data: { user } } = await supabase.auth.getUser();
+    const previousImageUrl = ad.image_url;
+    const previousPhotoTitle = ad.selected_photo_title;
+
+    const { error } = await supabase
+      .from("generated_ads")
+      .update({
+        image_url: ad.original_image_url,
+        selected_photo_title: ad.original_photo_title,
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", ad.id);
+
+    if (error) {
+      toast({ title: "Reset failed", description: error.message, variant: "destructive" });
+      return;
+    }
+
+    await supabase.from("ad_photo_audit_log").insert({
+      ad_id: ad.id,
+      changed_by: user?.id ?? null,
+      changed_by_email: user?.email ?? null,
+      previous_image_url: previousImageUrl,
+      previous_photo_title: previousPhotoTitle,
+      new_image_url: ad.original_image_url,
+      new_photo_title: ad.original_photo_title,
+      source: "reset_to_ai_choice",
+    });
+
+    toast({ title: "Reset to AI choice", description: `Reverted to "${ad.original_photo_title ?? "original photo"}".` });
+    loadAds();
+  };
+
   const regenerateImage = async (ad: GeneratedAd) => {
     setRegeneratingImageId(ad.id);
     try {
