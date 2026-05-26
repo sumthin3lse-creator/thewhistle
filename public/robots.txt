@@ -12,3 +12,6 @@ Allow: /
 
 User-agent: *
 Allow: /
+
+Sitemap: https://thewhistlestopstuart.com/sitemap.xml
+
