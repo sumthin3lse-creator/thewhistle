@@ -19,9 +19,50 @@ serve(async (req) => {
 
     const { form, employers, references } = await req.json();
 
-    const employerRows = employers
-      .filter((e: any) => e.name)
+    // Basic server-side validation (mirror client zod limits)
+    if (!form || typeof form !== "object") {
+      return new Response(JSON.stringify({ success: false, error: "Invalid payload" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const isStr = (v: unknown, max = 500) => typeof v === "string" && v.length <= max;
+    if (!isStr(form.fullName, 200) || !form.fullName.trim()) {
+      return new Response(JSON.stringify({ success: false, error: "Invalid name" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (form.email && !isStr(form.email, 320)) {
+      return new Response(JSON.stringify({ success: false, error: "Invalid email" }), {
+        status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const emps = Array.isArray(employers) ? employers.slice(0, 20) : [];
+    const refs = Array.isArray(references) ? references.slice(0, 20) : [];
+
+    // HTML escape helper to prevent injection into admin email
+    const esc = (v: unknown) =>
+      String(v ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+
+    const employerRows = emps
+      .filter((e: any) => e?.name)
       .map(
+        (e: any, i: number) =>
+          `<tr><td>${i + 1}</td><td>${esc(e.name)}</td><td>${esc(e.position)}</td><td>${esc(e.from)} – ${esc(e.to)}</td><td>${esc(e.reasonForLeaving)}</td></tr>`
+      )
+      .join("");
+
+    const referenceRows = refs
+      .filter((r: any) => r?.name)
+      .map(
+        (r: any) =>
+          `<tr><td>${esc(r.name)}</td><td>${esc(r.address)}</td><td>${esc(r.business)}</td><td>${esc(r.yearsKnown)}</td></tr>`
+      )
+      .join("");
         (e: any, i: number) =>
           `<tr><td>${i + 1}</td><td>${e.name}</td><td>${e.position}</td><td>${e.from} – ${e.to}</td><td>${e.reasonForLeaving}</td></tr>`
       )
