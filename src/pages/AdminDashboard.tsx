@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -310,7 +311,13 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <>
+      <Helmet>
+        <title>Admin Dashboard | The Whistle Stop</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://thewhistlestopstuart.com/admin" />
+      </Helmet>
+      <div className="min-h-screen bg-muted/30">
       {/* Header */}
       <header className="bg-card border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -724,5 +731,6 @@ export default function AdminDashboard() {
         </div>
       </main>
     </div>
+    </>
   );
 }
