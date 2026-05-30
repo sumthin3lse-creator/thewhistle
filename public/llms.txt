@@ -1,0 +1,11 @@
+# The Whistle Stop by Ariel Seafoods
+
+> A Port Salerno, Florida diner serving authentic Philly cheesesteaks, fresh-baked bread, and legendary cheese sauce. Nearly two decades of Philly tradition, now powered by Ariel Seafoods.
+
+The Whistle Stop is an informational website for the restaurant. There is no online ordering on this site — orders go through DoorDash or by phone. The site covers the brand story, menu highlights, hiring, and contact details.
+
+## Pages
+
+- [Home](/): Hero, menu highlights, awards, testimonials, and contact info.
+- [About](/about): The restaurant's history and the Ariel Seafoods relaunch.
+- [Apply](/apply): Employment application form for open positions.
