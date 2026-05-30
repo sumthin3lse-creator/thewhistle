@@ -104,7 +104,13 @@ export default function AdminUsers() {
   });
 
   return (
-    <div className="min-h-screen bg-muted/30">
+    <>
+      <Helmet>
+        <title>User Management | Admin — The Whistle Stop</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://thewhistlestopstuart.com/admin/users" />
+      </Helmet>
+      <div className="min-h-screen bg-muted/30">
       <header className="bg-card border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between gap-2">
           <div className="flex items-center gap-2">
