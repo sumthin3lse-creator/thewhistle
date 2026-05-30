@@ -194,5 +194,6 @@ export default function AdminUsers() {
         )}
       </main>
     </div>
+    </>
   );
 }
