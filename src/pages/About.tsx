@@ -56,11 +56,16 @@ export default function About() {
   return (
     <main className="min-h-screen">
       <Helmet>
-        <title>About Us | The Whistle Stop by Ariel Seafoods — Port Salerno</title>
+        <title>About | The Whistle Stop — Port Salerno, FL</title>
         <meta
           name="description"
-          content="A Port Salerno tradition, elevated. Nearly two decades of Philly authenticity, now powered by Ariel Seafoods. Same corner, same recipes, next-level execution."
+          content="A Port Salerno tradition, elevated. Nearly two decades of Philly authenticity, now powered by Ariel Seafoods."
         />
+        <link rel="canonical" href="https://thewhistlestopstuart.com/about" />
+        <meta property="og:title" content="About | The Whistle Stop" />
+        <meta property="og:description" content="Same corner. Same recipes. Next-level execution — powered by Ariel Seafoods." />
+        <meta property="og:url" content="https://thewhistlestopstuart.com/about" />
+        <meta property="og:type" content="article" />
       </Helmet>
       <Navbar />
 

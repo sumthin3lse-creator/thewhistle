@@ -62,6 +62,13 @@ const Index = () => {
   return (
     <main className="min-h-screen">
       <Helmet>
+        <title>The Whistle Stop by Ariel Seafoods | Port Salerno, FL</title>
+        <meta name="description" content="Port Salerno's Philly cheesesteak spot — fresh-baked bread, legendary cheese sauce, powered by Ariel Seafoods." />
+        <link rel="canonical" href="https://thewhistlestopstuart.com/" />
+        <meta property="og:title" content="The Whistle Stop by Ariel Seafoods" />
+        <meta property="og:description" content="A Port Salerno tradition, elevated. Same recipes, next-level execution." />
+        <meta property="og:url" content="https://thewhistlestopstuart.com/" />
+        <meta property="og:type" content="website" />
         <script type="application/ld+json">
           {JSON.stringify(restaurantSchema)}
         </script>
