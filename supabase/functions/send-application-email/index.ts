@@ -63,18 +63,6 @@ serve(async (req) => {
           `<tr><td>${esc(r.name)}</td><td>${esc(r.address)}</td><td>${esc(r.business)}</td><td>${esc(r.yearsKnown)}</td></tr>`
       )
       .join("");
-        (e: any, i: number) =>
-          `<tr><td>${i + 1}</td><td>${e.name}</td><td>${e.position}</td><td>${e.from} – ${e.to}</td><td>${e.reasonForLeaving}</td></tr>`
-      )
-      .join("");
-
-    const referenceRows = references
-      .filter((r: any) => r.name)
-      .map(
-        (r: any) =>
-          `<tr><td>${r.name}</td><td>${r.address}</td><td>${r.business}</td><td>${r.yearsKnown}</td></tr>`
-      )
-      .join("");
 
     const html = `
       <h2>New Employment Application</h2>
