@@ -88,5 +88,6 @@ export default function AdminLogin() {
         </CardContent>
       </Card>
     </div>
+    </>
   );
 }
