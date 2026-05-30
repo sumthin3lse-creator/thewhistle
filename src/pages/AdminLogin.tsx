@@ -44,7 +44,13 @@ export default function AdminLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+    <>
+      <Helmet>
+        <title>Admin Login | The Whistle Stop</title>
+        <meta name="robots" content="noindex, nofollow" />
+        <link rel="canonical" href="https://thewhistlestopstuart.com/admin/login" />
+      </Helmet>
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <div className="flex justify-center mb-4">
