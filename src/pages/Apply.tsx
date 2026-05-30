@@ -333,8 +333,13 @@ const Apply = () => {
   return (
     <main className="min-h-screen bg-background">
       <Helmet>
-        <title>Apply Now | The Whistle Stop by Ariel Seafoods</title>
+        <title>Apply Now | The Whistle Stop — Port Salerno</title>
         <meta name="description" content="Join the Whistle Stop team! Apply for a position at our Port Salerno restaurant." />
+        <link rel="canonical" href="https://thewhistlestopstuart.com/apply" />
+        <meta property="og:title" content="Apply Now | The Whistle Stop" />
+        <meta property="og:description" content="We're hiring at our Port Salerno location. Apply online today." />
+        <meta property="og:url" content="https://thewhistlestopstuart.com/apply" />
+        <meta property="og:type" content="website" />
       </Helmet>
       <Navbar />
 
